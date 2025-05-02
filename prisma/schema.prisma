@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Question {
+  id                   String                 @id @db.VarChar(36)
+  title                String                 @db.Text
+  cefr                 String?                @db.VarChar(10)
+  type                 String?                @db.VarChar(50)
+  theme                String?                @db.VarChar(100)
+  optionA              String?                @db.Text
+  optionB              String?                @db.Text
+  optionC              String?                @db.Text
+  response             String?                @db.VarChar(10)
+  UserQuestionProgress UserQuestionProgress[]
+}
+
+model User {
+  id                   String                 @id @db.VarChar(36)
+  name                 String                 @db.VarChar(100)
+  email                String                 @unique(map: "email") @db.VarChar(100)
+  password             String                 @db.VarChar(100)
+  cefr                 String?                @db.VarChar(10)
+  privilege            String?                @db.VarChar(50)
+  UserQuestionProgress UserQuestionProgress[]
+}
+
+model UserQuestionProgress {
+  id           String    @id @db.VarChar(36)
+  userId       String?   @db.VarChar(36)
+  questionId   String?   @db.VarChar(36)
+  status       Boolean?
+  chosenOption String?   @db.VarChar(10)
+  User         User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionProgress_ibfk_1")
+  Question     Question? @relation(fields: [questionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionProgress_ibfk_2")
+
+  @@index([questionId], map: "questionId")
+  @@index([userId], map: "userId")
+}
