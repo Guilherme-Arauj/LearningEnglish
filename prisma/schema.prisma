@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -26,8 +25,8 @@ model User {
   name                 String                 @db.VarChar(100)
   email                String                 @unique(map: "email") @db.VarChar(100)
   password             String                 @db.VarChar(100)
-  cefr                 String?                @db.VarChar(10)
-  privilege            String?                @db.VarChar(50)
+  cefr                 String                @db.VarChar(10)
+  privilege            String                @db.VarChar(50)
   UserQuestionProgress UserQuestionProgress[]
 }
 

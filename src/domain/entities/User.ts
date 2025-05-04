@@ -5,8 +5,8 @@ export interface IUser {
   name: string;
   email: string;
   password: string;
-  cefr?: string;
-  privilege?: string;
+  cefr: string;
+  privilege: string;
   userQuestionProgress?: IUserQuestionProgress[];
 }
 
@@ -15,8 +15,8 @@ export class User implements IUser {
     name: string;
     email: string;
     password: string;
-    cefr?: string;
-    privilege?: string;
+    cefr: string;
+    privilege: string;
     userQuestionProgress?: IUserQuestionProgress[];
   
     constructor(data: IUser) {
@@ -27,9 +27,5 @@ export class User implements IUser {
       this.cefr = data.cefr;
       this.privilege = data.privilege;
       this.userQuestionProgress = data.userQuestionProgress;
-    }
-
-    isAdmin(): boolean {
-      return this.privilege?.toLowerCase() === 'admin';
     }
   }
