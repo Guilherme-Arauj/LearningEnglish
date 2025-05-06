@@ -8,6 +8,9 @@ import { IUuidConfig } from "../utils/uuid/IUuidConfig";
 import { UuidConfig } from "../utils/uuid/UuidConfig";
 import { IPrismaConfig } from "../database/IPrismaConfig";
 import { PrismaConfig } from "../database/PrismaConfig";
+import { Login } from "../../application/usecases/Login";
+import { IJwtConfig } from "../utils/jwt/IJwtConfig";
+import { JwtConfig } from "../utils/jwt/JwtConfig";
 
 
 
@@ -17,7 +20,9 @@ export function UserFactory(): UserController {
     const userRepository: IUserRepository = new UserRepository(prismaConfig);
     const bcryptConfig: IBcryptConfig = new BcryptConfig();
     const uuidConfig: IUuidConfig = new UuidConfig();
+    const jwtConfig: IJwtConfig = new JwtConfig(secretKey);
  
     const createUserUseCase = new CreateUser(userRepository, bcryptConfig, uuidConfig); // Use Case recebe a interface
-    return new UserController(createUserUseCase); // Controller recebe os Use Cases
+    const loginUseCase = new Login(userRepository, bcryptConfig, jwtConfig)
+    return new UserController(createUserUseCase, loginUseCase); // Controller recebe os Use Cases
 }
