@@ -10,4 +10,6 @@
     "moduleResolution": "NodeNext",
     "allowSyntheticDefaultImports": true
   },
+  "include": ["src/**/*", "src/infrastructure/web/server.ts", "src/types/express-session.d.ts"],
+  "exclude": ["node_modules"]
 }

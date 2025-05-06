@@ -5,6 +5,10 @@ const userRouter = Router();
 
 const userController = UserFactory(); // Usando a Factory para criar o controller
 
+//rota de cadastro de usuário
 userRouter.post('/cadastro', (req, res) => userController.create(req, res));
+
+//rota para login
+userRouter.post('/login', (req, res) => userController.login(req, res));
 
 export { userRouter };
