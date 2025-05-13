@@ -5,18 +5,24 @@ import { CreateUser } from '../../../application/usecases/CreateUser';
 import { UserLoginDTO } from '../../../application/dto/UserLoginDTO';
 import { Login } from '../../../application/usecases/Login';
 import { validateDTOLogin } from '../../utils/zod/validateDTOLogin';
+import { validateDTOUserEmail } from '../../utils/zod/validateDTOUserEmail';
+import { UserEmailDTO } from '../../../application/dto/UserEmailDTO';
+import { RecuperarSenha } from '../../../application/usecases/RecuperarSenha';
 
 
 export class UserController {
     private createUserUseCase: CreateUser
     private loginUseCase: Login
+    private recuperarSenhaUseCase: RecuperarSenha
 
     constructor(
         createUserUseCase: CreateUser,
-        loginUseCase: Login
+        loginUseCase: Login,
+        recuperarSenhaUseCase: RecuperarSenha
     ) {
         this.createUserUseCase = createUserUseCase;
-        this.loginUseCase = loginUseCase;
+        this.loginUseCase = loginUseCase; 
+        this.recuperarSenhaUseCase = recuperarSenhaUseCase;
     }
 
     public async create(req: Request, res: Response): Promise<any> {
@@ -75,6 +81,30 @@ export class UserController {
         } catch (error) {
             console.error('Erro ao processar requisição:', error);
             res.status(400).json({ message: `Erro realizar Login - ${error}` });
+        }
+    }
+
+    public async recuperarSenha(req: Request, res: Response): Promise<any>{
+        try {
+            
+            const {email} = req.body;
+
+            const reqSchema = {email};
+
+            const validatedData = await validateDTOUserEmail(reqSchema, res);
+            if (!validatedData) return;
+
+            const dto = new UserEmailDTO(validatedData.email);
+
+            const userResponse = await this.recuperarSenhaUseCase.execute(dto);
+
+            res.status(201).json({
+                message: "Email enviado!",
+            });
+
+        } catch (error) {
+            console.error('Erro ao processar requisição:', error);
+            res.status(400).json({ message: `Erro ao Recuperar Senha - ${error}` });
         }
     }
 }
