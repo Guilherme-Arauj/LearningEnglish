@@ -11,23 +11,32 @@ export class TokenMiddleware {
     private jwtConfig: IJwtConfig
   ) {}
 
-  public verifyToken = async(req: Request, res: Response, next: NextFunction) =>{
+  public verifyToken = async(req: Request, res: Response, next: NextFunction): Promise<void> =>{
     let token = req.session.user?.token;
     
-    
     if (!token) {
-      return res.status(401).json({ message: 'Token não fornecido' });
+      const authHeader = req.headers.authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.split(' ')[1];
+      }
+    }
+
+    if (!token) {
+      res.status(401).json({ message: 'Token não fornecido' });
+      return;
     }
 
     const decoded = this.jwtConfig.verify(token);
     if (!decoded || typeof decoded === 'string') {
-      return res.status(401).json({ message: 'Token inválido ou expirado' });
+      res.status(401).json({ message: 'Token inválido ou expirado' });
+      return
     }
 
     const usuario = await this.userRepository.getUser((decoded as any).id)
 
     if (!usuario) {
-      return res.status(404).json({ message: 'Usuário não encontrado' });
+      res.status(404).json({ message: 'Usuário não encontrado' });
+      return
     }
 
     const novoToken = this.jwtConfig.sign(
@@ -36,7 +45,7 @@ export class TokenMiddleware {
     );
 
     res.setHeader('Authorization', `Bearer ${novoToken}`);
-    console.log(req.session.user);
+
     
     
     req.user = usuario;

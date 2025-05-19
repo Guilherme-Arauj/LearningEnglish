@@ -7,6 +7,7 @@ import { ResetPasswordFactory } from '../../factories/ResetPasswordFactory';
 const userRouter = Router();
 
 const userController = UserFactory(); // Usando a Factory para criar o controller
+const tokenMiddleware = TokenMiddlewareFactory(); // Usando a Factory de autenticação da rota
 const resetPasswordMiddleware = ResetPasswordFactory();
 
 //rota de cadastro de usuário
