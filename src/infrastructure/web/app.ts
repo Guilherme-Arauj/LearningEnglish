@@ -6,6 +6,7 @@ import { userRouter } from './routes/user';
 import { adminRouter } from './routes/admin';
 import { studentRouter } from './routes/student';
 import cors from 'cors';
+import { SESSION_SECRET } from '../env/envConfig';
 
 const app: Application = express();
 
@@ -13,7 +14,7 @@ const app: Application = express();
 app.use(cors());
 
 app.use(session({
-    secret: process.env.SESSION_SECRET as string,
+    secret: SESSION_SECRET as string,
     resave: false,
     saveUninitialized: true,            
     cookie: { secure: false }

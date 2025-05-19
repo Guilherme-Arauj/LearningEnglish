@@ -11,4 +11,7 @@ userRouter.post('/cadastro', (req, res) => userController.create(req, res));
 //rota para login
 userRouter.post('/login', (req, res) => userController.login(req, res));
 
+//rota de recuperação de senha
+userRouter.post('/recuperarSenha', (req, res) => userController.recuperarSenha(req, res));
+
 export { userRouter };
