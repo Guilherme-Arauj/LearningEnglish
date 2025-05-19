@@ -13,7 +13,7 @@ export class Login {
 
     public async execute(dto: UserLoginDTO): Promise <any>{
         
-        const userValidation = await this.userRepository.validate(dto.email);
+        const userValidation = await this.userRepository.findUserByEmail(dto.email);
 
         const privilege = userValidation?.privilege ;
 
@@ -28,7 +28,6 @@ export class Login {
         }
 
         const token = this.jwtConfig.sign({ id: userValidation.id, email: userValidation.email }, { expiresIn: '2h', })
-
 
         return { 
             id: userValidation.id,

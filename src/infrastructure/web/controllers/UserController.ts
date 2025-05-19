@@ -8,18 +8,24 @@ import { validateDTOLogin } from '../../utils/zod/validateDTOLogin';
 import { validateDTOUserEmail } from '../../utils/zod/validateDTOUserEmail';
 import { UserEmailDTO } from '../../../application/dto/UserEmailDTO';
 import { RecuperarSenha } from '../../../application/usecases/RecuperarSenha';
+import { validateDTOUserNewPassword } from '../../utils/zod/validateDTOUserNewPassword';
+import { UserNewPasswordDTO } from '../../../application/dto/UserNewPasswordDTO';
+import { RedefinirSenha } from '../../../application/usecases/RedefinirSenha';
 
 
 export class UserController {
     private createUserUseCase: CreateUser
     private loginUseCase: Login
     private recuperarSenhaUseCase: RecuperarSenha
+    private redefinirSenhaUseCase: RedefinirSenha
 
     constructor(
         createUserUseCase: CreateUser,
         loginUseCase: Login,
-        recuperarSenhaUseCase: RecuperarSenha
+        recuperarSenhaUseCase: RecuperarSenha,
+        redefinirSenhaUseCase: RedefinirSenha
     ) {
+        this.redefinirSenhaUseCase = redefinirSenhaUseCase;
         this.createUserUseCase = createUserUseCase;
         this.loginUseCase = loginUseCase; 
         this.recuperarSenhaUseCase = recuperarSenhaUseCase;
@@ -65,7 +71,7 @@ export class UserController {
             if (!userResponse) {
                 return res.status(401).json({ message: "Credenciais inválidas" });
             }
-            
+
             req.session.user = {
                 id: userResponse.id,
                 name: userResponse.name,
@@ -99,12 +105,37 @@ export class UserController {
             const userResponse = await this.recuperarSenhaUseCase.execute(dto);
 
             res.status(201).json({
-                message: "Email enviado!",
+                message: "Link de recuperação de senha enviado!",
             });
 
         } catch (error) {
             console.error('Erro ao processar requisição:', error);
             res.status(400).json({ message: `Erro ao Recuperar Senha - ${error}` });
+        }
+    }
+
+    public async redefinirSenha(req: Request, res: Response): Promise<any>{
+        try {
+
+            const {id, password} = req.body;
+
+            const reqSchema = {id, password};
+
+            const validatedData = await validateDTOUserNewPassword(reqSchema);
+            if(!validatedData) return;
+
+            const dto = new UserNewPasswordDTO(validatedData.id, validatedData.password);
+
+            const userResponse = await this.redefinirSenhaUseCase.execute(dto);
+
+            res.status(201).json({
+                message: "Senha alterada com sucesso! ",
+                userResponse
+            });
+
+        } catch (error) {
+            console.error('Erro ao processar requisição:', error);
+            res.status(400).json({ message: `Erro ao Redefinir Senha - ${error}` });
         }
     }
 }

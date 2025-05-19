@@ -13,7 +13,7 @@ export class RecuperarSenha {
   ) {}
 
   public async execute(dto: UserEmailDTO): Promise<void> {
-    const userValidation = await this.userRepository.validate(dto.email);
+    const userValidation = await this.userRepository.findUserByEmail(dto.email);
 
     if (!userValidation) {
       throw new Error("[Usuário não encontrado no banco de dados]");
