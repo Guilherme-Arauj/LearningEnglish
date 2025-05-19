@@ -13,7 +13,7 @@ export class CreateUser{
     ){}
 
     public async execute(dto: UserDTO): Promise <UserResponseDTO>{
-        const userValidation = await this.userRepository.validate(dto.email);
+        const userValidation = await this.userRepository.findUserByEmail(dto.email);
         
         if(userValidation){
             throw new Error("[Email de usuário já presente no Banco de dados]");

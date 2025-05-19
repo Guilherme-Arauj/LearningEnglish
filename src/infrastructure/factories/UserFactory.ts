@@ -17,6 +17,7 @@ import { IMailer } from "../utils/nodemailer/IMailer";
 import Mailer from "../utils/nodemailer/Mailer";
 import { IResetPasswordEmail } from "../utils/nodemailer/recuperarSenhaMail/IResetPasswordEmail";
 import { ResetPasswordEmail } from "../utils/nodemailer/recuperarSenhaMail/ResetPasswordEmail";
+import { RedefinirSenha } from "../../application/usecases/RedefinirSenha";
 
 
 
@@ -47,9 +48,15 @@ export function UserFactory(): UserController {
         jwtConfig
     );
 
+    const redefinirSenhaUseCase = new RedefinirSenha(
+       userRepository,
+       bcryptConfig
+    )
+
     return new UserController(
         createUserUseCase, 
         loginUseCase, 
-        recuperarSenhaUseCase
+        recuperarSenhaUseCase,
+        redefinirSenhaUseCase
     ); // Controller recebe os Use Cases
 }

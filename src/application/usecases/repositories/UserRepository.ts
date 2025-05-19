@@ -1,6 +1,7 @@
 import { User } from "../../../domain/entities/User";
 import { IUserRepository } from "./IUserRepository";
 import { IPrismaConfig } from "../../../infrastructure/database/IPrismaConfig";
+import { UUIDTypes } from "uuid";
 
 export class UserRepository implements IUserRepository {
     constructor(private prismaConfig: IPrismaConfig){}
@@ -22,12 +23,20 @@ export class UserRepository implements IUserRepository {
         });
     }
 
-    public async validate(email: string): Promise<User | null> {
+    public async findUserByEmail(email: string): Promise<User | null> {
         return await this.prisma.user.findUnique({
             where: {
                 email: email
             }
         });
+    }
+
+    public async findUserById(id: string): Promise<User | null> {
+        return await this.prisma.user.findUnique({
+            where:{
+                id: id
+            }
+        })
     }
 
     public async getUser(id: string): Promise<User | null> {
@@ -36,5 +45,16 @@ export class UserRepository implements IUserRepository {
                 id: id
             }
         })
+    }
+
+    public async changePassword(id: string, newPassword: string): Promise<User> {
+        return await this.prisma.user.update({
+            where:{
+                id:id
+            },
+            data:{
+                password: newPassword
+            }
+        });
     }
 }
