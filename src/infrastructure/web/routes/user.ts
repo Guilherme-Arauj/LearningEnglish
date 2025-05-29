@@ -25,4 +25,7 @@ userRouter.post('/redefinirSenha', resetPasswordMiddleware.verifyToken, (req, re
 //rota de atualização de usuário
 userRouter.put('/atualizarUsuario', tokenMiddleware.verifyToken, (req, res) => userController.updateUser(req, res));
 
+// rota para listar todos os usuários
+userRouter.get('/listarUsuarios', tokenMiddleware.verifyToken, (req, res) => userController.getAll(req, res));
+
 export { userRouter };
