@@ -152,6 +152,10 @@ export class UserController {
     public async updateUser(req: Request, res: Response): Promise<any>{
         try {
 
+            if (!req.user || req.user.privilege !== 'admin') {
+                return res.status(403).json({ message: 'Acesso restrito: apenas administradores podem acessar esta rota.' });
+            }
+
             const { id, ...userData } = req.body;
 
             const reqSchema = { id, ...userData };
