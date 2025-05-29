@@ -2,6 +2,7 @@ import { User } from "../../../domain/entities/User";
 import { IUserRepository } from "./IUserRepository";
 import { IPrismaConfig } from "../../../infrastructure/database/IPrismaConfig";
 import { UUIDTypes } from "uuid";
+import { Prisma } from "@prisma/client";
 
 export class UserRepository implements IUserRepository {
     constructor(private prismaConfig: IPrismaConfig){}
@@ -55,6 +56,20 @@ export class UserRepository implements IUserRepository {
             data:{
                 password: newPassword
             }
+        });
+    }
+
+
+    public async updateUser(user: User): Promise<User> {
+        return await this.prisma.user.update({
+          where: { id: user.id },
+          data: {
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            privilege: user.privilege,
+            cefr: user.cefr,
+          },
         });
     }
 }
