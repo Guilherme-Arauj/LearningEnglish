@@ -10,7 +10,7 @@ export class QuestionController {
     this.createQuestionUseCase = createQuestionUseCase;
   }
 
-  public async create(req: Request, res: Response): Promise<any> {
+  public async createQuestion(req: Request, res: Response): Promise<any> {
     try {
 
       if (!req.user || req.user.privilege !== 'admin') {

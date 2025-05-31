@@ -8,6 +8,6 @@ const questionController = QuestionFactory();
 const tokenMiddleware = TokenMiddlewareFactory();
 
 //rota para criar questão
-adminRouter.post('/criarQuestao', tokenMiddleware.verifyToken, (req, res) => questionController.create(req, res));
+adminRouter.post('/criarQuestao', tokenMiddleware.verifyToken, (req, res) => questionController.createQuestion(req, res));
 
 export { adminRouter };
