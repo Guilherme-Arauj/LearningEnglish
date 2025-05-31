@@ -13,4 +13,7 @@ adminRouter.post('/criarQuestao', tokenMiddleware.verifyToken, (req, res) => que
 //rota para atualizar questão
 adminRouter.put('/atualizarQuestao', tokenMiddleware.verifyToken, (req, res) => questionController.updateQuestion(req, res));
 
+//rota para receber todas as questões
+adminRouter.get('/receberQuestoes', tokenMiddleware.verifyToken, (req, res) => questionController.getAllQuestions(req, res));
+
 export { adminRouter };
