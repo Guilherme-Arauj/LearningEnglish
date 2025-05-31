@@ -206,7 +206,7 @@ export class UserController {
 
     public async deleteUser(req: Request, res: Response): Promise<any> {
         try {
-            
+
           if (!req.user || req.user.privilege !== 'admin') {
             return res.status(403).json({ message: 'Acesso restrito: apenas administradores podem acessar esta rota.' });
           }
@@ -231,5 +231,5 @@ export class UserController {
           console.error('Erro ao excluir usuários:', error);
           res.status(400).json({ message: `Erro ao excluir usuários - ${error}` });
         }
-      }
+    }
 }

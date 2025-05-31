@@ -10,4 +10,7 @@ const tokenMiddleware = TokenMiddlewareFactory();
 //rota para criar questão
 adminRouter.post('/criarQuestao', tokenMiddleware.verifyToken, (req, res) => questionController.createQuestion(req, res));
 
+//rota para atualizar questão
+adminRouter.put('/atualizarQuestao', tokenMiddleware.verifyToken, (req, res) => questionController.updateQuestion(req, res));
+
 export { adminRouter };
