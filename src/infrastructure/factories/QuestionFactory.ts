@@ -8,6 +8,7 @@ import { IPrismaConfig } from "../database/IPrismaConfig";
 import { PrismaConfig } from "../database/PrismaConfig";
 import { UpdateQuestion } from "../../application/usecases/UpdateQuestion";
 import { GetAllQuestions } from "../../application/usecases/GetAllQuestions";
+import { DeleteQuestion } from "../../application/usecases/DeleteQuestion";
 
 export function QuestionFactory(): QuestionController {
     const prismaConfig: IPrismaConfig = new PrismaConfig();
@@ -27,5 +28,9 @@ export function QuestionFactory(): QuestionController {
         questionRepository
     )
 
-    return new QuestionController(createQuestionUseCase, updateQuestionUseCase, getAllQuestionsUseCase);
+    const deleteQuestionUseCase = new DeleteQuestion(
+        questionRepository
+    )
+
+    return new QuestionController(createQuestionUseCase, updateQuestionUseCase, getAllQuestionsUseCase, deleteQuestionUseCase);
 }

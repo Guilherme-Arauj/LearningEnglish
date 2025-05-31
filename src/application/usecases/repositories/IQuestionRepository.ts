@@ -6,4 +6,5 @@ export interface IQuestionRepository {
     update(question: Question): Promise<Question>;
     findQuestionById(id: string): Promise <Question | null>;
     get(): Promise<Question[]>; 
+    delete(questionId: string): Promise<Question>; 
 }

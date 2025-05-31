@@ -16,4 +16,7 @@ adminRouter.put('/atualizarQuestao', tokenMiddleware.verifyToken, (req, res) => 
 //rota para receber todas as questões
 adminRouter.get('/receberQuestoes', tokenMiddleware.verifyToken, (req, res) => questionController.getAllQuestions(req, res));
 
+// rota para excluir questão
+adminRouter.delete('/excluirQuestao', tokenMiddleware.verifyToken, (req, res) => questionController.deleteQuestion(req, res));
+
 export { adminRouter };
