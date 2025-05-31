@@ -16,6 +16,13 @@ export class UuidConfig implements IUuidConfig{
         const uuidComPrefixo = "ADMIN-" + uuidLimitado;
         return uuidComPrefixo;
     }
+
+    public async generateQuestionId(): Promise<string> {
+        const uuid = uuidv4();
+        const uuidLimitado = uuid.substring(0, 12);
+        const uuidComPrefixo = "Q-" + uuidLimitado;
+        return uuidComPrefixo;
+    }
 }
 
 
