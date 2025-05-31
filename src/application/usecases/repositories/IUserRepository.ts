@@ -9,4 +9,5 @@ export interface IUserRepository {
     changePassword(id: string, newPassword: string): Promise<User>; 
     updateUser(user: User): Promise<User>;
     get(): Promise<User[]>;
+    deleteUserById(id: string): Promise<User>;
 }

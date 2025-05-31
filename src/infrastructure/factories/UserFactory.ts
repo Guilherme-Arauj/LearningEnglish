@@ -20,6 +20,7 @@ import { ResetPasswordEmail } from "../utils/nodemailer/recuperarSenhaMail/Reset
 import { RedefinirSenha } from "../../application/usecases/RedefinirSenha";
 import { UpdateUser } from "../../application/usecases/UpdateUser";
 import { GetAllUsers } from "../../application/usecases/GetAllUsers";
+import { DeleteUser } from "../../application/usecases/DeleteUser";
 
 
 
@@ -62,12 +63,15 @@ export function UserFactory(): UserController {
 
     const getAllUsersUseCase = new GetAllUsers(userRepository);
 
+    const deleteUserUseCase = new DeleteUser(userRepository);
+
     return new UserController(
         createUserUseCase, 
         loginUseCase, 
         recuperarSenhaUseCase,
         redefinirSenhaUseCase,
         updateUserUseCase,
-        getAllUsersUseCase
+        getAllUsersUseCase,
+        deleteUserUseCase
     ); 
 }
