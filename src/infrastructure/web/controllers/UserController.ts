@@ -15,6 +15,9 @@ import { RedefinirSenha } from '../../../application/usecases/RedefinirSenha';
 import { UserUpdateDTO } from '../../../application/dto/UserUpdateDTO';
 import { UpdateUser } from '../../../application/usecases/UpdateUser';
 import { GetAllUsers } from '../../../application/usecases/GetAllUsers';
+import { validateDTODeleteUser } from '../../utils/zod/validateDTODeleteUser';
+import { DeleteUserDTO } from '../../../application/dto/DeleteUserDTO';
+import { DeleteUser } from '../../../application/usecases/DeleteUser';
 
 
 export class UserController {
@@ -24,6 +27,7 @@ export class UserController {
     private redefinirSenhaUseCase: RedefinirSenha
     private updateUserUseCase: UpdateUser
     private getAllUsersUseCase: GetAllUsers
+    private deleteUserUseCase: DeleteUser
 
     constructor(
         createUserUseCase: CreateUser,
@@ -31,14 +35,16 @@ export class UserController {
         recuperarSenhaUseCase: RecuperarSenha,
         redefinirSenhaUseCase: RedefinirSenha,
         updateUserUseCase: UpdateUser,
-        getAllUsersUseCase: GetAllUsers
+        getAllUsersUseCase: GetAllUsers,
+        deleteUserUseCase: DeleteUser
     ) {
         this.redefinirSenhaUseCase = redefinirSenhaUseCase;
         this.createUserUseCase = createUserUseCase;
         this.loginUseCase = loginUseCase; 
         this.recuperarSenhaUseCase = recuperarSenhaUseCase;
         this.updateUserUseCase = updateUserUseCase;
-        this.getAllUsersUseCase =getAllUsersUseCase;
+        this.getAllUsersUseCase = getAllUsersUseCase;
+        this.deleteUserUseCase = deleteUserUseCase;
     }
 
     public async create(req: Request, res: Response): Promise<any> {
@@ -201,4 +207,32 @@ export class UserController {
             res.status(400).json({ message: `Erro ao buscar usuários - ${error}` });
         }
     }
+
+    public async deleteUser(req: Request, res: Response): Promise<any> {
+        try {
+          if (!req.user || req.user.privilege !== 'admin') {
+            return res.status(403).json({ message: 'Acesso restrito: apenas administradores podem acessar esta rota.' });
+          }
+      
+          const { id } = req.body;
+          const reqSchema = { id };
+      
+          const validatedData = await validateDTODeleteUser(reqSchema, res);
+          if (!validatedData) return;
+      
+          const dto = new DeleteUserDTO(validatedData);
+      
+          const deletedUser = await this.deleteUserUseCase.execute(dto);
+      
+          if (!deletedUser) {
+            return res.status(404).json({ message: 'Usuário não encontrado.' });
+          }
+      
+          return res.status(200).json({ message: 'Usuário excluído com sucesso.', user: deletedUser });
+      
+        } catch (error) {
+          console.error('Erro ao excluir usuários:', error);
+          res.status(400).json({ message: `Erro ao excluir usuários - ${error}` });
+        }
+      }
 }
