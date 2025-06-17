@@ -9,18 +9,29 @@ import { GetAllQuestions } from '../../../application/usecases/GetAllQuestions';
 import { validateDTODeleteQuestion } from '../../utils/zod/validateDTODeleteQuestion';
 import { DeleteQuestionDTO } from '../../../application/dto/DeleteQuestionDTO';
 import { DeleteQuestion } from '../../../application/usecases/DeleteQuestion';
+import { validateDTOAnswerQuestion } from '../../utils/zod/validateDTOAnswerQuestion';
+import { AnswerQuestionDTO } from '../../../application/dto/AnswerQuestionDTO';
+import { AnswerQuestion } from '../../../application/usecases/AnswerQuestion';
 
 export class QuestionController {
     private createQuestionUseCase: CreateQuestion
     private updateQuestionUseCase: UpdateQuestion
     private getAllQuestionsUseCase: GetAllQuestions
     private deleteQuestionUseCase: DeleteQuestion
+    private answerQuestionUseCase: AnswerQuestion
     
-  constructor( createQuestionUseCase: CreateQuestion, updateQuestionUseCase: UpdateQuestion, getAllQuestionsUseCase: GetAllQuestions, deleteQuestionUseCase: DeleteQuestion) {
+  constructor( 
+    createQuestionUseCase: CreateQuestion, 
+    updateQuestionUseCase: UpdateQuestion, 
+    getAllQuestionsUseCase: GetAllQuestions, 
+    deleteQuestionUseCase: DeleteQuestion,
+    answerQuestionUseCase: AnswerQuestion
+  ){
     this.createQuestionUseCase = createQuestionUseCase;
     this.updateQuestionUseCase = updateQuestionUseCase;
     this.getAllQuestionsUseCase = getAllQuestionsUseCase;
     this.deleteQuestionUseCase = deleteQuestionUseCase;
+    this.answerQuestionUseCase = answerQuestionUseCase
   }
 
   public async createQuestion(req: Request, res: Response): Promise<any> {
@@ -124,6 +135,32 @@ export class QuestionController {
     } catch (error) {
       console.error('Erro ao excluir questão:', error);
       res.status(400).json({ message: `Erro ao excluir questão - ${error}` });
+    }
+  }
+
+  public async answerQuestion(req: Request, res: Response): Promise<any> {
+    try {
+      const { id, answer } = req.body;
+      const reqSchema = { id, answer };
+
+      const validatedData = await validateDTOAnswerQuestion(reqSchema, res);
+      if(!validatedData) return;
+
+      const dto = new AnswerQuestionDTO(validatedData.id, validatedData.answer);
+
+      const answerQuestion = await this.answerQuestionUseCase.execute(dto);
+
+      res.status(200).json({
+        success: true,
+        message: answerQuestion.correct ? "Resposta correta!" : "Resposta incorreta!",
+        data: {
+          correct: answerQuestion.correct,
+          ...(answerQuestion.correctAnswer && { correctAnswer: answerQuestion.correctAnswer })
+        }
+      });
+    } catch (error) {
+      console.error('Erro ao responder questão:', error);
+      res.status(400).json({ message: `Erro ao responder questão - ${error}` });
     }
   }
 }
