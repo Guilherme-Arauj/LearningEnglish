@@ -22,4 +22,7 @@ userRouter.post('/recuperarSenha', (req, res) => userController.recuperarSenha(r
 //rota de redefinição de senha
 userRouter.post('/redefinirSenha', resetPasswordMiddleware.verifyToken, (req, res) => userController.redefinirSenha(req, res));
 
+//rota de atualização de usuário
+userRouter.put('/atualizarUsuario', tokenMiddleware.verifyToken, (req, res) => userController.updateUser(req, res));
+
 export { userRouter };

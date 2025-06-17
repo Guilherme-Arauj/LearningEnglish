@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { validateDTOUserUpdate } from '../../utils/zod/validateDTOUserUpdate';
 import { validateDTOUser } from '../../utils/zod/validateDTOUser';
 import { UserDTO } from '../../../application/dto/UserDTO';
 import { CreateUser } from '../../../application/usecases/CreateUser';
@@ -11,6 +12,8 @@ import { RecuperarSenha } from '../../../application/usecases/RecuperarSenha';
 import { validateDTOUserNewPassword } from '../../utils/zod/validateDTOUserNewPassword';
 import { UserNewPasswordDTO } from '../../../application/dto/UserNewPasswordDTO';
 import { RedefinirSenha } from '../../../application/usecases/RedefinirSenha';
+import { UserUpdateDTO } from '../../../application/dto/UserUpdateDTO';
+import { UpdateUser } from '../../../application/usecases/UpdateUser';
 
 
 export class UserController {
@@ -18,17 +21,20 @@ export class UserController {
     private loginUseCase: Login
     private recuperarSenhaUseCase: RecuperarSenha
     private redefinirSenhaUseCase: RedefinirSenha
+    private updateUserUseCase: UpdateUser
 
     constructor(
         createUserUseCase: CreateUser,
         loginUseCase: Login,
         recuperarSenhaUseCase: RecuperarSenha,
-        redefinirSenhaUseCase: RedefinirSenha
+        redefinirSenhaUseCase: RedefinirSenha,
+        updateUserUseCase: UpdateUser
     ) {
         this.redefinirSenhaUseCase = redefinirSenhaUseCase;
         this.createUserUseCase = createUserUseCase;
         this.loginUseCase = loginUseCase; 
         this.recuperarSenhaUseCase = recuperarSenhaUseCase;
+        this.updateUserUseCase = updateUserUseCase;
     }
 
     public async create(req: Request, res: Response): Promise<any> {
@@ -136,6 +142,35 @@ export class UserController {
         } catch (error) {
             console.error('Erro ao processar requisição:', error);
             res.status(400).json({ message: `Erro ao Redefinir Senha - ${error}` });
+        }
+    }
+
+    public async updateUser(req: Request, res: Response): Promise<any>{
+        try {
+            
+            if (!req.user || req.user.privilege !== 'admin') {
+                return res.status(403).json({ message: 'Acesso restrito: apenas administradores podem acessar esta rota.' });
+            }
+
+            const { id, ...userData } = req.body;
+
+            const reqSchema = { id, ...userData };
+
+            const validatedData = await validateDTOUserUpdate(reqSchema, res);
+            if (!validatedData) return;
+
+            const dto = new UserUpdateDTO(validatedData.id, validatedData); 
+
+            const userResponse = await this.updateUserUseCase.execute(dto);
+
+            res.status(200).json({
+            message: "Usuário atualizado com sucesso!",
+            userResponse
+            });
+
+        } catch (error) {
+            console.error('Erro ao processar requisição:', error);
+            res.status(400).json({ message: `Erro ao Atualizar Usuário - ${error}` });
         }
     }
 }

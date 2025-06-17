@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import {User} from "../../../domain/entities/User";
 
 export interface IUserRepository {
@@ -6,4 +7,5 @@ export interface IUserRepository {
     findUserById(id: string): Promise <User | null>;
     getUser(id: string): Promise <User | null>;
     changePassword(id: string, newPassword: string): Promise<User>; 
+    updateUser(user: User): Promise<User>;
 }
