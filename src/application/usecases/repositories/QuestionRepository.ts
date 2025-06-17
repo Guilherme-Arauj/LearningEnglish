@@ -101,4 +101,27 @@ export class QuestionRepository implements IQuestionRepository {
             response: q.response ?? undefined,
         }));
     }
+
+    public async delete(id: string): Promise<Question> {
+        const question = await this.findQuestionById(id);
+        if (!question) throw new Error('Questão não encontrada');
+    
+        await this.prisma.deletedQuestion.create({
+            data: {
+                id: question.id,
+                title: question.title,
+                cefr: question.cefr,
+                type: question.type,
+                theme: question.theme,
+                optionA: question.optionA,
+                optionB: question.optionB,
+                optionC: question.optionC,
+                response: question.response,
+            }
+        });
+    
+        await this.prisma.question.delete({ where: { id } });
+    
+        return question;
+    }
 }

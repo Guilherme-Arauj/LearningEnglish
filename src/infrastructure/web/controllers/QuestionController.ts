@@ -6,16 +6,21 @@ import { validateDTOQuestionUpdate } from '../../utils/zod/validateDTOQuestionUp
 import { QuestionUpdateDTO } from '../../../application/dto/QuestionUpdateDTO';
 import { UpdateQuestion } from '../../../application/usecases/UpdateQuestion';
 import { GetAllQuestions } from '../../../application/usecases/GetAllQuestions';
+import { validateDTODeleteQuestion } from '../../utils/zod/validateDTODeleteQuestion';
+import { DeleteQuestionDTO } from '../../../application/dto/DeleteQuestionDTO';
+import { DeleteQuestion } from '../../../application/usecases/DeleteQuestion';
 
 export class QuestionController {
     private createQuestionUseCase: CreateQuestion
     private updateQuestionUseCase: UpdateQuestion
     private getAllQuestionsUseCase: GetAllQuestions
+    private deleteQuestionUseCase: DeleteQuestion
     
-  constructor( createQuestionUseCase: CreateQuestion, updateQuestionUseCase: UpdateQuestion, getAllQuestionsUseCase: GetAllQuestions) {
+  constructor( createQuestionUseCase: CreateQuestion, updateQuestionUseCase: UpdateQuestion, getAllQuestionsUseCase: GetAllQuestions, deleteQuestionUseCase: DeleteQuestion) {
     this.createQuestionUseCase = createQuestionUseCase;
     this.updateQuestionUseCase = updateQuestionUseCase;
     this.getAllQuestionsUseCase = getAllQuestionsUseCase;
+    this.deleteQuestionUseCase = deleteQuestionUseCase;
   }
 
   public async createQuestion(req: Request, res: Response): Promise<any> {
@@ -93,6 +98,32 @@ export class QuestionController {
     } catch (error) {
         console.error('Erro ao buscar questões:', error);
         res.status(400).json({ message: `Erro ao buscar questões - ${error}` });
+    }
+  }
+
+  public async deleteQuestion(req: Request, res: Response): Promise<any> {
+    try {
+      if (!req.user || req.user.privilege !== 'admin') {
+        return res.status(403).json({ message: 'Acesso restrito: apenas administradores podem acessar esta rota.' });
+      }
+
+      const { id } = req.body;
+      const reqSchema = { id };
+
+      const validatedData = await validateDTODeleteQuestion(reqSchema, res);
+      if (!validatedData) return;
+
+      const dto = new DeleteQuestionDTO(validatedData);
+
+      const deletedQuestion = await this.deleteQuestionUseCase.execute(dto);
+
+      res.status(200).json({
+        message: "Questão excluída com sucesso!",
+        question: deletedQuestion
+      });
+    } catch (error) {
+      console.error('Erro ao excluir questão:', error);
+      res.status(400).json({ message: `Erro ao excluir questão - ${error}` });
     }
   }
 }
