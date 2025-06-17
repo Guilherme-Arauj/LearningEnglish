@@ -39,4 +39,53 @@ export class QuestionRepository implements IQuestionRepository {
         });
     }
 
+    public async update(question: Question): Promise<Question> {
+        const updated = await this.prisma.question.update({
+            where: { id: question.id },
+            data: {
+                title: question.title,
+                cefr: question.cefr,
+                type: question.type,
+                theme: question.theme,
+                optionA: question.optionA,
+                optionB: question.optionB,
+                optionC: question.optionC,
+                response: question.response
+            }
+        });
+    
+        return new Question({
+            id: updated.id,
+            title: updated.title,
+            cefr: updated.cefr ?? undefined,
+            type: updated.type ?? undefined,
+            theme: updated.theme ?? undefined,
+            optionA: updated.optionA ?? undefined,
+            optionB: updated.optionB ?? undefined,
+            optionC: updated.optionC ?? undefined,
+            response: updated.response ?? undefined,
+        });
+    }
+
+    public async findQuestionById(id: string): Promise<Question | null> {
+        const question = await this.prisma.question.findUnique({
+            where: { id }
+        });
+    
+        if (!question) return null;
+    
+        return new Question({
+            id: question.id,
+            title: question.title,
+            cefr: question.cefr ?? undefined,
+            type: question.type ?? undefined,
+            theme: question.theme ?? undefined,
+            optionA: question.optionA ?? undefined,
+            optionB: question.optionB ?? undefined,
+            optionC: question.optionC ?? undefined,
+            response: question.response ?? undefined,
+        });
+    }
+
+
 }
