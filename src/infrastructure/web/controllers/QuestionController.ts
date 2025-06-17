@@ -5,14 +5,17 @@ import { CreateQuestion } from '../../../application/usecases/CreateQuestion';
 import { validateDTOQuestionUpdate } from '../../utils/zod/validateDTOQuestionUpdate';
 import { QuestionUpdateDTO } from '../../../application/dto/QuestionUpdateDTO';
 import { UpdateQuestion } from '../../../application/usecases/UpdateQuestion';
+import { GetAllQuestions } from '../../../application/usecases/GetAllQuestions';
 
 export class QuestionController {
     private createQuestionUseCase: CreateQuestion
     private updateQuestionUseCase: UpdateQuestion
+    private getAllQuestionsUseCase: GetAllQuestions
     
-  constructor( createQuestionUseCase: CreateQuestion, updateQuestionUseCase: UpdateQuestion) {
+  constructor( createQuestionUseCase: CreateQuestion, updateQuestionUseCase: UpdateQuestion, getAllQuestionsUseCase: GetAllQuestions) {
     this.createQuestionUseCase = createQuestionUseCase;
     this.updateQuestionUseCase = updateQuestionUseCase;
+    this.getAllQuestionsUseCase = getAllQuestionsUseCase;
   }
 
   public async createQuestion(req: Request, res: Response): Promise<any> {
@@ -75,6 +78,21 @@ export class QuestionController {
     } catch (error) {
       console.error('Erro ao atualizar questão:', error);
       res.status(400).json({ message: `Erro ao atualizar questão - ${error}` });
+    }
+  }
+
+  public async getAllQuestions(req: Request, res: Response): Promise<any> {
+    try {
+        const questions = await this.getAllQuestionsUseCase.execute();
+
+        res.status(200).json({
+            message: "Questões encontradas com sucesso!",
+            questions
+        });
+
+    } catch (error) {
+        console.error('Erro ao buscar questões:', error);
+        res.status(400).json({ message: `Erro ao buscar questões - ${error}` });
     }
   }
 }

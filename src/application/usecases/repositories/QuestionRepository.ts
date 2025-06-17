@@ -87,5 +87,18 @@ export class QuestionRepository implements IQuestionRepository {
         });
     }
 
-
+    public async get(): Promise<Question[]> {
+        const questions = await this.prisma.question.findMany();
+        return questions.map(q => new Question({
+            id: q.id,
+            title: q.title,
+            cefr: q.cefr ?? undefined,
+            type: q.type ?? undefined,
+            theme: q.theme ?? undefined,
+            optionA: q.optionA ?? undefined,
+            optionB: q.optionB ?? undefined,
+            optionC: q.optionC ?? undefined,
+            response: q.response ?? undefined,
+        }));
+    }
 }

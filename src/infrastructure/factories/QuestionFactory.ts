@@ -7,6 +7,7 @@ import { UuidConfig } from "../utils/uuid/UuidConfig";
 import { IPrismaConfig } from "../database/IPrismaConfig";
 import { PrismaConfig } from "../database/PrismaConfig";
 import { UpdateQuestion } from "../../application/usecases/UpdateQuestion";
+import { GetAllQuestions } from "../../application/usecases/GetAllQuestions";
 
 export function QuestionFactory(): QuestionController {
     const prismaConfig: IPrismaConfig = new PrismaConfig();
@@ -22,5 +23,9 @@ export function QuestionFactory(): QuestionController {
         questionRepository
     );
 
-    return new QuestionController(createQuestionUseCase, updateQuestionUseCase);
+    const getAllQuestionsUseCase = new GetAllQuestions(
+        questionRepository
+    )
+
+    return new QuestionController(createQuestionUseCase, updateQuestionUseCase, getAllQuestionsUseCase);
 }
