@@ -8,4 +8,5 @@ export interface IUserRepository {
     getUser(id: string): Promise <User | null>;
     changePassword(id: string, newPassword: string): Promise<User>; 
     updateUser(user: User): Promise<User>;
+    get(): Promise<User[]>;
 }

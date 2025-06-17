@@ -14,6 +14,7 @@ import { UserNewPasswordDTO } from '../../../application/dto/UserNewPasswordDTO'
 import { RedefinirSenha } from '../../../application/usecases/RedefinirSenha';
 import { UserUpdateDTO } from '../../../application/dto/UserUpdateDTO';
 import { UpdateUser } from '../../../application/usecases/UpdateUser';
+import { GetAllUsers } from '../../../application/usecases/GetAllUsers';
 
 
 export class UserController {
@@ -22,19 +23,22 @@ export class UserController {
     private recuperarSenhaUseCase: RecuperarSenha
     private redefinirSenhaUseCase: RedefinirSenha
     private updateUserUseCase: UpdateUser
+    private getAllUsersUseCase: GetAllUsers
 
     constructor(
         createUserUseCase: CreateUser,
         loginUseCase: Login,
         recuperarSenhaUseCase: RecuperarSenha,
         redefinirSenhaUseCase: RedefinirSenha,
-        updateUserUseCase: UpdateUser
+        updateUserUseCase: UpdateUser,
+        getAllUsersUseCase: GetAllUsers
     ) {
         this.redefinirSenhaUseCase = redefinirSenhaUseCase;
         this.createUserUseCase = createUserUseCase;
         this.loginUseCase = loginUseCase; 
         this.recuperarSenhaUseCase = recuperarSenhaUseCase;
         this.updateUserUseCase = updateUserUseCase;
+        this.getAllUsersUseCase =getAllUsersUseCase;
     }
 
     public async create(req: Request, res: Response): Promise<any> {
@@ -152,6 +156,10 @@ export class UserController {
                 return res.status(403).json({ message: 'Acesso restrito: apenas administradores podem acessar esta rota.' });
             }
 
+            if (!req.user || req.user.privilege !== 'admin') {
+                return res.status(403).json({ message: 'Acesso restrito: apenas administradores podem acessar esta rota.' });
+            }
+
             const { id, ...userData } = req.body;
 
             const reqSchema = { id, ...userData };
@@ -171,6 +179,26 @@ export class UserController {
         } catch (error) {
             console.error('Erro ao processar requisição:', error);
             res.status(400).json({ message: `Erro ao Atualizar Usuário - ${error}` });
+        }
+    }
+
+    public async getAll(req: Request, res: Response): Promise<any> {
+        try {
+
+            if (!req.user || req.user.privilege !== 'admin') {
+                return res.status(403).json({ message: 'Acesso restrito: apenas administradores podem acessar esta rota.' });
+            }
+
+            const users = await this.getAllUsersUseCase.execute();
+            
+            res.status(200).json({
+                message: "Usuários encontrados com sucesso!",
+                users
+            });
+
+        } catch (error) {
+            console.error('Erro ao buscar usuários:', error);
+            res.status(400).json({ message: `Erro ao buscar usuários - ${error}` });
         }
     }
 }

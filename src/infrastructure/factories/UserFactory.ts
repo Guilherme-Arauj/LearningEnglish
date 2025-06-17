@@ -19,6 +19,7 @@ import { IResetPasswordEmail } from "../utils/nodemailer/recuperarSenhaMail/IRes
 import { ResetPasswordEmail } from "../utils/nodemailer/recuperarSenhaMail/ResetPasswordEmail";
 import { RedefinirSenha } from "../../application/usecases/RedefinirSenha";
 import { UpdateUser } from "../../application/usecases/UpdateUser";
+import { GetAllUsers } from "../../application/usecases/GetAllUsers";
 
 
 
@@ -59,11 +60,14 @@ export function UserFactory(): UserController {
         bcryptConfig
     );
 
+    const getAllUsersUseCase = new GetAllUsers(userRepository);
+
     return new UserController(
         createUserUseCase, 
         loginUseCase, 
         recuperarSenhaUseCase,
         redefinirSenhaUseCase,
-        updateUserUseCase
+        updateUserUseCase,
+        getAllUsersUseCase
     ); 
 }
