@@ -12,6 +12,7 @@ import { DeleteQuestion } from "../../application/usecases/DeleteQuestion";
 import { AnswerQuestion } from "../../application/usecases/AnswerQuestion";
 import { IUserQuestionProgressRepository } from "../../application/usecases/repositories/IUserQuestionProgressRepository";
 import { UserQuestionProgressRepository } from "../../application/usecases/repositories/UserQuestionProgressRepository";
+import { TrackProgress } from "../../application/usecases/TrackProgress";
 
 export function QuestionFactory(): QuestionController {
     const prismaConfig: IPrismaConfig = new PrismaConfig();
@@ -42,11 +43,16 @@ export function QuestionFactory(): QuestionController {
         uuidConfig
     );
 
+    const trackProgressUseCase = new TrackProgress(
+        userQuestionProgressRepository
+    );
+
     return new QuestionController(
         createQuestionUseCase, 
         updateQuestionUseCase, 
         getAllQuestionsUseCase, 
         deleteQuestionUseCase,
-        answerQuestionUseCase
+        answerQuestionUseCase,
+        trackProgressUseCase
     );
 }

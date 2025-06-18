@@ -67,4 +67,32 @@ export class UserQuestionProgressRepository implements IUserQuestionProgressRepo
             chosenOption: updated.chosenOption ?? undefined,
         });
     }
+
+    public async findByUserIdWithQuestions(userId: string): Promise<any[]> {
+        const progressWithQuestions = await this.prisma.userQuestionProgress.findMany({
+            where: { 
+                userId: userId
+            },
+            include: {
+                Question: true
+            },
+            orderBy: {
+                id: 'desc'
+            }
+        });
+
+        return progressWithQuestions.map(item => ({
+            id: item.id,
+            userId: item.userId,
+            questionId: item.questionId,
+            status: item.status,
+            chosenOption: item.chosenOption,
+            question: item.Question ? {
+                title: item.Question.title,
+                theme: item.Question.theme,
+                cefr: item.Question.cefr,
+                type: item.Question.type
+            } : null
+        }));
+    }
 }

@@ -12,6 +12,7 @@ import { DeleteQuestion } from '../../../application/usecases/DeleteQuestion';
 import { validateDTOAnswerQuestion } from '../../utils/zod/validateDTOAnswerQuestion';
 import { AnswerQuestionDTO } from '../../../application/dto/AnswerQuestionDTO';
 import { AnswerQuestion } from '../../../application/usecases/AnswerQuestion';
+import { TrackProgress } from '../../../application/usecases/TrackProgress';
 
 export class QuestionController {
     private createQuestionUseCase: CreateQuestion
@@ -19,19 +20,22 @@ export class QuestionController {
     private getAllQuestionsUseCase: GetAllQuestions
     private deleteQuestionUseCase: DeleteQuestion
     private answerQuestionUseCase: AnswerQuestion
+    private trackProgressUseCase: TrackProgress
     
   constructor( 
     createQuestionUseCase: CreateQuestion, 
     updateQuestionUseCase: UpdateQuestion, 
     getAllQuestionsUseCase: GetAllQuestions, 
     deleteQuestionUseCase: DeleteQuestion,
-    answerQuestionUseCase: AnswerQuestion
+    answerQuestionUseCase: AnswerQuestion,
+    trackProgressUseCase: TrackProgress
   ){
     this.createQuestionUseCase = createQuestionUseCase;
     this.updateQuestionUseCase = updateQuestionUseCase;
     this.getAllQuestionsUseCase = getAllQuestionsUseCase;
     this.deleteQuestionUseCase = deleteQuestionUseCase;
-    this.answerQuestionUseCase = answerQuestionUseCase
+    this.answerQuestionUseCase = answerQuestionUseCase;
+    this.trackProgressUseCase = trackProgressUseCase;
   }
 
   public async createQuestion(req: Request, res: Response): Promise<any> {
@@ -163,6 +167,26 @@ export class QuestionController {
     } catch (error) {
       console.error('Erro ao responder questão:', error);
       res.status(400).json({ message: `Erro ao responder questão - ${error}` });
+    }
+  }
+
+  public async trackProgress(req: Request, res: Response): Promise<any> {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+            return res.status(401).json({ message: "Usuário não autenticado" });
+      }
+
+      const progress = await this.trackProgressUseCase.execute(userId);
+
+        res.status(200).json({
+            message: "Aqui está seu Progresso!",
+            progress
+        });
+
+    } catch (error) {
+      console.error('Erro ao busar progresso:', error);
+      res.status(400).json({ message: `Erro ao buscar progresso - ${error}` });
     }
   }
 }
