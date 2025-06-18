@@ -1,9 +1,15 @@
 export class AnswerQuestionDTO {
-    public id: string;
+    public questionId: string;
     public answer: string;
+    public userId: string;
   
-    constructor(id: string, answer: string) {
-      this.id = id;
+    constructor(
+      questionId: string, 
+      answer: string,
+      userId: string
+    ) {
+      this.questionId = questionId;
       this.answer = answer;
+      this.userId = userId
     }
 }
