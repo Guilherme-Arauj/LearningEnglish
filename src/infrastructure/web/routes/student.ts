@@ -8,4 +8,6 @@ const tokenMiddleware = TokenMiddlewareFactory();
 
 studentRouter.post('/responderQuestao', tokenMiddleware.verifyToken, (req, res) => questionController.answerQuestion(req, res));
 
+studentRouter.get('/trackProgress', tokenMiddleware.verifyToken, (req, res) => questionController.trackProgress(req,res));
+
 export { studentRouter };
