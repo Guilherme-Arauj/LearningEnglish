@@ -2,7 +2,8 @@ import { z } from "zod";
 
 export async function validateDTOAnswerQuestion(reqSchema: object, res: any) {
   const answerQuestionSchema = z.object({
-    id: z.string().min(1, "[ID é obrigatório]"),
+    userId: z.string().min(1, "[ID do usuário é obrigatório]"),
+    questionId: z.string().min(1, "[ID da questão é obrigatório]"),
     answer: z.string().min(1, "[Resposta é obrigatória]"),
   });
 

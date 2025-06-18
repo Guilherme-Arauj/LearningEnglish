@@ -140,13 +140,15 @@ export class QuestionController {
 
   public async answerQuestion(req: Request, res: Response): Promise<any> {
     try {
-      const { id, answer } = req.body;
-      const reqSchema = { id, answer };
+      const userId = req.user?.id;
+
+      const {questionId, answer } = req.body;
+      const reqSchema = { questionId, answer, userId };
 
       const validatedData = await validateDTOAnswerQuestion(reqSchema, res);
       if(!validatedData) return;
 
-      const dto = new AnswerQuestionDTO(validatedData.id, validatedData.answer);
+      const dto = new AnswerQuestionDTO(validatedData.questionId, validatedData.answer, validatedData.userId);
 
       const answerQuestion = await this.answerQuestionUseCase.execute(dto);
 
