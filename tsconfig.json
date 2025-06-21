@@ -8,8 +8,15 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "NodeNext",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["vitest/globals", "node"]
   },
-  "include": ["src/**/*", "src/infrastructure/web/server.ts", "src/types/express-session.d.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*", 
+    "src/infrastructure/web/server.ts", 
+    "src/types/express-session.d.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
 }
