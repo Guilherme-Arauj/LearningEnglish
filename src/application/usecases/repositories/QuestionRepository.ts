@@ -1,8 +1,6 @@
 import { Question } from "../../../domain/entities/Question";
 import { IQuestionRepository } from "./IQuestionRepository";
 import { IPrismaConfig } from "../../../infrastructure/database/IPrismaConfig";
-import { UUIDTypes } from "uuid";
-import { Prisma } from "@prisma/client";
 
 export class QuestionRepository implements IQuestionRepository {
     constructor(private prismaConfig: IPrismaConfig){}
@@ -22,26 +20,25 @@ export class QuestionRepository implements IQuestionRepository {
                 optionA: question.optionA,
                 optionB: question.optionB,
                 optionC: question.optionC,
-                response: question.response   
+                response: question.response,
+                status: "ACTIVE"
             }
         });
     
-        return new Question({
-            id: created.id,
-            title: created.title,
-            cefr: created.cefr ?? undefined,
-            type: created.type ?? undefined,
-            theme: created.theme ?? undefined,
-            optionA: created.optionA ?? undefined,
-            optionB: created.optionB ?? undefined,
-            optionC: created.optionC ?? undefined,
-            response: created.response ?? undefined,
-        });
+        return this.mapToEntity(created);
     }
 
     public async update(question: Question): Promise<Question> {
+        const existingQuestion = await this.findQuestionById(question.id);
+        if (!existingQuestion) {
+            throw new Error('Questão não encontrada ou foi excluída');
+        }
+
         const updated = await this.prisma.question.update({
-            where: { id: question.id },
+            where: { 
+                id: question.id,
+                status: "ACTIVE" 
+            },
             data: {
                 title: question.title,
                 cefr: question.cefr,
@@ -54,74 +51,101 @@ export class QuestionRepository implements IQuestionRepository {
             }
         });
     
-        return new Question({
-            id: updated.id,
-            title: updated.title,
-            cefr: updated.cefr ?? undefined,
-            type: updated.type ?? undefined,
-            theme: updated.theme ?? undefined,
-            optionA: updated.optionA ?? undefined,
-            optionB: updated.optionB ?? undefined,
-            optionC: updated.optionC ?? undefined,
-            response: updated.response ?? undefined,
-        });
+        return this.mapToEntity(updated);
     }
 
     public async findQuestionById(id: string): Promise<Question | null> {
-        const question = await this.prisma.question.findUnique({
-            where: { id }
+        const question = await this.prisma.question.findFirst({
+            where: { 
+                id,
+                status: "ACTIVE"
+            }
         });
     
         if (!question) return null;
-    
-        return new Question({
-            id: question.id,
-            title: question.title,
-            cefr: question.cefr ?? undefined,
-            type: question.type ?? undefined,
-            theme: question.theme ?? undefined,
-            optionA: question.optionA ?? undefined,
-            optionB: question.optionB ?? undefined,
-            optionC: question.optionC ?? undefined,
-            response: question.response ?? undefined,
-        });
+        return this.mapToEntity(question);
     }
 
     public async get(): Promise<Question[]> {
-        const questions = await this.prisma.question.findMany();
-        return questions.map(q => new Question({
-            id: q.id,
-            title: q.title,
-            cefr: q.cefr ?? undefined,
-            type: q.type ?? undefined,
-            theme: q.theme ?? undefined,
-            optionA: q.optionA ?? undefined,
-            optionB: q.optionB ?? undefined,
-            optionC: q.optionC ?? undefined,
-            response: q.response ?? undefined,
-        }));
+        const questions = await this.prisma.question.findMany({
+            where: { status: "ACTIVE" }
+        });
+        
+        return questions.map(q => this.mapToEntity(q));
     }
 
     public async delete(id: string): Promise<Question> {
         const question = await this.findQuestionById(id);
-        if (!question) throw new Error('Questão não encontrada');
+        if (!question) {
+            throw new Error('Questão não encontrada');
+        }
     
-        await this.prisma.deletedQuestion.create({
+        const deletedQuestion = await this.prisma.question.update({
+            where: { id },
             data: {
-                id: question.id,
-                title: question.title,
-                cefr: question.cefr,
-                type: question.type,
-                theme: question.theme,
-                optionA: question.optionA,
-                optionB: question.optionB,
-                optionC: question.optionC,
-                response: question.response,
+                status: "DELETED",
+                deletedAt: new Date()
             }
         });
     
-        await this.prisma.question.delete({ where: { id } });
+        return this.mapToEntity(deletedQuestion);
+    }
+
+    public async getDeleted(): Promise<Question[]> {
+        const questions = await this.prisma.question.findMany({
+            where: { status: "DELETED" }
+        });
+        
+        return questions.map(q => this.mapToEntity(q));
+    }
+
+    public async restore(id: string): Promise<Question> {
+        const question = await this.prisma.question.findFirst({
+            where: { 
+                id,
+                status: "DELETED"
+            }
+        });
+
+        if (!question) {
+            throw new Error('Questão deletada não encontrada');
+        }
+
+        const restoredQuestion = await this.prisma.question.update({
+            where: { id },
+            data: {
+                status: "ACTIVE",
+                deletedAt: null
+            }
+        });
+
+        return this.mapToEntity(restoredQuestion);
+    }
+
+    public async findById(id: string, includeDeleted: boolean = false): Promise<Question | null> {
+        const whereClause = includeDeleted 
+            ? { id } 
+            : { id, status: "ACTIVE" };
+
+        const question = await this.prisma.question.findFirst({
+            where: whereClause
+        });
     
-        return question;
+        if (!question) return null;
+        return this.mapToEntity(question);
+    }
+
+    private mapToEntity(prismaQuestion: any): Question {
+        return new Question({
+            id: prismaQuestion.id,
+            title: prismaQuestion.title,
+            cefr: prismaQuestion.cefr ?? undefined,
+            type: prismaQuestion.type ?? undefined,
+            theme: prismaQuestion.theme ?? undefined,
+            optionA: prismaQuestion.optionA ?? undefined,
+            optionB: prismaQuestion.optionB ?? undefined,
+            optionC: prismaQuestion.optionC ?? undefined,
+            response: prismaQuestion.response ?? undefined,
+        });
     }
 }

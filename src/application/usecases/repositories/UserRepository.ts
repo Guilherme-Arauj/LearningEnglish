@@ -12,7 +12,7 @@ export class UserRepository implements IUserRepository {
     }
 
     public async create(user: User): Promise<User> {
-        return await this.prisma.user.create({
+        const created = await this.prisma.user.create({
             data: {
                 id: user.id,
                 name: user.name,  
@@ -22,47 +22,104 @@ export class UserRepository implements IUserRepository {
                 cefr: user.cefr,
             }
         });
+
+        return new User({
+            id: created.id,
+            name: created.name,
+            email: created.email,
+            password: created.password,
+            privilege: created.privilege,
+            cefr: created.cefr,
+        });
     }
 
     public async findUserByEmail(email: string): Promise<User | null> {
-        return await this.prisma.user.findUnique({
+        const user = await this.prisma.user.findFirst({
             where: {
-                email: email
+                email: email,
+                status: "ACTIVE"
             }
+        });
+
+        if (!user) return null;
+
+        return new User({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            privilege: user.privilege,
+            cefr: user.cefr,
         });
     }
 
     public async findUserById(id: string): Promise<User | null> {
-        return await this.prisma.user.findUnique({
+        const user = await this.prisma.user.findFirst({
             where:{
-                id: id
+                id: id,
+                status: "ACTIVE"
             }
-        })
+        });
+
+        if (!user) return null;
+
+        return new User({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            privilege: user.privilege,
+            cefr: user.cefr,
+        });
     }
 
     public async getUser(id: string): Promise<User | null> {
-        return await this.prisma.user.findUnique({
+        const user = await this.prisma.user.findFirst({
             where: {
-                id: id
+                id: id,
+                status: "ACTIVE"
             }
-        })
+        });
+
+        if (!user) return null;
+
+        return new User({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            privilege: user.privilege,
+            cefr: user.cefr,
+        });
     }
 
     public async changePassword(id: string, newPassword: string): Promise<User> {
-        return await this.prisma.user.update({
+        const updated = await this.prisma.user.update({
             where:{
-                id:id
+                id: id,
+                status: "ACTIVE"
             },
             data:{
                 password: newPassword
             }
         });
+
+        return new User({
+            id: updated.id,
+            name: updated.name,
+            email: updated.email,
+            password: updated.password,
+            privilege: updated.privilege,
+            cefr: updated.cefr,
+        });
     }
 
-
     public async updateUser(user: User): Promise<User> {
-        return await this.prisma.user.update({
-          where: { id: user.id },
+        const updated = await this.prisma.user.update({
+          where: { 
+            id: user.id,
+            status: "ACTIVE"
+          },
           data: {
             name: user.name,
             email: user.email,
@@ -71,15 +128,51 @@ export class UserRepository implements IUserRepository {
             cefr: user.cefr,
           },
         });
+
+        return new User({
+            id: updated.id,
+            name: updated.name,
+            email: updated.email,
+            password: updated.password,
+            privilege: updated.privilege,
+            cefr: updated.cefr,
+        });
     }
 
     public async deleteUserById(id: string): Promise<User>{
-        return await this.prisma.user.delete({
-            where: { id }
+        const user = await this.findUserById(id);
+        if (!user) throw new Error('Usuário não encontrado');
+
+        const deleted = await this.prisma.user.update({
+            where: { id },
+            data: {
+                status: "DELETED",
+                deletedAt: new Date()
+            }
+        });
+
+        return new User({
+            id: deleted.id,
+            name: deleted.name,
+            email: deleted.email,
+            password: deleted.password,
+            privilege: deleted.privilege,
+            cefr: deleted.cefr,
         });
     }
 
     public async get(): Promise<User[]> {
-        return await this.prisma.user.findMany();
+        const users = await this.prisma.user.findMany({
+            where: { status: "ACTIVE" }
+        });
+
+        return users.map(user => new User({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            password: user.password,
+            privilege: user.privilege,
+            cefr: user.cefr,
+        }));
     }
 }
