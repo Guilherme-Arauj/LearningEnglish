@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `deletedAt` DATETIME(3) NULL,
+    ADD COLUMN `status` VARCHAR(20) NOT NULL DEFAULT 'ACTIVE';

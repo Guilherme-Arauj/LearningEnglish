@@ -17,6 +17,8 @@ model Question {
   optionB              String?                @db.Text
   optionC              String?                @db.Text
   response             String?                @db.VarChar(10)
+  status               String                 @default("ACTIVE") @db.VarChar(20)   
+  deletedAt            DateTime?              
   UserQuestionProgress UserQuestionProgress[]
 }
 
@@ -27,6 +29,8 @@ model User {
   password             String                 @db.VarChar(100)
   cefr                 String                @db.VarChar(10)
   privilege            String                @db.VarChar(50)
+  status               String                 @default("ACTIVE") @db.VarChar(20)
+  deletedAt            DateTime?
   UserQuestionProgress UserQuestionProgress[]
 }
 
@@ -41,17 +45,4 @@ model UserQuestionProgress {
 
   @@index([questionId], map: "questionId")
   @@index([userId], map: "userId")
-}
-
-model DeletedQuestion {
-  id         String   @id @db.VarChar(36)
-  title      String   @db.Text
-  cefr       String?  @db.VarChar(10)
-  type       String?  @db.VarChar(50)
-  theme      String?  @db.VarChar(100)
-  optionA    String?  @db.Text
-  optionB    String?  @db.Text
-  optionC    String?  @db.Text
-  response   String?  @db.VarChar(10)
-  deletedAt  DateTime @default(now())
 }
