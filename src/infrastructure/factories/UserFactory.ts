@@ -21,6 +21,7 @@ import { RedefinirSenha } from "../../application/usecases/RedefinirSenha";
 import { UpdateUser } from "../../application/usecases/UpdateUser";
 import { GetAllUsers } from "../../application/usecases/GetAllUsers";
 import { DeleteUser } from "../../application/usecases/DeleteUser";
+import { AddStudyTime } from "../../application/usecases/AddStudyTime";
 
 
 
@@ -65,6 +66,8 @@ export function UserFactory(): UserController {
 
     const deleteUserUseCase = new DeleteUser(userRepository);
 
+    const addStudyTimeUseCase = new AddStudyTime(userRepository);
+
     return new UserController(
         createUserUseCase, 
         loginUseCase, 
@@ -72,6 +75,7 @@ export function UserFactory(): UserController {
         redefinirSenhaUseCase,
         updateUserUseCase,
         getAllUsersUseCase,
-        deleteUserUseCase
+        deleteUserUseCase,
+        addStudyTimeUseCase
     ); 
 }
