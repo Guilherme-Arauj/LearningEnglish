@@ -33,6 +33,8 @@ export class Login {
             id: userValidation.id,
             name: userValidation.name,
             privilege: privilege,
+            cefr: userValidation.cefr,
+            timeSpentSeconds: userValidation.timeSpentSeconds,
             token
         };
     }
