@@ -1,0 +1,300 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "InglesBackend",
+    "collectionId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+    "dateExported": "2025-06-26T00:04:20.202Z",
+    "version": "1.2",
+    "folders": [
+        {
+            "_id": "9da1f83d-6cf8-45b7-a8f4-c21ff5cd8007",
+            "name": "UserCRUD",
+            "containerId": "",
+            "created": "2025-05-31T06:30:58.822Z",
+            "sortNum": 10000
+        },
+        {
+            "_id": "34b574da-a124-4a8b-ad14-c11d1b8a7363",
+            "name": "QuestionCRUD",
+            "containerId": "",
+            "created": "2025-05-31T06:31:29.862Z",
+            "sortNum": 20000
+        },
+        {
+            "_id": "d6a0ad7b-dfed-4dd3-bf5c-89ff67c2ad38",
+            "name": "Student",
+            "containerId": "",
+            "created": "2025-06-17T22:07:45.050Z",
+            "sortNum": 30000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "26577620-da90-4299-9866-b7719ece0993",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "9da1f83d-6cf8-45b7-a8f4-c21ff5cd8007",
+            "name": "cadastroUsuario",
+            "url": "http://localhost:3000/users/cadastro",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2025-05-04T20:35:17.584Z",
+            "modified": "2025-06-25T14:21:50.816Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"araujo\",\n  \"email\": \"superrr@gmail.com\",\n  \"password\": \"senha123\",\n  \"privilege\": \"admin\",\n  \"cefr\": \"B2\"\n}\n",
+                "form": []
+            }
+        },
+        {
+            "_id": "a950e4a5-9542-40b9-a323-35353c80162d",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "9da1f83d-6cf8-45b7-a8f4-c21ff5cd8007",
+            "name": "loginUsuario",
+            "url": "http://localhost:3000/users/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2025-05-06T21:06:55.506Z",
+            "modified": "2025-06-24T14:36:03.602Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"araujo29082@gmail.com\",\n  \"password\": \"1234guigs\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "1ce9f3c4-eef0-4d63-ae14-4cd710e851a8",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "9da1f83d-6cf8-45b7-a8f4-c21ff5cd8007",
+            "name": "recuperarSenha",
+            "url": "http://localhost:3000/users/recuperarSenha",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2025-05-07T19:56:07.783Z",
+            "modified": "2025-05-07T19:59:04.228Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"araujocontato2@gmail.com\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "54da0f3b-bea3-4e2e-b05f-8480f552a880",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "9da1f83d-6cf8-45b7-a8f4-c21ff5cd8007",
+            "name": "redefinirSenha",
+            "url": "http://localhost:3000/users/redefinirSenha",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2025-05-18T21:01:51.173Z",
+            "modified": "2025-06-23T13:09:35.087Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": \"ADMIN-2c9bb7\",\n  \"password\": \"opa1234\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjgzMjQ0LCJleHAiOjE3NTA2OTA0NDR9.GizJ6ACL0LjN2pJZxcyfJlL1kYJ_zCSV8PN0vjzPjdg"
+            }
+        },
+        {
+            "_id": "a26d9f0e-8c80-42c7-965f-8c9e4aa3ad84",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "9da1f83d-6cf8-45b7-a8f4-c21ff5cd8007",
+            "name": "updateUsuario",
+            "url": "http://localhost:3000/users/atualizarUsuario",
+            "method": "PUT",
+            "sortNum": 50000,
+            "created": "2025-05-29T02:21:39.014Z",
+            "modified": "2025-06-24T04:25:14.602Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": \"ADMIN-4e4ce8\", \n  \"name\": \"BISCOITO\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjE5Nzc4LCJleHAiOjE3NTA2MjY5Nzh9.Vu1-CFAYWPG35iFFrNg1kiHLS-5ALTEmnewYWlObiOM"
+            }
+        },
+        {
+            "_id": "b62152a9-899e-420c-885f-56d1fe6cff55",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "9da1f83d-6cf8-45b7-a8f4-c21ff5cd8007",
+            "name": "listarUsuarios",
+            "url": "http://localhost:3000/users/listarUsuarios",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2025-05-29T03:01:38.801Z",
+            "modified": "2025-06-22T19:40:35.008Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjIwODQ3LCJleHAiOjE3NTA2MjgwNDd9.efNp6_sTwO8HvorC7lo6m9asR_7CoJ8jPo3m5SqgGhI"
+            }
+        },
+        {
+            "_id": "311cd185-2155-4029-b26a-06d14b32dfaa",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "9da1f83d-6cf8-45b7-a8f4-c21ff5cd8007",
+            "name": "deletarUsuario",
+            "url": "http://localhost:3000/users/deletarUsuario",
+            "method": "DELETE",
+            "sortNum": 70000,
+            "created": "2025-05-31T05:56:06.526Z",
+            "modified": "2025-06-24T04:25:24.116Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\"id\": \"ADMIN-4e4ce8\"}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjIwODQ3LCJleHAiOjE3NTA2MjgwNDd9.efNp6_sTwO8HvorC7lo6m9asR_7CoJ8jPo3m5SqgGhI"
+            }
+        },
+        {
+            "_id": "8a010747-fa61-4358-a9e8-e2df23a5807c",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "34b574da-a124-4a8b-ad14-c11d1b8a7363",
+            "name": "criarQuestao",
+            "url": "http://localhost:3000/admin/criarQuestao",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2025-05-31T06:31:46.814Z",
+            "modified": "2025-06-17T22:10:58.484Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"title\": \"Qual é a capital da França?\",\n  \"cefr\": \"A2\",\n  \"type\": \"multiple-choice\",\n  \"theme\": \"Geografia\",\n  \"optionA\": \"Paris\",\n  \"optionB\": \"Londres\",\n  \"optionC\": \"Berlim\",\n  \"response\": \"A\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwMTk4MjQ3LCJleHAiOjE3NTAyMDU0NDd9.npaTi237mbxcgg8NfUSMN8zSs18E-U1So6ZYTQi9Sdc"
+            }
+        },
+        {
+            "_id": "bb2fa98d-c70c-420a-8195-0bce64fad042",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "34b574da-a124-4a8b-ad14-c11d1b8a7363",
+            "name": "atualizarQuestao",
+            "url": "http://localhost:3000/admin/atualizarQuestao",
+            "method": "PUT",
+            "sortNum": 90000,
+            "created": "2025-05-31T07:03:24.658Z",
+            "modified": "2025-06-22T17:43:42.425Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": \"Q-7d14117d-28d\",\n  \"title\": \"Título atualizado\",\n  \"theme\": \"Novo tema\",\n  \"cefr\": \"A1\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLWMxNmU4YyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzQ4Njc1MTA0LCJleHAiOjE3NDg2ODIzMDR9.t5qXIPdOcx4byB0HonjTMhUHvoAJ66WXfr-5dfm5fQU"
+            }
+        },
+        {
+            "_id": "0e1fd552-f035-491d-9803-fe0e707dd8b0",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "34b574da-a124-4a8b-ad14-c11d1b8a7363",
+            "name": "receberQuestoes",
+            "url": "http://localhost:3000/admin/receberQuestoes",
+            "method": "GET",
+            "sortNum": 100000,
+            "created": "2025-05-31T19:37:55.365Z",
+            "modified": "2025-06-24T04:43:42.816Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNUVURFTlQtOTRmNGUwIiwiZW1haWwiOiJhcmF1am8yOTA4MkBnbWFpbC5jb20iLCJpYXQiOjE3NTA3Mzg3MTgsImV4cCI6MTc1MDc0NTkxOH0.U4OSbTKULdZOAuEFDxLE2cJV5AU0kdWqipz0G9B_JFE"
+            }
+        },
+        {
+            "_id": "dcc90add-ff3d-42c1-a27d-eed32212624b",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "34b574da-a124-4a8b-ad14-c11d1b8a7363",
+            "name": "excluirQuestao",
+            "url": "http://localhost:3000/admin/excluirQuestao",
+            "method": "DELETE",
+            "sortNum": 110000,
+            "created": "2025-05-31T22:18:50.682Z",
+            "modified": "2025-06-22T19:16:53.805Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": \"Q-a4bd2da0-ab0\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzQ4NzMwMDI4LCJleHAiOjE3NDg3MzcyMjh9.IkMU1JIFPMDxDUbMqvLorYWHKGPzRxi-RQVIVtmR0Pw"
+            }
+        },
+        {
+            "_id": "60b13246-e82c-428f-9107-5bbe17ed0450",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "d6a0ad7b-dfed-4dd3-bf5c-89ff67c2ad38",
+            "name": "responderQuestao",
+            "url": "http://localhost:3000/student/responderQuestao",
+            "method": "POST",
+            "sortNum": 120000,
+            "created": "2025-06-17T22:07:57.565Z",
+            "modified": "2025-06-23T12:54:29.555Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"questionId\": \"Q-7d14117d-28d\",\n  \"answer\": \"A\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjgzMjQ0LCJleHAiOjE3NTA2OTA0NDR9.GizJ6ACL0LjN2pJZxcyfJlL1kYJ_zCSV8PN0vjzPjdg"
+            }
+        },
+        {
+            "_id": "f1869558-deea-414f-a97f-31fd84796c69",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "d6a0ad7b-dfed-4dd3-bf5c-89ff67c2ad38",
+            "name": "trackProgress",
+            "url": "http://localhost:3000/student/trackProgress",
+            "method": "GET",
+            "sortNum": 130000,
+            "created": "2025-06-18T16:55:46.386Z",
+            "modified": "2025-06-18T16:56:23.615Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwMjY1NzY5LCJleHAiOjE3NTAyNzI5Njl9.8_dAsAtlRcvQ8g6rY_2tchbNSfm6xfeb1vPSPBF4WSs"
+            }
+        },
+        {
+            "_id": "87b26ace-a490-4220-a279-fbf776cd0c5d",
+            "colId": "56024cd4-713d-4b1c-ae82-d33b5a399eac",
+            "containerId": "9da1f83d-6cf8-45b7-a8f4-c21ff5cd8007",
+            "name": "addTimeSpent",
+            "url": "http://localhost:3000/student/addTimeSpent",
+            "method": "POST",
+            "sortNum": 140000,
+            "created": "2025-06-24T04:17:09.132Z",
+            "modified": "2025-06-24T04:19:39.931Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"timeToAdd\": 2\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "bearer",
+                "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNUVURFTlQtOTRmNGUwIiwiZW1haWwiOiJhcmF1am8yOTA4MkBnbWFpbC5jb20iLCJpYXQiOjE3NTA3Mzg3MTgsImV4cCI6MTc1MDc0NTkxOH0.U4OSbTKULdZOAuEFDxLE2cJV5AU0kdWqipz0G9B_JFE"
+            }
+        }
+    ],
+    "ref": "bZQaIBzk-pF_1QmRl0o40jhqnzVQVBx6IV-fySEQUO88D_hRX7yp3syqi-nIX9QY0ivYHLdoNkW_EsV-VneoCw"
+}

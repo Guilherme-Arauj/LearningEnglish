@@ -1,0 +1,516 @@
+{
+	"info": {
+		"_postman_id": "6fdc2cb5-addc-4349-bda7-8b1229eb1031",
+		"name": "InglesBackend",
+		"description": "Converted from Thunder Client collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31259591",
+		"_collection_link": "https://lively-star-785264.postman.co/workspace/ingles~d69c736a-99de-4714-a83d-cc3ca88ea1e8/collection/31259591-6fdc2cb5-addc-4349-bda7-8b1229eb1031?action=share&source=collection_link&creator=31259591"
+	},
+	"item": [
+		{
+			"name": "UserCRUD",
+			"item": [
+				{
+					"name": "cadastroUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"araujo\",\n  \"email\": \"superrr@gmail.com\",\n  \"password\": \"senha123\",\n  \"privilege\": \"admin\",\n  \"cefr\": \"B2\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/cadastro",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"cadastro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginUsuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"araujo29082@gmail.com\",\n  \"password\": \"1234guigs\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "recuperarSenha",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"araujocontato2@gmail.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/recuperarSenha",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"recuperarSenha"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "redefinirSenha",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjgzMjQ0LCJleHAiOjE3NTA2OTA0NDR9.GizJ6ACL0LjN2pJZxcyfJlL1kYJ_zCSV8PN0vjzPjdg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"ADMIN-2c9bb7\",\n  \"password\": \"opa1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/redefinirSenha",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"redefinirSenha"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateUsuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjE5Nzc4LCJleHAiOjE3NTA2MjY5Nzh9.Vu1-CFAYWPG35iFFrNg1kiHLS-5ALTEmnewYWlObiOM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"ADMIN-4e4ce8\",\n  \"name\": \"BISCOITO\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/atualizarUsuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"atualizarUsuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listarUsuarios",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjIwODQ3LCJleHAiOjE3NTA2MjgwNDd9.efNp6_sTwO8HvorC7lo6m9asR_7CoJ8jPo3m5SqgGhI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/users/listarUsuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"listarUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletarUsuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjIwODQ3LCJleHAiOjE3NTA2MjgwNDd9.efNp6_sTwO8HvorC7lo6m9asR_7CoJ8jPo3m5SqgGhI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"ADMIN-4e4ce8\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/users/deletarUsuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"deletarUsuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "addTimeSpent",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNUVURFTlQtOTRmNGUwIiwiZW1haWwiOiJhcmF1am8yOTA4MkBnbWFpbC5jb20iLCJpYXQiOjE3NTA3Mzg3MTgsImV4cCI6MTc1MDc0NTkxOH0.U4OSbTKULdZOAuEFDxLE2cJV5AU0kdWqipz0G9B_JFE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"timeToAdd\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/student/addTimeSpent",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"student",
+								"addTimeSpent"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "QuestionCRUD",
+			"item": [
+				{
+					"name": "criarQuestao",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwMTk4MjQ3LCJleHAiOjE3NTAyMDU0NDd9.npaTi237mbxcgg8NfUSMN8zSs18E-U1So6ZYTQi9Sdc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Qual \\u00e9 a capital da Fran\\u00e7a?\",\n  \"cefr\": \"A2\",\n  \"type\": \"multiple-choice\",\n  \"theme\": \"Geografia\",\n  \"optionA\": \"Paris\",\n  \"optionB\": \"Londres\",\n  \"optionC\": \"Berlim\",\n  \"response\": \"A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/criarQuestao",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"criarQuestao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizarQuestao",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLWMxNmU4YyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzQ4Njc1MTA0LCJleHAiOjE3NDg2ODIzMDR9.t5qXIPdOcx4byB0HonjTMhUHvoAJ66WXfr-5dfm5fQU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"Q-7d14117d-28d\",\n  \"title\": \"T\\u00edtulo atualizado\",\n  \"theme\": \"Novo tema\",\n  \"cefr\": \"A1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/atualizarQuestao",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"atualizarQuestao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "receberQuestoes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNUVURFTlQtOTRmNGUwIiwiZW1haWwiOiJhcmF1am8yOTA4MkBnbWFpbC5jb20iLCJpYXQiOjE3NTA3Mzg3MTgsImV4cCI6MTc1MDc0NTkxOH0.U4OSbTKULdZOAuEFDxLE2cJV5AU0kdWqipz0G9B_JFE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/admin/receberQuestoes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"receberQuestoes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "excluirQuestao",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzQ4NzMwMDI4LCJleHAiOjE3NDg3MzcyMjh9.IkMU1JIFPMDxDUbMqvLorYWHKGPzRxi-RQVIVtmR0Pw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": \"Q-a4bd2da0-ab0\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/excluirQuestao",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"excluirQuestao"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Student",
+			"item": [
+				{
+					"name": "responderQuestao",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjgzMjQ0LCJleHAiOjE3NTA2OTA0NDR9.GizJ6ACL0LjN2pJZxcyfJlL1kYJ_zCSV8PN0vjzPjdg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"questionId\": \"Q-7d14117d-28d\",\n  \"answer\": \"A\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/student/responderQuestao",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"student",
+								"responderQuestao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "trackProgress",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwMjY1NzY5LCJleHAiOjE3NTAyNzI5Njl9.8_dAsAtlRcvQ8g6rY_2tchbNSfm6xfeb1vPSPBF4WSs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/student/trackProgress",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"student",
+								"trackProgress"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
