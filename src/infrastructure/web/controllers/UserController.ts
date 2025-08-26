@@ -2,60 +2,33 @@ import { Request, Response } from "express";
 import { validateDTOUserUpdate } from "../../utils/zod/validateDTOUserUpdate";
 import { validateDTOUser } from "../../utils/zod/validateDTOUser";
 import { UserDTO } from "../../../application/dto/UserDTO";
-import { CreateUser } from "../../../application/usecases/CreateUser";
 import { UserLoginDTO } from "../../../application/dto/UserLoginDTO";
-import { Login } from "../../../application/usecases/Login";
 import { validateDTOLogin } from "../../utils/zod/validateDTOLogin";
 import { validateDTOUserEmail } from "../../utils/zod/validateDTOUserEmail";
 import { UserEmailDTO } from "../../../application/dto/UserEmailDTO";
-import { RecuperarSenha } from "../../../application/usecases/RecuperarSenha";
 import { validateDTOUserNewPassword } from "../../utils/zod/validateDTOUserNewPassword";
 import { UserNewPasswordDTO } from "../../../application/dto/UserNewPasswordDTO";
-import { RedefinirSenha } from "../../../application/usecases/RedefinirSenha";
 import { UserUpdateDTO } from "../../../application/dto/UserUpdateDTO";
-import { UpdateUser } from "../../../application/usecases/UpdateUser";
-import { GetAllUsers } from "../../../application/usecases/GetAllUsers";
 import { validateDTODeleteUser } from "../../utils/zod/validateDTODeleteUser";
 import { DeleteUserDTO } from "../../../application/dto/DeleteUserDTO";
-import { DeleteUser } from "../../../application/usecases/DeleteUser";
 import { validateDTOAddStudyTime } from "../../utils/zod/validateDTOAddStudyTime";
 import { AddStudyTimeDTO } from "../../../application/dto/AddStudyTimeDTO";
-import { AddStudyTime } from "../../../application/usecases/AddStudyTime";
+import { UserService } from "../../../application/services/UserService";
 
 export class UserController {
-  private createUserUseCase: CreateUser;
-  private loginUseCase: Login;
-  private recuperarSenhaUseCase: RecuperarSenha;
-  private redefinirSenhaUseCase: RedefinirSenha;
-  private updateUserUseCase: UpdateUser;
-  private getAllUsersUseCase: GetAllUsers;
-  private deleteUserUseCase: DeleteUser;
-  private addStudyTimeUseCase: AddStudyTime;
+  private userService: UserService;
 
   constructor(
-    createUserUseCase: CreateUser,
-    loginUseCase: Login,
-    recuperarSenhaUseCase: RecuperarSenha,
-    redefinirSenhaUseCase: RedefinirSenha,
-    updateUserUseCase: UpdateUser,
-    getAllUsersUseCase: GetAllUsers,
-    deleteUserUseCase: DeleteUser,
-    addStudyTimeUseCase: AddStudyTime
+    userService: UserService
   ) {
-    this.redefinirSenhaUseCase = redefinirSenhaUseCase;
-    this.createUserUseCase = createUserUseCase;
-    this.loginUseCase = loginUseCase;
-    this.recuperarSenhaUseCase = recuperarSenhaUseCase;
-    this.updateUserUseCase = updateUserUseCase;
-    this.getAllUsersUseCase = getAllUsersUseCase;
-    this.deleteUserUseCase = deleteUserUseCase;
-    this.addStudyTimeUseCase = addStudyTimeUseCase;
+    this.userService = userService;
   }
 
-  public async create(req: Request, res: Response): Promise<any> {
+  public async create(req: Request, res: Response): Promise<void> {
     try {
-      const { name, email, password, privilege, cefr } = req.body;
-
+      const { name, email, password, cefr } = req.body;
+      const privilege = 'student'
+      
       const reqSchema = { name, email, password, privilege, cefr };
 
       const validatedData = await validateDTOUser(reqSchema, res);
@@ -69,7 +42,7 @@ export class UserController {
         validatedData.cefr
       );
 
-      const userResponse = await this.createUserUseCase.execute(dto);
+      const userResponse = await this.userService.createUser(dto);
 
       res.status(201).json({
         message: "Cadastro realizado com sucesso!",
@@ -81,7 +54,7 @@ export class UserController {
     }
   }
 
-  public async login(req: Request, res: Response): Promise<any> {
+  public async login(req: Request, res: Response): Promise<void> {
     try {
       const { email, password } = req.body;
 
@@ -92,17 +65,13 @@ export class UserController {
 
       const dto = new UserLoginDTO(validatedData.email, validatedData.password);
 
-      const userResponse = await this.loginUseCase.execute(dto);
-
-      if (!userResponse) {
-        return res.status(401).json({ message: "Credenciais inválidas" });
-      }
-
+      const userResponse = await this.userService.login(dto);
+      
       req.session.user = {
         id: userResponse.id,
         name: userResponse.name,
         privilege: userResponse.privilege,
-        token: userResponse.token,
+        token: userResponse.token || "",
       };
 
       res.status(201).json({
@@ -115,7 +84,7 @@ export class UserController {
     }
   }
 
-  public async recuperarSenha(req: Request, res: Response): Promise<any> {
+  public async recuperarSenha(req: Request, res: Response): Promise<void> {
     try {
       const { email } = req.body;
 
@@ -126,7 +95,7 @@ export class UserController {
 
       const dto = new UserEmailDTO(validatedData.email);
 
-      const userResponse = await this.recuperarSenhaUseCase.execute(dto);
+      const userResponse = await this.userService.passwordRecuperation(dto);
 
       res.status(201).json({
         message: "Link de recuperação de senha enviado!",
@@ -137,7 +106,7 @@ export class UserController {
     }
   }
 
-  public async redefinirSenha(req: Request, res: Response): Promise<any> {
+  public async redefinirSenha(req: Request, res: Response): Promise<void> {
     try {
       const { id, password } = req.body;
 
@@ -151,7 +120,7 @@ export class UserController {
         validatedData.password
       );
 
-      const userResponse = await this.redefinirSenhaUseCase.execute(dto);
+      const userResponse = await this.userService.passwordRedefinition(dto);
 
       res.status(201).json({
         message: "Senha alterada com sucesso! ",
@@ -163,10 +132,10 @@ export class UserController {
     }
   }
 
-  public async updateUser(req: Request, res: Response): Promise<any> {
+  public async updateUser(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || req.user.privilege !== "admin") {
-        return res
+        res
           .status(403)
           .json({
             message:
@@ -183,7 +152,7 @@ export class UserController {
 
       const dto = new UserUpdateDTO(validatedData.id, validatedData);
 
-      const userResponse = await this.updateUserUseCase.execute(dto);
+      const userResponse = await this.userService.updateUser(dto);
 
       res.status(200).json({
         message: "Usuário atualizado com sucesso!",
@@ -195,10 +164,10 @@ export class UserController {
     }
   }
 
-  public async getAll(req: Request, res: Response): Promise<any> {
+  public async getAll(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || req.user.privilege !== "admin") {
-        return res
+        res
           .status(403)
           .json({
             message:
@@ -206,7 +175,7 @@ export class UserController {
           });
       }
 
-      const users = await this.getAllUsersUseCase.execute();
+      const users = await this.userService.getAllUsers();
 
       res.status(200).json({
         message: "Usuários encontrados com sucesso!",
@@ -218,10 +187,10 @@ export class UserController {
     }
   }
 
-  public async deleteUser(req: Request, res: Response): Promise<any> {
+  public async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || req.user.privilege !== "admin") {
-        return res
+        res
           .status(403)
           .json({
             message:
@@ -237,13 +206,13 @@ export class UserController {
 
       const dto = new DeleteUserDTO(validatedData);
 
-      const deletedUser = await this.deleteUserUseCase.execute(dto);
+      const deletedUser = await this.userService.deleteUser(dto);
 
       if (!deletedUser) {
-        return res.status(404).json({ message: "Usuário não encontrado." });
+        res.status(404).json({ message: "Usuário não encontrado." });
       }
 
-      return res
+      res
         .status(200)
         .json({ message: "Usuário excluído com sucesso.", user: deletedUser });
     } catch (error) {
@@ -252,15 +221,13 @@ export class UserController {
     }
   }
 
-  public async addStudyTime(req: Request, res: Response): Promise<any> {
+  public async addStudyTime(req: Request, res: Response): Promise<void> {
     try {
       const { timeToAdd } = req.body;
       const userId = req.user?.id;
 
       if (!userId) {
-        return res
-          .status(400)
-          .json({ message: "User ID is missing from request." });
+        throw new Error("User ID is missing from request.");
       }
 
       const reqSchema = { userId, timeToAdd };
@@ -268,15 +235,16 @@ export class UserController {
       const validatedData = await validateDTOAddStudyTime(reqSchema, res);
       if (!validatedData) return;
 
+
       const dto = new AddStudyTimeDTO(userId, timeToAdd);
 
-      const user = await this.addStudyTimeUseCase.execute(dto);
+      const user = await this.userService.addStudyTimeToUser(dto);
 
       if (!user) {
-        return res.status(404).json({ message: "Usuário não encontrado." });
+        res.status(404).json({ message: "Usuário não encontrado." });
       }
 
-      return res
+      res
         .status(200)
         .json({ message: "Tempo de estudo salvo com sucesso.", user: user });
     } catch (error) {
@@ -285,5 +253,14 @@ export class UserController {
         .status(400)
         .json({ message: `Erro ao adicionar tempo de estudo - ${error}` });
     }
+  }
+
+  public async loggedUser(req: Request, res: Response): Promise<void> {
+    if (!req.session.user) {
+      res.status(401).json({ message: "Usuário não autenticado" });
+      return;
+    }
+
+    res.status(200).json({ user: req.session.user });
   }
 }

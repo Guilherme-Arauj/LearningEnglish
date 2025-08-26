@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { IJwtConfig } from '../../infrastructure/utils/jwt/IJwtConfig';
-import { IUserRepository } from '../usecases/repositories/IUserRepository';
+import { IUserRepository } from '../services/repositories/IUserRepository';
 
 export class ResetPasswordTokenMiddleware {
   constructor(

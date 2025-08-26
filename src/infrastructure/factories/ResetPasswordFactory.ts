@@ -1,7 +1,7 @@
 import { ResetPasswordTokenMiddleware } from '../../application/middleware/PasswordResetMiddleware';
 import { TokenMiddleware } from '../../application/middleware/TokenMiddleware';
-import { IUserRepository } from '../../application/usecases/repositories/IUserRepository';
-import { UserRepository } from '../../application/usecases/repositories/UserRepository';
+import { IUserRepository } from '../../application/services/repositories/IUserRepository';
+import { UserRepository } from '../../application/services/repositories/UserRepository';
 import { IJwtConfig } from '../../infrastructure/utils/jwt/IJwtConfig';
 import { IPrismaConfig } from '../database/IPrismaConfig';
 import { PrismaConfig } from '../database/PrismaConfig';

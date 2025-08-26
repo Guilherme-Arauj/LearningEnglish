@@ -1,18 +1,18 @@
-import { QuestionRepository } from "../../application/usecases/repositories/QuestionRepository";
-import { CreateQuestion } from "../../application/usecases/CreateQuestion";
+import { QuestionRepository } from "../../application/services/repositories/QuestionRepository";
+import { CreateQuestion } from "../../application/services/CreateQuestion";
 import { QuestionController } from "../web/controllers/QuestionController";
-import { IQuestionRepository } from "../../application/usecases/repositories/IQuestionRepository";
+import { IQuestionRepository } from "../../application/services/repositories/IQuestionRepository";
 import { IUuidConfig } from "../utils/uuid/IUuidConfig";
 import { UuidConfig } from "../utils/uuid/UuidConfig";
 import { IPrismaConfig } from "../database/IPrismaConfig";
 import { PrismaConfig } from "../database/PrismaConfig";
-import { UpdateQuestion } from "../../application/usecases/UpdateQuestion";
-import { GetAllQuestions } from "../../application/usecases/GetAllQuestions";
-import { DeleteQuestion } from "../../application/usecases/DeleteQuestion";
-import { AnswerQuestion } from "../../application/usecases/AnswerQuestion";
-import { IUserQuestionProgressRepository } from "../../application/usecases/repositories/IUserQuestionProgressRepository";
-import { UserQuestionProgressRepository } from "../../application/usecases/repositories/UserQuestionProgressRepository";
-import { TrackProgress } from "../../application/usecases/TrackProgress";
+import { UpdateQuestion } from "../../application/services/UpdateQuestion";
+import { GetAllQuestions } from "../../application/services/GetAllQuestions";
+import { DeleteQuestion } from "../../application/services/DeleteQuestion";
+import { AnswerQuestion } from "../../application/services/AnswerQuestion";
+import { IUserQuestionProgressRepository } from "../../application/services/repositories/IUserQuestionProgressRepository";
+import { UserQuestionProgressRepository } from "../../application/services/repositories/UserQuestionProgressRepository";
+import { TrackProgress } from "../../application/services/TrackProgress";
 
 export function QuestionFactory(): QuestionController {
     const prismaConfig: IPrismaConfig = new PrismaConfig();

@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
 import { QuestionDTO } from '../../../application/dto/QuestionDTO';
 import { validateDTOQuestion } from '../../utils/zod/validateDTOQuestion';
-import { CreateQuestion } from '../../../application/usecases/CreateQuestion';
+import { CreateQuestion } from '../../../application/services/CreateQuestion';
 import { validateDTOQuestionUpdate } from '../../utils/zod/validateDTOQuestionUpdate';
 import { QuestionUpdateDTO } from '../../../application/dto/QuestionUpdateDTO';
-import { UpdateQuestion } from '../../../application/usecases/UpdateQuestion';
-import { GetAllQuestions } from '../../../application/usecases/GetAllQuestions';
+import { UpdateQuestion } from '../../../application/services/UpdateQuestion';
+import { GetAllQuestions } from '../../../application/services/GetAllQuestions';
 import { validateDTODeleteQuestion } from '../../utils/zod/validateDTODeleteQuestion';
 import { DeleteQuestionDTO } from '../../../application/dto/DeleteQuestionDTO';
-import { DeleteQuestion } from '../../../application/usecases/DeleteQuestion';
+import { DeleteQuestion } from '../../../application/services/DeleteQuestion';
 import { validateDTOAnswerQuestion } from '../../utils/zod/validateDTOAnswerQuestion';
 import { AnswerQuestionDTO } from '../../../application/dto/AnswerQuestionDTO';
-import { AnswerQuestion } from '../../../application/usecases/AnswerQuestion';
-import { TrackProgress } from '../../../application/usecases/TrackProgress';
+import { AnswerQuestion } from '../../../application/services/AnswerQuestion';
+import { TrackProgress } from '../../../application/services/TrackProgress';
 
 export class QuestionController {
     private createQuestionUseCase: CreateQuestion

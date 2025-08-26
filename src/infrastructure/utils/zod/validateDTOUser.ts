@@ -2,9 +2,9 @@ import { z } from "zod";
 
 export async function validateDTOUser(reqSchema: Object, res: any) {
   const userSchema = z.object({
-    email: z.string().email("[Formato de email inválido]"),
-    name: z.string().min(1, "[Nome é obrigatório]"),
-    password: z.string().min(6, "[Senha deve ter no mínimo 6 caracteres]"),
+    email: z.string().email("Formato de email inválido"),
+    name: z.string().min(1, "Nome é obrigatório"),
+    password: z.string().min(8, "Senha deve ter no mínimo 8 caracteres"),
     privilege: z.enum(["student", "admin"], {
       errorMap: () => ({ message: "Privilégio inválido! Use 'student' ou 'admin'." })
     }),
