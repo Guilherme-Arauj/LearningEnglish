@@ -17,14 +17,20 @@ const app: Application = express();
 app.use(helmet());
 
 // Middleware para permitir requisições de diferentes origens
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:4200",
+  credentials: true
+}));
 
 app.use(
   session({
     secret: SESSION_SECRET as string,
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false },
+    cookie: {
+      secure: false,   // true só em produção com HTTPS
+      sameSite: "lax"  // "none" + secure:true se quiser cross-site
+    },
   })
 );
 const limiter = rateLimit({

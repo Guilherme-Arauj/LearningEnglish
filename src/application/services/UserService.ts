@@ -6,7 +6,6 @@ import { IResetPasswordEmail } from "../../infrastructure/utils/nodemailer/recup
 import { IUuidConfig } from "../../infrastructure/utils/uuid/IUuidConfig";
 import { AddStudyTimeDTO } from "../dto/AddStudyTimeDTO";
 import { DeleteUserDTO } from "../dto/DeleteUserDTO";
-import { TokenDTO } from "../dto/TokenDTO";
 import { UserDTO } from "../dto/UserDTO";
 import { UserEmailDTO } from "../dto/UserEmailDTO";
 import { UserLoginDTO } from "../dto/UserLoginDTO";
@@ -89,6 +88,7 @@ export class UserService {
 
   public async passwordRecuperation(dto: UserEmailDTO): Promise<void> {
     const user = await this.userRepository.findUserByEmail(dto.email);
+
     if (!user) {
       throw new Error("Usuário não encontrado no banco de dados");
     }
@@ -98,15 +98,16 @@ export class UserService {
       { expiresIn: "15m" }
     );
 
-    const url = `http://localhost:4000/users/redefinirSenha?token=${token}`;
+    const url = `${process.env.FRONTEND_URL || "http://localhost:4000"}/users/redefinirSenha?token=${token}`;
 
     const html = this.mailerTemplate.generate(url);
 
-    this.mailer
-      .sendMail(dto.email, "Recuperação de senha", html)
-      .catch((err) => {
-        console.error("Erro ao enviar e-mail de recuperação de senha:", err);
-      });
+    try {
+      await this.mailer.sendMail(dto.email, "Recuperação de senha", html);
+    } catch (err) {
+      console.error("Erro ao enviar e-mail de recuperação de senha:", err);
+      throw new Error("Não foi possível enviar o e-mail de recuperação de senha. Tente novamente mais tarde.");
+    }
   }
 
   public async passwordRedefinition(dto: UserNewPasswordDTO): Promise<UserResponseDTO> {

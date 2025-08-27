@@ -6,6 +6,7 @@ declare module 'express-session' {
       id: string;
       name: string;
       privilege: string;
+      cefr: string;
       token: string;
     };
   }

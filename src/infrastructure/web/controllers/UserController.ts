@@ -71,6 +71,7 @@ export class UserController {
         id: userResponse.id,
         name: userResponse.name,
         privilege: userResponse.privilege,
+        cefr: userResponse.cefr,
         token: userResponse.token || "",
       };
 
@@ -263,4 +264,19 @@ export class UserController {
 
     res.status(200).json({ user: req.session.user });
   }
+
+  public async logout(req: Request, res: Response): Promise<void> {
+    req.session.destroy((err) => {
+      if (err) {
+        res.status(500).json({ success: false, message: 'Erro ao fazer logout' });
+        return;
+      }
+      
+      res.setHeader('Authorization', '');
+      res.status(200).json({ success: true, message: 'Logout realizado com sucesso' });
+    });
+  }
 }
+
+
+

@@ -16,6 +16,9 @@ userRouter.post('/cadastro', (req, res) => userController.create(req, res));
 //rota para login
 userRouter.post('/login', (req, res) => userController.login(req, res));
 
+//rota para logout
+userRouter.post('/logout', tokenMiddleware.verifyToken, (req, res) => userController.logout(req, res));
+
 //rota me para dados do login
 userRouter.get('/me', tokenMiddleware.verifyToken, (req, res) => userController.loggedUser(req, res));
 
