@@ -32,7 +32,7 @@ export class TokenMiddleware {
       return
     }
 
-    const usuario = await this.userRepository.getUser((decoded as any).id)
+    const usuario = await this.userRepository.findUserById((decoded as any).id)
 
     if (!usuario) {
       res.status(404).json({ message: 'Usuário não encontrado' });
