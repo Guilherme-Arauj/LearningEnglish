@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { UserFactory } from '../../factories/UserFactory';
 import { TokenMiddlewareFactory } from '../../factories/TokenMiddlewareFactory';
-import { ResetPasswordTokenMiddleware } from '../../../application/middleware/PasswordResetMiddleware';
 import { ResetPasswordFactory } from '../../factories/ResetPasswordFactory';
 
 const userRouter = Router();

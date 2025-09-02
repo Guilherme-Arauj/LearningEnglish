@@ -8,20 +8,18 @@ import { PrismaConfig } from "../database/PrismaConfig";
 import { IUserQuestionProgressRepository } from "../../application/services/repositories/IUserQuestionProgressRepository";
 import { UserQuestionProgressRepository } from "../../application/services/repositories/UserQuestionProgressRepository";
 import { QuestionService } from "../../application/services/QuestionService";
+import { UserQuestionProgressService } from "../../application/services/UserQuestionProgressService";
+import { UserQuestionProgressController } from "../web/controllers/UserQuestionProgressController";
 
-export function QuestionFactory(): QuestionController {
+export function UserQuestionProgressFactory(): UserQuestionProgressController {
     const prismaConfig: IPrismaConfig = new PrismaConfig();
-    const questionRepository: IQuestionRepository = new QuestionRepository(prismaConfig);
-    const uuidConfig: IUuidConfig = new UuidConfig();
     const userQuestionProgressRepository: IUserQuestionProgressRepository = new UserQuestionProgressRepository(prismaConfig);
 
-    const questionService = new QuestionService(
-        questionRepository,
+    const questionService = new UserQuestionProgressService(
         userQuestionProgressRepository,
-        uuidConfig
     )
 
-    return new QuestionController(
+    return new UserQuestionProgressController(
         questionService
     );
 }

@@ -85,6 +85,27 @@ export class UserController {
     }
   }
 
+  public async loggedUser(req: Request, res: Response): Promise<void> {
+    if (!req.session.user) {
+      res.status(401).json({ message: "Usuário não autenticado" });
+      return;
+    }
+
+    res.status(200).json({ user: req.session.user });
+  }
+
+  public async logout(req: Request, res: Response): Promise<void> {
+    req.session.destroy((err) => {
+      if (err) {
+        res.status(500).json({ success: false, message: 'Erro ao fazer logout' });
+        return;
+      }
+      
+      res.setHeader('Authorization', '');
+      res.status(200).json({ success: true, message: 'Logout realizado com sucesso' });
+    });
+  }
+
   public async recuperarSenha(req: Request, res: Response): Promise<void> {
     try {
       const { email } = req.body;
@@ -254,27 +275,6 @@ export class UserController {
         .status(400)
         .json({ message: `Erro ao adicionar tempo de estudo - ${error}` });
     }
-  }
-
-  public async loggedUser(req: Request, res: Response): Promise<void> {
-    if (!req.session.user) {
-      res.status(401).json({ message: "Usuário não autenticado" });
-      return;
-    }
-
-    res.status(200).json({ user: req.session.user });
-  }
-
-  public async logout(req: Request, res: Response): Promise<void> {
-    req.session.destroy((err) => {
-      if (err) {
-        res.status(500).json({ success: false, message: 'Erro ao fazer logout' });
-        return;
-      }
-      
-      res.setHeader('Authorization', '');
-      res.status(200).json({ success: true, message: 'Logout realizado com sucesso' });
-    });
   }
 }
 

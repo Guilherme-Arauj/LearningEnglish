@@ -1,41 +1,22 @@
 import { Request, Response } from 'express';
 import { QuestionDTO } from '../../../application/dto/QuestionDTO';
 import { validateDTOQuestion } from '../../utils/zod/validateDTOQuestion';
-import { CreateQuestion } from '../../../application/services/CreateQuestion';
 import { validateDTOQuestionUpdate } from '../../utils/zod/validateDTOQuestionUpdate';
 import { QuestionUpdateDTO } from '../../../application/dto/QuestionUpdateDTO';
-import { UpdateQuestion } from '../../../application/services/UpdateQuestion';
-import { GetAllQuestions } from '../../../application/services/GetAllQuestions';
 import { validateDTODeleteQuestion } from '../../utils/zod/validateDTODeleteQuestion';
 import { DeleteQuestionDTO } from '../../../application/dto/DeleteQuestionDTO';
-import { DeleteQuestion } from '../../../application/services/DeleteQuestion';
 import { validateDTOAnswerQuestion } from '../../utils/zod/validateDTOAnswerQuestion';
 import { AnswerQuestionDTO } from '../../../application/dto/AnswerQuestionDTO';
-import { AnswerQuestion } from '../../../application/services/AnswerQuestion';
-import { TrackProgress } from '../../../application/services/TrackProgress';
+import { QuestionService } from '../../../application/services/QuestionService';
 
 export class QuestionController {
-    private createQuestionUseCase: CreateQuestion
-    private updateQuestionUseCase: UpdateQuestion
-    private getAllQuestionsUseCase: GetAllQuestions
-    private deleteQuestionUseCase: DeleteQuestion
-    private answerQuestionUseCase: AnswerQuestion
-    private trackProgressUseCase: TrackProgress
+    private questionService: QuestionService
+
     
   constructor( 
-    createQuestionUseCase: CreateQuestion, 
-    updateQuestionUseCase: UpdateQuestion, 
-    getAllQuestionsUseCase: GetAllQuestions, 
-    deleteQuestionUseCase: DeleteQuestion,
-    answerQuestionUseCase: AnswerQuestion,
-    trackProgressUseCase: TrackProgress
+    questionService: QuestionService, 
   ){
-    this.createQuestionUseCase = createQuestionUseCase;
-    this.updateQuestionUseCase = updateQuestionUseCase;
-    this.getAllQuestionsUseCase = getAllQuestionsUseCase;
-    this.deleteQuestionUseCase = deleteQuestionUseCase;
-    this.answerQuestionUseCase = answerQuestionUseCase;
-    this.trackProgressUseCase = trackProgressUseCase;
+    this.questionService = questionService;
   }
 
   public async createQuestion(req: Request, res: Response): Promise<any> {
@@ -62,7 +43,7 @@ export class QuestionController {
         validatedData.response
       );
 
-      const questionResponse = await this.createQuestionUseCase.execute(dto);
+      const questionResponse = await this.questionService.createQuestion(dto);
 
       res.status(201).json({
         message: "Questão criada com sucesso!",
@@ -88,7 +69,7 @@ export class QuestionController {
   
       const dto = new QuestionUpdateDTO(validatedData.id, validatedData);
   
-      const questionResponse = await this.updateQuestionUseCase.execute(dto);
+      const questionResponse = await this.questionService.updateQuestion(dto);
   
       res.status(200).json({
         message: "Questão atualizada com sucesso!",
@@ -103,7 +84,7 @@ export class QuestionController {
 
   public async getAllQuestions(req: Request, res: Response): Promise<any> {
     try {
-        const questions = await this.getAllQuestionsUseCase.execute();
+        const questions = await this.questionService.getAllQuestions();
 
         res.status(200).json({
             message: "Questões encontradas com sucesso!",
@@ -130,7 +111,7 @@ export class QuestionController {
 
       const dto = new DeleteQuestionDTO(validatedData);
 
-      const deletedQuestion = await this.deleteQuestionUseCase.execute(dto);
+      const deletedQuestion = await this.questionService.deleteQuestion(dto);
 
       res.status(200).json({
         message: "Questão excluída com sucesso!",
@@ -154,7 +135,7 @@ export class QuestionController {
 
       const dto = new AnswerQuestionDTO(validatedData.questionId, validatedData.answer, validatedData.userId);
 
-      const answerQuestion = await this.answerQuestionUseCase.execute(dto);
+      const answerQuestion = await this.questionService.answerQuestion(dto);
 
       res.status(200).json({
         success: true,
@@ -169,24 +150,5 @@ export class QuestionController {
       res.status(400).json({ message: `Erro ao responder questão - ${error}` });
     }
   }
-
-  public async trackProgress(req: Request, res: Response): Promise<any> {
-    try {
-      const userId = req.user?.id;
-      if (!userId) {
-            return res.status(401).json({ message: "Usuário não autenticado" });
-      }
-
-      const progress = await this.trackProgressUseCase.execute(userId);
-
-        res.status(200).json({
-            message: "Aqui está seu Progresso!",
-            progress
-        });
-
-    } catch (error) {
-      console.error('Erro ao busar progresso:', error);
-      res.status(400).json({ message: `Erro ao buscar progresso - ${error}` });
-    }
-  }
+  
 }

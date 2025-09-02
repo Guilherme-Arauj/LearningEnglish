@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export async function validateDTOLogin(reqSchema: Object, res: any) {
   const userSchema = z.object({
-    email: z.string().email("[Formato de email inválido]"),
-    password: z.string().min(6, "[Senha deve ter no mínimo 6 caracteres]"),
+    email: z.string().email("Formato de email inválido"),
+    password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
   });
 
   try {

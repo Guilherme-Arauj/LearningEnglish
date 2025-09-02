@@ -14,7 +14,7 @@ export class UserRepository implements IUserRepository {
       data: user.toPersistence(),
     });
 
-    return new User(created);
+    return this.mapToEntity(created);
   }
 
   public async findUserByEmail(email: string): Promise<User | null> {
@@ -27,15 +27,7 @@ export class UserRepository implements IUserRepository {
 
     if (!user) return null;
 
-    return new User({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      privilege: user.privilege,
-      cefr: user.cefr,
-      timeSpentSeconds: user.timeSpentSeconds ?? 0,
-    });
+    return this.mapToEntity(user);
   }
 
   public async findUserById(id: string): Promise<User | null> {
@@ -48,36 +40,7 @@ export class UserRepository implements IUserRepository {
 
     if (!user) return null;
 
-    return new User({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      privilege: user.privilege,
-      cefr: user.cefr,
-      timeSpentSeconds: user.timeSpentSeconds ?? 0,
-    });
-  }
-
-  public async getUser(id: string): Promise<User | null> {
-    const user = await this.prisma.user.findFirst({
-      where: {
-        id: id,
-        status: "ACTIVE",
-      },
-    });
-
-    if (!user) return null;
-
-    return new User({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      password: user.password,
-      privilege: user.privilege,
-      cefr: user.cefr,
-      timeSpentSeconds: user.timeSpentSeconds ?? 0,
-    });
+    return this.mapToEntity(user);
   }
 
   public async updateUser(user: User): Promise<User> {
@@ -98,48 +61,43 @@ export class UserRepository implements IUserRepository {
       },
     });
 
-    return new User(updated);
+    return this.mapToEntity(updated);
   }
 
   public async deleteUserById(id: string): Promise<User> {
-    const user = await this.findUserById(id);
-    if (!user) throw new Error("Usuário não encontrado");
-
     const deleted = await this.prisma.user.update({
-      where: { id },
+      where: { 
+        id,
+        status: "ACTIVE"
+      },
       data: {
         status: "DELETED",
         deletedAt: new Date(),
       },
     });
 
-    return new User({
-      id: deleted.id,
-      name: deleted.name,
-      email: deleted.email,
-      password: deleted.password,
-      privilege: deleted.privilege,
-      cefr: deleted.cefr,
-      timeSpentSeconds: deleted.timeSpentSeconds ?? 0,
-    });
+    return this.mapToEntity(deleted);
   }
 
-  public async get(): Promise<User[]> {
+  public async getAllUsers(): Promise<User[]> {
     const users = await this.prisma.user.findMany({
       where: { status: "ACTIVE" },
     });
 
-    return users.map(
-      (user) =>
-        new User({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          password: user.password,
-          privilege: user.privilege,
-          cefr: user.cefr,
-          timeSpentSeconds: user.timeSpentSeconds ?? 0,
-        })
-    );
+    return users.map((user) => this.mapToEntity(user));
+  }
+
+
+  private mapToEntity(prismaUser: any): User {
+    return new User({
+        id: prismaUser.id,
+        name: prismaUser.name,
+        email: prismaUser.email,
+        password: prismaUser.password,
+        privilege: prismaUser.privilege,
+        cefr: prismaUser.cefr,
+        timeSpentSeconds: prismaUser.timeSpentSeconds ?? 0,
+        userQuestionProgress: prismaUser.userQuestionProgress ?? undefined,
+    });
   }
 }

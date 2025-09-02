@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export async function validateDTOUserEmail(reqSchema: Object, res: any) {
   const userSchema = z.object({
-    email: z.string().email("[Formato de email inválido]")
+    email: z.string().email("Formato de email inválido")
   });
 
   try {

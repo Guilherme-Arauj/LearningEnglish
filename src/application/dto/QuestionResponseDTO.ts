@@ -1,3 +1,6 @@
+import { Question } from "../../domain/entities/Question";
+
+
 export class QuestionResponseDTO {
     public id: string;
     public title: string;
@@ -29,5 +32,20 @@ export class QuestionResponseDTO {
       this.optionB = optionB;
       this.optionC = optionC;
       this.response = response;
+    }
+
+    static fromQuestion(question: Question): QuestionResponseDTO {
+      const publicData = question.toPublicData();
+      return new QuestionResponseDTO(
+        publicData.id,
+        publicData.title,
+        publicData.cefr,
+        publicData.type,
+        publicData.theme,
+        publicData.optionA,
+        publicData.optionB,
+        publicData.optionC,
+        publicData.response
+      )
     }
   }

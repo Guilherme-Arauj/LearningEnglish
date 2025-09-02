@@ -11,22 +11,10 @@ export class UserQuestionProgressRepository implements IUserQuestionProgressRepo
 
     public async create(userQuestionProgress: UserQuestionProgress): Promise<UserQuestionProgress> {
         const created = await this.prisma.userQuestionProgress.create({
-            data: {
-                id: userQuestionProgress.id,
-                userId: userQuestionProgress.userId,
-                questionId: userQuestionProgress.questionId,
-                status: userQuestionProgress.status,
-                chosenOption: userQuestionProgress.chosenOption
-            }
+            data: userQuestionProgress.toPersistence()
         });
     
-        return new UserQuestionProgress({
-            id: created.id,
-            userId: created.userId ?? undefined,
-            questionId: created.questionId ?? undefined,
-            status: created.status ?? undefined,
-            chosenOption: created.chosenOption ?? undefined,
-        });
+        return this.mapToEntity(created);
     }
 
     public async findByUserAndQuestion(userId: string, questionId: string): Promise<UserQuestionProgress | null> {
@@ -39,33 +27,16 @@ export class UserQuestionProgressRepository implements IUserQuestionProgressRepo
     
         if (!progress) return null;
     
-        return new UserQuestionProgress({
-            id: progress.id,
-            userId: progress.userId ?? undefined,
-            questionId: progress.questionId ?? undefined,
-            status: progress.status ?? undefined,
-            chosenOption: progress.chosenOption ?? undefined,
-        });
+        return this.mapToEntity(progress);
     }
 
     public async update(userQuestionProgress: UserQuestionProgress): Promise<UserQuestionProgress> {
         const updated = await this.prisma.userQuestionProgress.update({
             where: { id: userQuestionProgress.id },
-            data: {
-                userId: userQuestionProgress.userId,
-                questionId: userQuestionProgress.questionId,
-                status: userQuestionProgress.status,
-                chosenOption: userQuestionProgress.chosenOption
-            }
+            data: userQuestionProgress.toPersistence()
         });
     
-        return new UserQuestionProgress({
-            id: updated.id,
-            userId: updated.userId ?? undefined,
-            questionId: updated.questionId ?? undefined,
-            status: updated.status ?? undefined,
-            chosenOption: updated.chosenOption ?? undefined,
-        });
+        return this.mapToEntity(updated);
     }
 
     public async findByUserIdWithQuestions(userId: string): Promise<any[]> {
@@ -94,5 +65,17 @@ export class UserQuestionProgressRepository implements IUserQuestionProgressRepo
                 type: item.Question.type
             } : null
         }));
+    }
+
+    private mapToEntity(prismaUserQuestionProgress: any): UserQuestionProgress {
+        return new UserQuestionProgress({
+            id: prismaUserQuestionProgress.id,
+            userId: prismaUserQuestionProgress.userId ?? undefined,
+            questionId: prismaUserQuestionProgress.questionId ?? undefined,
+            status: prismaUserQuestionProgress.status ?? undefined,
+            chosenOption: prismaUserQuestionProgress.chosenOption ?? undefined,
+            user: prismaUserQuestionProgress.user ?? undefined,
+            question: prismaUserQuestionProgress.question ?? undefined,
+        });
     }
 }

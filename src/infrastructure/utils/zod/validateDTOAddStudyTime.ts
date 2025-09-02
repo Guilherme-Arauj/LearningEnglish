@@ -3,14 +3,14 @@ import { z } from "zod";
 export async function validateDTOAddStudyTime(reqSchema: Object, res: any) {
   const addStudyTimeSchema = z.object({
     userId: z.string()
-      .min(8, "[ID deve ter pelo menos 8 caracteres (prefixo + 6 chars)]")
+      .min(8, "ID deve ter pelo menos 8 caracteres (prefixo + 6 chars)")
       .refine(
         (id) => id.startsWith("STUDENT-") || id.startsWith("ADMIN-"),
-        "[ID deve começar com 'STUDENT-' ou 'ADMIN-']"
+        "ID deve começar com 'STUDENT-' ou 'ADMIN-'"
       ),
     timeToAdd: z.number()
-      .int("[Tempo a adicionar deve ser um número inteiro]")
-      .positive("[Tempo a adicionar deve ser maior que zero]"),
+      .int("Tempo a adicionar deve ser um número inteiro")
+      .positive("Tempo a adicionar deve ser maior que zero"),
   });
 
   try {
