@@ -26,10 +26,10 @@ export class UserController {
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
-      const { name, email, password, cefr } = req.body;
+      const { name, email, password, cefr, timeline } = req.body;
       const privilege = 'student'
       
-      const reqSchema = { name, email, password, privilege, cefr };
+      const reqSchema = { name, email, password, privilege, cefr, timeline};
 
       const validatedData = await validateDTOUser(reqSchema, res);
       if (!validatedData) return;
@@ -39,7 +39,8 @@ export class UserController {
         validatedData.email,
         validatedData.password,
         validatedData.privilege,
-        validatedData.cefr
+        validatedData.cefr,
+        validatedData.timeline
       );
 
       const userResponse = await this.userService.createUser(dto);
@@ -72,6 +73,8 @@ export class UserController {
         name: userResponse.name,
         privilege: userResponse.privilege,
         cefr: userResponse.cefr,
+        timeline: userResponse.timeline,
+        firstAccess: userResponse.firstAccess,
         token: userResponse.token || "",
       };
 

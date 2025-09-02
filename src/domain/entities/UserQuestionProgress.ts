@@ -1,5 +1,5 @@
 import { IQuestion } from "./Question";
-import { IUser } from "./User";
+import { IUser, User } from "./User";
 
 export interface IUserQuestionProgress {
   id: string;

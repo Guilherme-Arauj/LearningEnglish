@@ -8,7 +8,8 @@ export async function validateDTOUser(reqSchema: Object, res: any) {
     privilege: z.enum(["student", "admin"], {
       errorMap: () => ({ message: "Privilégio inválido! Use 'student' ou 'admin'." })
     }),
-    cefr: z.string()
+    cefr: z.string(),
+    timeline: z.number()
   });
 
   try {

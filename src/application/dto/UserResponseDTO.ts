@@ -6,6 +6,8 @@ export class UserResponseDTO {
   public email: string;
   public privilege: string;
   public cefr: string;
+  public firstAccess: boolean;
+  public timeline: number;
   public studyTimeSeconds?: number;
   public token?: string;
 
@@ -15,6 +17,8 @@ export class UserResponseDTO {
     email: string,
     privilege: string,
     cefr: string,
+    firstAccess: boolean,
+    timeline: number,
     studyTimeSeconds?: number
   ) {
     this.id = id;
@@ -23,6 +27,8 @@ export class UserResponseDTO {
     this.privilege = privilege;
     this.cefr = cefr;
     this.studyTimeSeconds = studyTimeSeconds;
+    this.firstAccess = firstAccess;
+    this.timeline = timeline;
   }
 
   static fromUser(user: User): UserResponseDTO {
@@ -33,6 +39,8 @@ export class UserResponseDTO {
       publicData.email,
       publicData.privilege,
       publicData.cefr,
+      publicData.firstAccess,
+      publicData.timeline,
       publicData.timeSpentSeconds
     );
   }

@@ -58,6 +58,8 @@ export class UserRepository implements IUserRepository {
         privilege: userData.privilege,
         cefr: userData.cefr,
         timeSpentSeconds: userData.timeSpentSeconds,
+        firstAccess: userData.firstAccess,
+        timeline: userData.timeline 
       },
     });
 
@@ -97,6 +99,8 @@ export class UserRepository implements IUserRepository {
         privilege: prismaUser.privilege,
         cefr: prismaUser.cefr,
         timeSpentSeconds: prismaUser.timeSpentSeconds ?? 0,
+        timeline: prismaUser.timeline,
+        firstAccess: prismaUser.firstAccess,
         userQuestionProgress: prismaUser.userQuestionProgress ?? undefined,
     });
   }

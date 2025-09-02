@@ -7,6 +7,8 @@ declare module 'express-session' {
       name: string;
       privilege: string;
       cefr: string;
+      timeline: number;
+      firstAccess: boolean;
       token: string;
     };
   }

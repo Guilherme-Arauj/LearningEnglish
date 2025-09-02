@@ -47,11 +47,14 @@ export class UserService {
       id: id,
       name: dto.name,
       email: dto.email,
-      privilege: dto.privilege,
-      cefr: dto.cefr,
       password: hashedPassword,
+      cefr: dto.cefr,
+      privilege: dto.privilege,
+      timeSpentSeconds: 0,
+      timeline: 1, 
+      firstAccess: true,
+      userQuestionProgress: []
     });
-
     const savedUser = await this.userRepository.create(user);
 
     return UserResponseDTO.fromUser(savedUser);
@@ -77,6 +80,13 @@ export class UserService {
       throw new Error("Usuário não encontrado no banco de dados");
     }
 
+    const isFirstAccess = user.firstAccess;
+
+    if(user.firstAccess === true){
+      user.updateFirstAccess(false);
+      await this.userRepository.updateUser(user);
+    }
+
     const passwordMatch = await this.bcryptConfig.compare(
       dto.password,
       user.password
@@ -86,11 +96,14 @@ export class UserService {
     }
 
     const token = this.jwtConfig.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email,},
       { expiresIn: "2h" }
     );
 
-    return UserResponseDTO.fromUserWithToken(user, token);
+    const response = UserResponseDTO.fromUserWithToken(user, token);
+    response.firstAccess = isFirstAccess;
+
+    return response;
   }
 
   // ---

@@ -8,6 +8,8 @@ export interface IUser {
   cefr: string;
   privilege: string;
   timeSpentSeconds?: number;
+  timeline: number;
+  firstAccess: boolean;
   userQuestionProgress?: IUserQuestionProgress[];
 }
 
@@ -17,6 +19,8 @@ export interface IUserPublicData {
   email: string;
   cefr: string;
   privilege: string;
+  timeline: number;
+  firstAccess: boolean;
   timeSpentSeconds: number;
   userQuestionProgress?: IUserQuestionProgress[];
 }
@@ -29,6 +33,8 @@ export class User implements IUser {
   private _cefr: string;
   private _privilege: string;
   private _timeSpentSeconds: number;
+  private _timeline: number;
+  private _firstAccess: boolean;
   private _userQuestionProgress?: IUserQuestionProgress[];
 
   constructor(data: IUser) {
@@ -44,6 +50,8 @@ export class User implements IUser {
     this._cefr = data.cefr;
     this._privilege = data.privilege;
     this._timeSpentSeconds = data.timeSpentSeconds ?? 0;
+    this._timeline = data.timeline
+    this._firstAccess = data.firstAccess
     this._userQuestionProgress = data.userQuestionProgress;
   }
 
@@ -55,12 +63,21 @@ export class User implements IUser {
   get privilege(): string {return this._privilege;}
   get timeSpentSeconds(): number {return this._timeSpentSeconds;}
   get userQuestionProgress(): IUserQuestionProgress[] | undefined {return this._userQuestionProgress;}
+  get timeline(): number {return this._timeline;}
+  get firstAccess(): boolean {return this._firstAccess;}
 
   public setHashedPassword(hashedPassword: string): void {
     if (!hashedPassword) {
       throw new Error("Senha hasheada não pode ser vazia!");
     }
     this._password = hashedPassword;
+  }
+
+  public updateFirstAccess(newAccess: boolean): void {
+    if (newAccess !== false) {
+      throw new Error("Acesso deve ser atualizado apenas para false!");
+    }
+    this._firstAccess = newAccess;
   }
 
   public updateName(newName: string): void {
@@ -123,8 +140,9 @@ export class User implements IUser {
       email: this._email,
       cefr: this._cefr,
       privilege: this._privilege,
+      timeline: this._timeline,
+      firstAccess: this._firstAccess,
       timeSpentSeconds: this._timeSpentSeconds,
-      userQuestionProgress: this._userQuestionProgress,
     };
   }
 
@@ -137,7 +155,8 @@ export class User implements IUser {
       cefr: this._cefr,
       privilege: this._privilege,
       timeSpentSeconds: this._timeSpentSeconds,
-      userQuestionProgress: this._userQuestionProgress,
+      timeline: this._timeline,
+      firstAccess: this._firstAccess,
     };
   }
   //------ --------------------------------- --------
