@@ -120,9 +120,7 @@ export class UserService {
       { expiresIn: "15m" }
     );
 
-    const url = `${
-      process.env.FRONTEND_URL || "http://localhost:4000"
-    }/users/redefinirSenha?token=${token}`;
+    const url = `${process.env.FRONTEND_URL}:${token}`;
 
     const html = this.mailerTemplate.generate(url);
 
