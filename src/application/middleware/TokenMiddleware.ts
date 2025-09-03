@@ -45,9 +45,7 @@ export class TokenMiddleware {
     );
 
     res.setHeader('Authorization', `Bearer ${novoToken}`);
-
-    
-    
+  
     req.user = usuario;
     next();
   }
