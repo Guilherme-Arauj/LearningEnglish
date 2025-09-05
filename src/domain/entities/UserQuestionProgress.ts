@@ -54,8 +54,11 @@ export class UserQuestionProgress implements IUserQuestionProgress {
   get user(): IUser | undefined {return this._user;}
   get question(): IQuestion | undefined {return this._question;}
 
-  public updateProgress(status: boolean, chosenOption: string): void {
+  set status(status: boolean) {
     this._status = status;
+  }
+
+  set chosenOption(chosenOption: string) {
     this._chosenOption = chosenOption;
   }
 

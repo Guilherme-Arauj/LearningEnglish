@@ -55,7 +55,6 @@ export class UserService {
       timeSpentSeconds: 0,
       timeline: 1, 
       firstAccess: true,
-      userQuestionProgress: []
     });
     const savedUser = await this.userRepository.create(user);
 
@@ -143,7 +142,7 @@ export class UserService {
     }
 
     const hashedPassword = await this.bcryptConfig.hash(dto.password, 10);
-    user.setHashedPassword(hashedPassword);
+    user.hashedPassword = hashedPassword;
 
     const updatedUser = await this.userRepository.updateUser(user);
 
@@ -175,10 +174,10 @@ export class UserService {
     }
 
     const updateMethods = {
-      name: (user: User, value: string) => user.updateName(value),
-      email: (user: User, value: string) => user.updateEmail(value),
-      cefr: (user: User, value: string) => user.updateCefr(value),
-      privilege: (user: User, value: string) => user.updatePrivilege(value),
+      name: (user: User, value: string) => user.name = value,
+      email: (user: User, value: string) => user.email = value,
+      cefr: (user: User, value: string) => user.cefr = value,
+      privilege: (user: User, value: string) => user.privilege = value,
     } as const;
 
     (
@@ -193,7 +192,7 @@ export class UserService {
     });
 
     if (hashedPassword) {
-      existingUser.setHashedPassword(hashedPassword);
+      existingUser.hashedPassword = hashedPassword;
     }
 
     const savedUser = await this.userRepository.updateUser(existingUser);
@@ -218,7 +217,7 @@ export class UserService {
       throw new Error("Usuário não encontrado");
     }
 
-    user.addStudyTime(dto.timeToAdd);
+    user.timeSpentSeconds = dto.timeToAdd;
     const updatedUser = await this.userRepository.updateUser(user);
 
     return UserResponseDTO.fromUser(updatedUser);

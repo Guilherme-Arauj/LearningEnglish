@@ -66,14 +66,14 @@ export class User implements IUser {
   get timeline(): number {return this._timeline;}
   get firstAccess(): boolean {return this._firstAccess;}
 
-  public setHashedPassword(hashedPassword: string): void {
+  set hashedPassword(hashedPassword: string) {
     if (!hashedPassword) {
       throw new Error("Senha hasheada não pode ser vazia!");
     }
     this._password = hashedPassword;
   }
 
-  public set timeline(newTimeline: number) {
+  set timeline(newTimeline: number) {
     if (!Number.isInteger(newTimeline)) {
       throw new Error("Timeline deve ser um número inteiro!");
     }
@@ -83,63 +83,40 @@ export class User implements IUser {
     this._timeline = newTimeline;
   }
 
-  public set firstAccess(newAccess: boolean) {
+  set firstAccess(newAccess: boolean) {
     if (newAccess !== false) {
       throw new Error("Acesso deve ser atualizado apenas para false!");
     }
     this._firstAccess = newAccess;
   }
 
-  public updateName(newName: string): void {
+  set name(newName: string) {
     if (!newName?.trim()) {
       throw new Error("Nome não pode ser vazio!");
     }
     this._name = newName.trim();
   }
 
-  public updateEmail(newEmail: string): void {
+  set email(newEmail: string) {
     this.validateEmail(newEmail);
     this._email = newEmail.toLowerCase().trim();
   }
 
-  public updateCefr(newCefr: string): void {
+  set cefr(newCefr: string) {
     this.validateCefr(newCefr);
     this._cefr = newCefr;
   }
 
-  public updatePrivilege(newPrivilege: string): void {
+  set privilege(newPrivilege: string) {
     this.validatePrivilege(newPrivilege);
     this._privilege = newPrivilege;
   }
 
-  public addStudyTime(seconds: number): void {
+  set timeSpentSeconds(seconds: number) {
     if (seconds <= 0) {
       throw new Error("Tempo deve ser positivo");
     }
     this._timeSpentSeconds += seconds;
-  }
-
-  public addQuestionProgress(progress: IUserQuestionProgress): void {
-    if (!this._userQuestionProgress) {
-      this._userQuestionProgress = [];
-    }
-    this._userQuestionProgress.push(progress);
-  }
-
-  public clearQuestionProgress(): void {
-    this._userQuestionProgress = [];
-  }
-
-  public static isStrongPassword(password: string): boolean {
-    if (!password) return false;
-
-    return (
-      password.length >= 8 &&
-      /[A-Z]/.test(password) &&
-      /[a-z]/.test(password) &&
-      /[0-9]/.test(password) &&
-      /[^A-Za-z0-9]/.test(password)
-    );
   }
 
   //------ Métodos para exposição de dados --------
@@ -172,6 +149,18 @@ export class User implements IUser {
   //------ --------------------------------- --------
 
   // --------- Métodos de validação -----------
+  public static isStrongPassword(password: string): boolean {
+    if (!password) return false;
+
+    return (
+      password.length >= 8 &&
+      /[A-Z]/.test(password) &&
+      /[a-z]/.test(password) &&
+      /[0-9]/.test(password) &&
+      /[^A-Za-z0-9]/.test(password)
+    );
+  }
+
   private validateRequiredFields(data: IUser): void {
     if (!data.id) throw new Error("ID não pode ser vazio!");
     if (!data.name?.trim()) throw new Error("Nome não pode ser vazio!");

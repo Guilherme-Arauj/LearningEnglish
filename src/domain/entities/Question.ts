@@ -63,19 +63,19 @@ export class Question implements IQuestion {
   get response(): string | undefined {return this._response;}
   get userQuestionProgress(): IUserQuestionProgress[] | undefined {return this._userQuestionProgress;}
 
-  public updateTitle(newTitle: string): void {
+  set title(newTitle: string) {
     if (!newTitle?.trim()) {
       throw new Error("Título não pode ser vazio!");
     }
     this._title = newTitle.trim();
   }
-  public updateCefr(newCefr?: string | null): void {this._cefr = newCefr || undefined;}
-  public updateType(newType?: string | null): void {this._type = newType || undefined;}
-  public updateTheme(newTheme?: string | null): void {this._theme = newTheme || undefined;}
-  public updateOptionA(newOptionA?: string | null): void {this._optionA = newOptionA || undefined;}
-  public updateOptionB(newOptionB?: string | null): void {this._optionB = newOptionB || undefined;}
-  public updateOptionC(newOptionC?: string | null): void {this._optionC = newOptionC || undefined;}
-  public updateResponse(newResponse?: string | null): void {this._response = newResponse || undefined;}
+  set cefr(newCefr: string | null) {this._cefr = newCefr || undefined;}
+  set type(newType: string | null) {this._type = newType || undefined;}
+  set theme(newTheme: string | null) {this._theme = newTheme || undefined;}
+  set optionA(newOptionA: string | null) {this._optionA = newOptionA || undefined;}
+  set optionB(newOptionB: string | null) {this._optionB = newOptionB || undefined;}
+  set optionC(newOptionC: string | null) {this._optionC = newOptionC || undefined;}
+  set response(newResponse: string | null) {this._response = newResponse || undefined;}
 
   //------ Métodos para exposição de dados ----------
   public toPublicData(): IQuestionPublicData {

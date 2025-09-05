@@ -63,14 +63,14 @@ export class QuestionService {
     if (!question) throw new Error("Questão não encontrada");
 
     const updateMethods = {
-      title: (q: Question, value: string) => q.updateTitle(value),
-      cefr: (q: Question, value: string) => q.updateCefr(value),
-      type: (q: Question, value: string) => q.updateType(value),
-      theme: (q: Question, value: string) => q.updateTheme(value),
-      optionA: (q: Question, value: string) => q.updateOptionA(value),
-      optionB: (q: Question, value: string) => q.updateOptionB(value),
-      optionC: (q: Question, value: string) => q.updateOptionC(value),
-      response: (q: Question, value: string) => q.updateResponse(value),
+      title: (q: Question, value: string) => q.title = value,
+      cefr: (q: Question, value: string) => q.cefr = value,
+      type: (q: Question, value: string) => q.type = value,
+      theme: (q: Question, value: string) => q.theme = value,
+      optionA: (q: Question, value: string) => q.optionA = value,
+      optionB: (q: Question, value: string) => q.optionB = value,
+      optionC: (q: Question, value: string) => q.optionC = value,
+      response: (q: Question, value: string) => q.response = value,
     } as const;
     
     (Object.entries(updateMethods) as Array<[
@@ -106,7 +106,8 @@ export class QuestionService {
       const existingProgress = await this.userQuestionProgressRepository.findByUserAndQuestion(dto.userId, dto.questionId);
   
       if (existingProgress) {
-        existingProgress.updateProgress(isCorrect, dto.answer.toUpperCase());
+        existingProgress.status = isCorrect;
+        existingProgress.chosenOption = dto.answer.toUpperCase();
         await this.userQuestionProgressRepository.update(existingProgress);
       } else {
         const progressId = await this.uuidConfig.generateUserQuestionProgressId();
