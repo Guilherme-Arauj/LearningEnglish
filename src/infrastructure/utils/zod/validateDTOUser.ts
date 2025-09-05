@@ -9,7 +9,6 @@ export async function validateDTOUser(reqSchema: Object, res: any) {
       errorMap: () => ({ message: "Privilégio inválido! Use 'student' ou 'admin'." })
     }),
     cefr: z.string(),
-    timeline: z.number()
   });
 
   try {

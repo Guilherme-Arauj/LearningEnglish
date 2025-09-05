@@ -53,7 +53,6 @@ export class UserService {
       cefr: dto.cefr,
       privilege: dto.privilege,
       timeSpentSeconds: 0,
-      timeline: 1, 
       firstAccess: true,
     });
     const savedUser = await this.userRepository.create(user);

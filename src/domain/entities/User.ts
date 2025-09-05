@@ -8,7 +8,7 @@ export interface IUser {
   cefr: string;
   privilege: string;
   timeSpentSeconds?: number;
-  timeline: number;
+  timeline?: number;
   firstAccess: boolean;
   userQuestionProgress?: IUserQuestionProgress[];
 }
@@ -19,7 +19,7 @@ export interface IUserPublicData {
   email: string;
   cefr: string;
   privilege: string;
-  timeline: number;
+  timeline?: number;
   firstAccess: boolean;
   timeSpentSeconds: number;
   userQuestionProgress?: IUserQuestionProgress[];
@@ -33,7 +33,7 @@ export class User implements IUser {
   private _cefr: string;
   private _privilege: string;
   private _timeSpentSeconds: number;
-  private _timeline: number;
+  private _timeline?: number;
   private _firstAccess: boolean;
   private _userQuestionProgress?: IUserQuestionProgress[];
 
@@ -63,7 +63,7 @@ export class User implements IUser {
   get privilege(): string {return this._privilege;}
   get timeSpentSeconds(): number {return this._timeSpentSeconds;}
   get userQuestionProgress(): IUserQuestionProgress[] | undefined {return this._userQuestionProgress;}
-  get timeline(): number {return this._timeline;}
+  get timeline(): number | undefined {return this._timeline;}
   get firstAccess(): boolean {return this._firstAccess;}
 
   set hashedPassword(hashedPassword: string) {
