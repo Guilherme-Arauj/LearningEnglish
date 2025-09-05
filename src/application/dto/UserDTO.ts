@@ -4,7 +4,6 @@ export class UserDTO{
     public password: string;
     public privilege: string;
     public cefr: string;
-    public timeline: number;
 
     constructor(
         name:string, 
@@ -12,14 +11,12 @@ export class UserDTO{
         password:string, 
         privilege:string, 
         cefr:string,
-        timeline: number
     ){
         this.name = name;
         this.email = email;
         this.password = password;
         this.privilege = privilege;
         this.cefr = cefr;
-        this.timeline = timeline;
     }
 }
 

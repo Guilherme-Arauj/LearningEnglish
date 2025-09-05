@@ -44,7 +44,6 @@ export class UserController {
         validatedData.password,
         validatedData.privilege,
         validatedData.cefr,
-        validatedData.timeline
       );
 
       const userResponse = await this.userService.createUser(dto);
