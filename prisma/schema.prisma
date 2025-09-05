@@ -30,9 +30,9 @@ model User {
   cefr                 String                 @db.VarChar(10)
   privilege            String                 @db.VarChar(50)
   status               String                 @default("ACTIVE") @db.VarChar(20)
-  deletedAt            DateTime?
-  timeline           Int                      @default(0)
-  firstAccess       Boolean                   @default(false)
+  deletedAt            DateTime?    
+  timeline             Int?                   @default(0)
+  firstAccess          Boolean                @default(true)
   timeSpentSeconds     Int                    @default(0)
   UserQuestionProgress UserQuestionProgress[]
 }

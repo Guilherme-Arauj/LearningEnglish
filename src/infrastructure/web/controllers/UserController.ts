@@ -14,6 +14,10 @@ import { DeleteUserDTO } from "../../../application/dto/DeleteUserDTO";
 import { validateDTOAddStudyTime } from "../../utils/zod/validateDTOAddStudyTime";
 import { AddStudyTimeDTO } from "../../../application/dto/AddStudyTimeDTO";
 import { UserService } from "../../../application/services/UserService";
+import { validateDTOTimeline } from "../../utils/zod/validateDTOTimeline";
+import { TimelineDTO } from "../../../application/dto/TimelineDTO";
+import { validateDTOLoggedUser } from "../../utils/zod/validateDTOLoggedUser";
+import { LoggedUserDTO } from "../../../application/dto/LoggedUserDTO";
 
 export class UserController {
   private userService: UserService;
@@ -71,6 +75,7 @@ export class UserController {
       req.session.user = {
         id: userResponse.id,
         name: userResponse.name,
+        email: userResponse.email,
         privilege: userResponse.privilege,
         cefr: userResponse.cefr,
         timeline: userResponse.timeline,
@@ -88,13 +93,23 @@ export class UserController {
     }
   }
 
-  public async loggedUser(req: Request, res: Response): Promise<void> {
-    if (!req.session.user) {
+  public async loggedUser(req: Request, res: Response): Promise<void> { 
+    const user = req.session.user
+    if (!user) {
       res.status(401).json({ message: "Usuário não autenticado" });
       return;
     }
 
-    res.status(200).json({ user: req.session.user });
+    const reqSchema = {userId: user.id}
+    
+    const validatedData = await validateDTOLoggedUser(reqSchema, res);
+    if(!validatedData) return;
+
+    const dto = new LoggedUserDTO(validatedData.userId);
+
+    const userResponse = await this.userService.getLoggedUser(dto);
+
+    res.status(200).json(userResponse);
   }
 
   public async logout(req: Request, res: Response): Promise<void> {
@@ -278,6 +293,28 @@ export class UserController {
         .status(400)
         .json({ message: `Erro ao adicionar tempo de estudo - ${error}` });
     }
+  }
+
+  public async updateTimeline(req: Request, res: Response): Promise<void> {
+    const { timeline } = req.body;
+    const userId = req.user?.id;
+
+    if(!userId){
+      throw new Error("User ID is missing from request.");
+    }
+
+    const reqSchema = {timeline, userId}
+
+    const validatedData = await validateDTOTimeline(reqSchema, res);
+    if(!validatedData) return;
+
+    const dto = new TimelineDTO(validatedData.userId, validatedData.timeline);
+
+    const user = await this.userService.updateTimeline(dto);
+
+    res
+      .status(200)
+      .json({ message: "Cronograma atualizado com sucesso!", user: user });    
   }
 }
 

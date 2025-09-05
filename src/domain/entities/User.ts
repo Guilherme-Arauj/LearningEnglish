@@ -73,7 +73,17 @@ export class User implements IUser {
     this._password = hashedPassword;
   }
 
-  public updateFirstAccess(newAccess: boolean): void {
+  public set timeline(newTimeline: number) {
+    if (!Number.isInteger(newTimeline)) {
+      throw new Error("Timeline deve ser um número inteiro!");
+    }
+    if (newTimeline < 0) {
+      throw new Error("Timeline não pode ser negativo!");
+    }
+    this._timeline = newTimeline;
+  }
+
+  public set firstAccess(newAccess: boolean) {
     if (newAccess !== false) {
       throw new Error("Acesso deve ser atualizado apenas para false!");
     }

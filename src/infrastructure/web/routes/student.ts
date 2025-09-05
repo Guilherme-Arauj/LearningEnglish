@@ -16,4 +16,6 @@ studentRouter.get('/trackProgress', tokenMiddleware.verifyToken, (req, res) => u
 
 studentRouter.post('/addTimeSpent', tokenMiddleware.verifyToken, (req, res) => userController.addStudyTime(req,res));
 
+studentRouter.put('/updateTimeline', tokenMiddleware.verifyToken, (req, res) => userController.updateTimeline(req, res));
+
 export { studentRouter };

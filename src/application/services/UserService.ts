@@ -6,6 +6,8 @@ import { IResetPasswordEmail } from "../../infrastructure/utils/nodemailer/recup
 import { IUuidConfig } from "../../infrastructure/utils/uuid/IUuidConfig";
 import { AddStudyTimeDTO } from "../dto/AddStudyTimeDTO";
 import { DeleteUserDTO } from "../dto/DeleteUserDTO";
+import { LoggedUserDTO } from "../dto/LoggedUserDTO";
+import { TimelineDTO } from "../dto/TimelineDTO";
 import { UserDTO } from "../dto/UserDTO";
 import { UserEmailDTO } from "../dto/UserEmailDTO";
 import { UserLoginDTO } from "../dto/UserLoginDTO";
@@ -80,13 +82,6 @@ export class UserService {
       throw new Error("Usuário não encontrado no banco de dados");
     }
 
-    const isFirstAccess = user.firstAccess;
-
-    if(user.firstAccess === true){
-      user.updateFirstAccess(false);
-      await this.userRepository.updateUser(user);
-    }
-
     const passwordMatch = await this.bcryptConfig.compare(
       dto.password,
       user.password
@@ -101,7 +96,6 @@ export class UserService {
     );
 
     const response = UserResponseDTO.fromUserWithToken(user, token);
-    response.firstAccess = isFirstAccess;
 
     return response;
   }
@@ -216,6 +210,8 @@ export class UserService {
     });
   }
 
+  // ---
+
   public async addStudyTimeToUser(dto: AddStudyTimeDTO): Promise<UserResponseDTO> {
     const user = await this.userRepository.findUserById(dto.userId);
     if (!user) {
@@ -226,5 +222,28 @@ export class UserService {
     const updatedUser = await this.userRepository.updateUser(user);
 
     return UserResponseDTO.fromUser(updatedUser);
+  }
+
+  // ---
+
+  public async updateTimeline(dto: TimelineDTO): Promise<UserResponseDTO> {
+    const user = await this.userRepository.findUserById(dto.id);
+    if (!user) {
+      throw new Error("Usuário não encontrado");
+    }
+
+    user.timeline = dto.timeline;
+    user.firstAccess = false
+    const updatedUser = await this.userRepository.updateUser(user);
+
+    return UserResponseDTO.fromUser(updatedUser);
+  }
+
+  public async getLoggedUser(dto: LoggedUserDTO): Promise<UserResponseDTO> {
+    const user = await this.userRepository.findUserById(dto.id);
+    if (!user) {
+      throw new Error("Usuário não encontrado");
+    }
+    return UserResponseDTO.fromUser(user);
   }
 }
