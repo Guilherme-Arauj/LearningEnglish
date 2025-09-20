@@ -22,18 +22,16 @@ import { LoggedUserDTO } from "../../../application/dto/LoggedUserDTO";
 export class UserController {
   private userService: UserService;
 
-  constructor(
-    userService: UserService
-  ) {
+  constructor(userService: UserService) {
     this.userService = userService;
   }
 
   public async create(req: Request, res: Response): Promise<void> {
     try {
       const { name, email, password, cefr, timeline } = req.body;
-      const privilege = 'student'
-      
-      const reqSchema = { name, email, password, privilege, cefr, timeline};
+      const privilege = "student";
+
+      const reqSchema = { name, email, password, privilege, cefr, timeline };
 
       const validatedData = await validateDTOUser(reqSchema, res);
       if (!validatedData) return;
@@ -43,7 +41,36 @@ export class UserController {
         validatedData.email,
         validatedData.password,
         validatedData.privilege,
-        validatedData.cefr,
+        validatedData.cefr
+      );
+
+      const userResponse = await this.userService.createUser(dto);
+
+      res.status(201).json({
+        message: "Cadastro realizado com sucesso!",
+        user: userResponse,
+      });
+    } catch (error) {
+      console.error("Erro ao processar requisição:", error);
+      res.status(400).json({ message: `Erro ao criar usuário - ${error}` });
+    }
+  }
+
+  public async adminCreate(req: Request, res: Response): Promise<void> {
+    try {
+      const { name, email, password, cefr, timeline, privilege } = req.body;
+
+      const reqSchema = { name, email, password, privilege, cefr, timeline };
+
+      const validatedData = await validateDTOUser(reqSchema, res);
+      if (!validatedData) return;
+
+      const dto = new UserDTO(
+        validatedData.name,
+        validatedData.email,
+        validatedData.password,
+        validatedData.privilege,
+        validatedData.cefr
       );
 
       const userResponse = await this.userService.createUser(dto);
@@ -70,7 +97,7 @@ export class UserController {
       const dto = new UserLoginDTO(validatedData.email, validatedData.password);
 
       const userResponse = await this.userService.login(dto);
-      
+
       req.session.user = {
         id: userResponse.id,
         name: userResponse.name,
@@ -92,17 +119,17 @@ export class UserController {
     }
   }
 
-  public async loggedUser(req: Request, res: Response): Promise<void> { 
-    const user = req.session.user
+  public async loggedUser(req: Request, res: Response): Promise<void> {
+    const user = req.session.user;
     if (!user) {
       res.status(401).json({ message: "Usuário não autenticado" });
       return;
     }
 
-    const reqSchema = {userId: user.id}
-    
+    const reqSchema = { userId: user.id };
+
     const validatedData = await validateDTOLoggedUser(reqSchema, res);
-    if(!validatedData) return;
+    if (!validatedData) return;
 
     const dto = new LoggedUserDTO(validatedData.userId);
 
@@ -114,12 +141,16 @@ export class UserController {
   public async logout(req: Request, res: Response): Promise<void> {
     req.session.destroy((err) => {
       if (err) {
-        res.status(500).json({ success: false, message: 'Erro ao fazer logout' });
+        res
+          .status(500)
+          .json({ success: false, message: "Erro ao fazer logout" });
         return;
       }
-      
-      res.setHeader('Authorization', '');
-      res.status(200).json({ success: true, message: 'Logout realizado com sucesso' });
+
+      res.setHeader("Authorization", "");
+      res
+        .status(200)
+        .json({ success: true, message: "Logout realizado com sucesso" });
     });
   }
 
@@ -174,12 +205,10 @@ export class UserController {
   public async updateUser(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || req.user.privilege !== "admin") {
-        res
-          .status(403)
-          .json({
-            message:
-              "Acesso restrito: apenas administradores podem acessar esta rota.",
-          });
+        res.status(403).json({
+          message:
+            "Acesso restrito: apenas administradores podem acessar esta rota.",
+        });
       }
 
       const { id, ...userData } = req.body;
@@ -206,12 +235,10 @@ export class UserController {
   public async getAll(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || req.user.privilege !== "admin") {
-        res
-          .status(403)
-          .json({
-            message:
-              "Acesso restrito: apenas administradores podem acessar esta rota.",
-          });
+        res.status(403).json({
+          message:
+            "Acesso restrito: apenas administradores podem acessar esta rota.",
+        });
       }
 
       const users = await this.userService.getAllUsers();
@@ -229,12 +256,10 @@ export class UserController {
   public async deleteUser(req: Request, res: Response): Promise<void> {
     try {
       if (!req.user || req.user.privilege !== "admin") {
-        res
-          .status(403)
-          .json({
-            message:
-              "Acesso restrito: apenas administradores podem acessar esta rota.",
-          });
+        res.status(403).json({
+          message:
+            "Acesso restrito: apenas administradores podem acessar esta rota.",
+        });
       }
 
       const { id } = req.body;
@@ -274,7 +299,6 @@ export class UserController {
       const validatedData = await validateDTOAddStudyTime(reqSchema, res);
       if (!validatedData) return;
 
-
       const dto = new AddStudyTimeDTO(userId, timeToAdd);
 
       const user = await this.userService.addStudyTimeToUser(dto);
@@ -298,14 +322,14 @@ export class UserController {
     const { timeline } = req.body;
     const userId = req.user?.id;
 
-    if(!userId){
+    if (!userId) {
       throw new Error("User ID is missing from request.");
     }
 
-    const reqSchema = {timeline, userId}
+    const reqSchema = { timeline, userId };
 
     const validatedData = await validateDTOTimeline(reqSchema, res);
-    if(!validatedData) return;
+    if (!validatedData) return;
 
     const dto = new TimelineDTO(validatedData.userId, validatedData.timeline);
 
@@ -313,9 +337,6 @@ export class UserController {
 
     res
       .status(200)
-      .json({ message: "Cronograma atualizado com sucesso!", user: user });    
+      .json({ message: "Cronograma atualizado com sucesso!", user: user });
   }
 }
-
-
-
