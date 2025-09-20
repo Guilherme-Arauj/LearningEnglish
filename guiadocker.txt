@@ -1,0 +1,143 @@
+# Guia de Uso do Docker Compose
+Este guia cobre o primeiro uso do projeto e o fluxo do dia a dia para usar Docker Compose
+
+## Primeiro uso (ou quando for clonar o projeto do zero)
+### 1 - Clonar repositórios 
+```
+mkdir AprendizadoEmIngles
+cd AprendicadoEmIngles
+git clone https://github.com/Guilherme-Arauj/LearningEnglish
+git clone https://github.com/GuilhermeARCora/LearningEnglishFront
+```
+### 2- Criar arquivo .env na pasta raiz do back-end utilizando .env-example 
+Utilizar: mysql://root:root123@db:3306/learningEnglish
+
+### 3- Criar arquivo docker-compose.yml
+ Copiar para o arquivo :
+ ```
+ version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: learningenglish-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: learningEnglish
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: app123
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql   
+    networks:
+      - learningenglish-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  app:
+    build:
+      context: ./LearningEnglish
+      dockerfile: Dockerfile
+    container_name: learningenglish-app
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "mysql://root:root123@db:3306/learningEnglish" 
+    volumes:
+      - ./LearningEnglish:/app
+      - /app/node_modules
+    networks:
+      - learningenglish-network
+
+  frontend:
+    build:
+      context: ./LearningEnglishFront
+      dockerfile: Dockerfile
+    container_name: learningenglish-frontend
+    restart: always
+    ports:
+      - "4200:4200"
+    depends_on:
+      - app
+    volumes:
+      - ./LearningEnglishFront:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - learningenglish-network
+volumes:
+  db_data:
+
+networks:
+  learningenglish-network:
+    driver: bridge
+ ```
+### 4- Executar docker
+#### 1- Suba apenas o banco de dados
+```
+docker-compose up -d db>
+```
+#### 2- Rode as migrações do Prisma
+``` 
+docker-compose run --rm app npx prisma migrate dev
+```
+#### 3 - Suba todos os serviços (backend, frontend, db)
+``` 
+docker-compose up --build
+```
+#### 4 - Quando terminar, pare tudo
+``` 
+    docker-compose down
+```
+## 💻 Para continuar o trabalho em outro dia
+
+### Atualize o código (sempre antes de começar):
+```
+    git pull
+```
+### Se alguém alterou dependências (package.json, package-lock.json) ou o Dockerfile
+```
+    docker-compose up --build
+```
+### Se só o código-fonte mudou:
+    ```
+        docker-compose up
+    ```
+ ### Se alguém alterou as migrations do banco
+ #### 1- Suba o banco
+ ```
+ docker-compose up -d db
+ ```
+ #### 2- Rode as migrações:
+ ```
+    docker-compose run --rm app npx prisma migrate dev
+ ```
+ #### 3 - Suba o restante normalmente:
+ ```
+ docker-compose up
+ ```
+
+ ## 📝 Dicas rápidas
+*Use docker-compose down -v apenas se quiser apagar todos os dados do banco (volume).
+
+*Se der erro de dependência, sempre tente docker-compose up --build.
+
+*Se der erro de banco, cheque se precisa rodar as migrações.
+
+Para listar todos os containers em execução
+```
+docker stats
+```
+Para ver logs de um serviço:
+``` 
+docker-compose logs app
+docker-compose logs frontend
+```
+### *Qualquer dúvida, consulte este guia ou pergunte para o time!*
