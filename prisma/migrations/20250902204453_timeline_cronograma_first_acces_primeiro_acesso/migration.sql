@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `User` ADD COLUMN `firstAccess` BOOLEAN NOT NULL DEFAULT false,
+    ADD COLUMN `timeline` INTEGER NOT NULL DEFAULT 0;

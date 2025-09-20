@@ -11,18 +11,7 @@ export class QuestionRepository implements IQuestionRepository {
 
     public async create(question: Question): Promise<Question> {
         const created = await this.prisma.question.create({
-            data: {
-                id: question.id,
-                title: question.title,
-                cefr: question.cefr,
-                type: question.type,
-                theme: question.theme,
-                optionA: question.optionA,
-                optionB: question.optionB,
-                optionC: question.optionC,
-                response: question.response,
-                status: "ACTIVE"
-            }
+            data: question.toPersistence()
         });
     
         return this.mapToEntity(created);
@@ -39,16 +28,7 @@ export class QuestionRepository implements IQuestionRepository {
                 id: question.id,
                 status: "ACTIVE" 
             },
-            data: {
-                title: question.title,
-                cefr: question.cefr,
-                type: question.type,
-                theme: question.theme,
-                optionA: question.optionA,
-                optionB: question.optionB,
-                optionC: question.optionC,
-                response: question.response
-            }
+            data: question.toPersistence()
         });
     
         return this.mapToEntity(updated);

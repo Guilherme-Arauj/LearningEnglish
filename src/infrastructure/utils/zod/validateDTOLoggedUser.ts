@@ -1,13 +1,17 @@
 import { z } from "zod";
 
-export async function validateDTOLogin(reqSchema: Object, res: any) {
-  const userSchema = z.object({
-    email: z.string().email("Formato de email inválido"),
-    password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+export async function validateDTOLoggedUser(reqSchema: Object, res: any) {
+  const loggedUserSchema = z.object({
+    userId: z.string()
+      .min(8, "ID deve ter pelo menos 8 caracteres (prefixo + 6 chars)")
+      .refine(
+        (id) => id.startsWith("STUDENT-") || id.startsWith("ADMIN-"),
+        "ID deve começar com 'STUDENT-' ou 'ADMIN-'"
+      )
   });
 
   try {
-    const user = userSchema.parse(reqSchema);
+    const user = loggedUserSchema.parse(reqSchema);
     return user;
   } catch (error: any) {
     if (error instanceof z.ZodError) {

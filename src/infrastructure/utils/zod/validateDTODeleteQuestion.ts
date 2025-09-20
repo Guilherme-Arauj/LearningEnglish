@@ -3,10 +3,10 @@ import { z } from "zod";
 export async function validateDTODeleteQuestion(reqSchema: object, res: any) {
   const questionSchema = z.object({
     id: z.string()
-      .min(14, "[ID deve ter pelo menos 14 caracteres (Q- + 12 chars)]")
+      .min(14, "ID deve ter pelo menos 14 caracteres (Q- + 12 chars)")
       .refine(
         (id) => id.startsWith("Q-"),
-        "[ID deve começar com 'Q-']"
+        "ID deve começar com 'Q-'"
       ),
   });
   try {

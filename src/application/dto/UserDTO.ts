@@ -10,7 +10,7 @@ export class UserDTO{
         email:string, 
         password:string, 
         privilege:string, 
-        cefr:string
+        cefr:string,
     ){
         this.name = name;
         this.email = email;

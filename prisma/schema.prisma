@@ -17,8 +17,8 @@ model Question {
   optionB              String?                @db.Text
   optionC              String?                @db.Text
   response             String?                @db.VarChar(10)
-  status               String                 @default("ACTIVE") @db.VarChar(20)   
-  deletedAt            DateTime?              
+  status               String                 @default("ACTIVE") @db.VarChar(20)
+  deletedAt            DateTime?
   UserQuestionProgress UserQuestionProgress[]
 }
 
@@ -27,11 +27,13 @@ model User {
   name                 String                 @db.VarChar(100)
   email                String                 @unique(map: "email") @db.VarChar(100)
   password             String                 @db.VarChar(100)
-  cefr                 String                @db.VarChar(10)
-  privilege            String                @db.VarChar(50)
+  cefr                 String                 @db.VarChar(10)
+  privilege            String                 @db.VarChar(50)
   status               String                 @default("ACTIVE") @db.VarChar(20)
-  deletedAt            DateTime?
-  timeSpentSeconds Int       @default(0) 
+  deletedAt            DateTime?    
+  timeline             Int?                   @default(0)
+  firstAccess          Boolean                @default(true)
+  timeSpentSeconds     Int                    @default(0)
   UserQuestionProgress UserQuestionProgress[]
 }
 
