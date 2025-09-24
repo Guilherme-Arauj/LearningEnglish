@@ -1,11 +1,16 @@
 import { Router } from 'express';
 import { QuestionFactory } from '../../factories/QuestionFactory';
 import { TokenMiddlewareFactory } from '../../factories/TokenMiddlewareFactory';
+import { UserFactory } from '../../factories/UserFactory';
 
 const adminRouter = Router();
 
+const userController = UserFactory(); 
 const questionController = QuestionFactory();
 const tokenMiddleware = TokenMiddlewareFactory();
+
+//rota de cadastro de usuário pelo admin
+adminRouter.post('/adminCadastro', (req, res) => userController.adminCreate(req, res));
 
 //rota para criar questão
 adminRouter.post('/criarQuestao', tokenMiddleware.verifyToken, (req, res) => questionController.createQuestion(req, res));

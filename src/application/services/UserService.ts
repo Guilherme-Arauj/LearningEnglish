@@ -60,6 +60,38 @@ export class UserService {
     return UserResponseDTO.fromUser(savedUser);
   }
 
+    public async adminCreateUser(dto: UserDTO): Promise<UserResponseDTO> {
+    const existingUser = await this.userRepository.findUserByEmail(dto.email);
+    if (existingUser) {
+      throw new Error("Email de usuário já presente no Banco de dados");
+    }
+
+    if (!User.isStrongPassword(dto.password)) {
+      throw new Error("A senha não é forte o suficiente!");
+    }
+
+    const hashedPassword = await this.bcryptConfig.hash(dto.password, 10);
+
+    const id =
+      dto.privilege === "student"
+        ? await this.uuidConfig.generateStudentId()
+        : await this.uuidConfig.generateAdminId();
+
+    const user = new User({
+      id: id,
+      name: dto.name,
+      email: dto.email,
+      password: hashedPassword,
+      cefr: dto.cefr,
+      privilege: dto.privilege,
+      timeSpentSeconds: 0,
+      firstAccess: true,
+    });
+    const savedUser = await this.userRepository.create(user);
+
+    return UserResponseDTO.fromUser(savedUser);
+  }
+
   // ---
 
   public async deleteUser(dto: DeleteUserDTO): Promise<UserResponseDTO | null> {
