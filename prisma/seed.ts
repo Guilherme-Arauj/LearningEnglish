@@ -18,55 +18,91 @@ const upper = (s: any) =>
 
 const prisma = new PrismaClient()
 
+// ---------- Seed de usuários ----------
 async function seedUsers() {
   const passwordHash = await bcrypt.hash('Senha@123', 10)
 
+  // Admins ativos
   const admins = [
-    { name: 'Ana Silva',      email: 'ana@gmail.com'      },
-    { name: 'Gabriela Neri',  email: 'gabriela@gmail.com' }
-  ]
-  const students = [
-    { name: 'Bruno Souza',    email: 'bruno@gmail.com'    },
-    { name: 'Carla Pereira',  email: 'carla@gmail.com'    },
-    { name: 'Diego Santos',   email: 'diego@gmail.com'    },
-    { name: 'Elisa Rocha',    email: 'elisa@gmail.com'    },
-    { name: 'Felipe Lima',    email: 'felipe@gmail.com'   },
-    { name: 'Henrique Alves', email: 'henrique@gmail.com' }
+    { name: 'Ana Silva',      email: 'ana@gmail.com',      cefr: 'A1' },
+    { name: 'Gabriela Neri',  email: 'gabriela@gmail.com', cefr: 'A2' }
   ]
 
-  // 2 admins
+  // Students ativos
+  const students = [
+    { name: 'Bruno Souza',    email: 'bruno@gmail.com',    cefr: 'B1' },
+    { name: 'Carla Pereira',  email: 'carla@gmail.com',    cefr: 'B2' },
+    { name: 'Diego Santos',   email: 'diego@gmail.com',    cefr: 'C1' },
+    { name: 'Elisa Rocha',    email: 'elisa@gmail.com',    cefr: 'C2' },
+    { name: 'Felipe Lima',    email: 'felipe@gmail.com',   cefr: 'A1' },
+    { name: 'Henrique Alves', email: 'henrique@gmail.com', cefr: 'A2' }
+  ]
+
+  // 2 admins ativos
   for (const u of admins) {
     await prisma.user.upsert({
       where: { email: u.email },
-      update: {},
+      update: { cefr: u.cefr },
       create: {
         id: generateAdminId(),
         name: u.name,
         email: u.email,
         password: passwordHash,
-        cefr: 'A1',
+        cefr: u.cefr,
         privilege: 'admin',
-        // status/timeSpentSeconds = defaults
+        status: 'ACTIVE',
       }
     })
   }
 
-  // 6 students
+  // 6 students ativos
   for (const u of students) {
     await prisma.user.upsert({
       where: { email: u.email },
-      update: {},
+      update: { cefr: u.cefr },
       create: {
         id: generateStudentId(),
         name: u.name,
         email: u.email,
         password: passwordHash,
-        cefr: 'A1',
+        cefr: u.cefr,
         privilege: 'student',
+        status: 'ACTIVE',
       }
     })
   }
-  console.log('✅ Users seed: OK (6 student, 2 admin)')
+
+  // 1 student inativo
+  await prisma.user.upsert({
+    where: { email: 'desativado.student@gmail.com' },
+    update: { status: 'INACTIVE', cefr: 'B1' },
+    create: {
+      id: generateStudentId(),
+      name: 'Estudante Desativado',
+      email: 'desativado.student@gmail.com',
+      password: passwordHash,
+      cefr: 'B1',
+      privilege: 'student',
+      status: 'INACTIVE',
+    }
+  })
+
+  // 1 admin inativo
+  await prisma.user.upsert({
+    where: { email: 'desativado.admin@gmail.com' },
+    update: { status: 'INACTIVE', cefr: 'B2' },
+    create: {
+      id: generateAdminId(),
+      name: 'Administrador Desativado',
+      email: 'desativado.admin@gmail.com',
+      password: passwordHash,
+      cefr: 'B2',
+      privilege: 'admin',
+      status: 'INACTIVE',
+    }
+  })
+
+  console.log('✅ Users seed: OK (6 students ativos, 2 admins ativos, 1 student inativo, 1 admin inativo, cada um com cefr diferente)')
 }
 
 async function seedQuestionsFromExcel() {
