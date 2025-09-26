@@ -3,4 +3,5 @@ export interface IUuidConfig {
     generateAdminId(): Promise<string>;
     generateQuestionId(): Promise<string>;
     generateUserQuestionProgressId(): Promise<string>;
+    generateVideoId(): Promise<string>;
 }

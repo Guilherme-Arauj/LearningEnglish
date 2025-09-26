@@ -1,23 +1,23 @@
 import { Request, Response } from "express";
 import { validateDTOUserUpdate } from "../../utils/zod/validateDTOUserUpdate";
 import { validateDTOUser } from "../../utils/zod/validateDTOUser";
-import { UserDTO } from "../../../application/dto/UserDTO";
-import { UserLoginDTO } from "../../../application/dto/UserLoginDTO";
+import { UserDTO } from "../../../application/dto/user/UserDTO";
+import { UserLoginDTO } from "../../../application/dto/user/UserLoginDTO";
 import { validateDTOLogin } from "../../utils/zod/validateDTOLogin";
 import { validateDTOUserEmail } from "../../utils/zod/validateDTOUserEmail";
-import { UserEmailDTO } from "../../../application/dto/UserEmailDTO";
+import { UserEmailDTO } from "../../../application/dto/user/UserEmailDTO";
 import { validateDTOUserNewPassword } from "../../utils/zod/validateDTOUserNewPassword";
-import { UserNewPasswordDTO } from "../../../application/dto/UserNewPasswordDTO";
-import { UserUpdateDTO } from "../../../application/dto/UserUpdateDTO";
+import { UserNewPasswordDTO } from "../../../application/dto/user/UserNewPasswordDTO";
+import { UserUpdateDTO } from "../../../application/dto/user/UserUpdateDTO";
 import { validateDTODeleteUser } from "../../utils/zod/validateDTODeleteUser";
-import { DeleteUserDTO } from "../../../application/dto/DeleteUserDTO";
+import { DeleteUserDTO } from "../../../application/dto/user/DeleteUserDTO";
 import { validateDTOAddStudyTime } from "../../utils/zod/validateDTOAddStudyTime";
-import { AddStudyTimeDTO } from "../../../application/dto/AddStudyTimeDTO";
+import { AddStudyTimeDTO } from "../../../application/dto/studentUser/AddStudyTimeDTO";
 import { UserService } from "../../../application/services/UserService";
 import { validateDTOTimeline } from "../../utils/zod/validateDTOTimeline";
-import { TimelineDTO } from "../../../application/dto/TimelineDTO";
+import { TimelineDTO } from "../../../application/dto/studentUser/TimelineDTO";
 import { validateDTOLoggedUser } from "../../utils/zod/validateDTOLoggedUser";
-import { LoggedUserDTO } from "../../../application/dto/LoggedUserDTO";
+import { LoggedUserDTO } from "../../../application/dto/user/LoggedUserDTO";
 
 export class UserController {
   private userService: UserService;

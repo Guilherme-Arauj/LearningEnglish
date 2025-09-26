@@ -1,11 +1,11 @@
 import { Question } from "../../domain/entities/Question";
 import { UserQuestionProgress } from "../../domain/entities/UserQuestionProgress";
 import { IUuidConfig } from "../../infrastructure/utils/uuid/IUuidConfig";
-import { AnswerQuestionDTO } from "../dto/AnswerQuestionDTO";
-import { DeleteQuestionDTO } from "../dto/DeleteQuestionDTO";
-import { QuestionDTO } from "../dto/QuestionDTO";
-import { QuestionResponseDTO } from "../dto/QuestionResponseDTO";
-import { QuestionUpdateDTO } from "../dto/QuestionUpdateDTO";
+import { AnswerQuestionDTO } from "../dto/question/AnswerQuestionDTO";
+import { DeleteQuestionDTO } from "../dto/question/DeleteQuestionDTO";
+import { QuestionDTO } from "../dto/question/QuestionDTO";
+import { QuestionResponseDTO } from "../dto/question/QuestionResponseDTO";
+import { QuestionUpdateDTO } from "../dto/question/QuestionUpdateDTO";
 import { IQuestionRepository } from "./repositories/IQuestionRepository";
 import { IUserQuestionProgressRepository } from "./repositories/IUserQuestionProgressRepository";
 

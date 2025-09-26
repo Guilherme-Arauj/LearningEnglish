@@ -40,7 +40,7 @@ export class UserResponseDTO {
       publicData.privilege,
       publicData.cefr,
       publicData.firstAccess,
-      publicData.timeline,
+      publicData.timeline ?? 0,
       publicData.timeSpentSeconds
     );
   }

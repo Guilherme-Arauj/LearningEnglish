@@ -30,7 +30,7 @@ model User {
   cefr                 String                 @db.VarChar(10)
   privilege            String                 @db.VarChar(50)
   status               String                 @default("ACTIVE") @db.VarChar(20)
-  deletedAt            DateTime?    
+  deletedAt            DateTime?
   timeline             Int?                   @default(0)
   firstAccess          Boolean                @default(true)
   timeSpentSeconds     Int                    @default(0)
@@ -48,4 +48,18 @@ model UserQuestionProgress {
 
   @@index([questionId], map: "questionId")
   @@index([userId], map: "userId")
+}
+
+model Video {
+  id             String    @id @db.VarChar(36)
+  youtubeVideoId String    @unique
+  title          String
+  description    String?
+  thumbnailUrl   String?
+  publishedAt    DateTime?
+  channelTitle   String?
+  tags           String?
+  status         String    @default("ACTIVE") @db.VarChar(20)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime?
 }

@@ -1,5 +1,5 @@
 
-import { UserQuestionProgressResponseDTO } from "../dto/UserQuestionProgressResponseDTO";
+import { UserQuestionProgressResponseDTO } from "../dto/studentUser/UserQuestionProgressResponseDTO";
 import { IUserQuestionProgressRepository } from "./repositories/IUserQuestionProgressRepository";
 
 export class UserQuestionProgressService {
