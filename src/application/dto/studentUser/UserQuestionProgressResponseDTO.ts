@@ -1,7 +1,7 @@
 import {
   IUserQuestionProgressPublicData,
   UserQuestionProgress,
-} from "../../domain/entities/UserQuestionProgress";
+} from "../../../domain/entities/UserQuestionProgress";
 
 export class UserQuestionProgressResponseDTO {
   public id: string;

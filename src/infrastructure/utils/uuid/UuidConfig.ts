@@ -30,6 +30,13 @@ export class UuidConfig implements IUuidConfig{
         const uuidComPrefixo = "PROGRESS-" + uuidLimitado;
         return uuidComPrefixo;
     }
+
+    public async generateVideoId(): Promise<string> {
+        const uuid = uuidv4();
+        const uuidLimitado = uuid.substring(0, 12);
+        const uuidComPrefixo = "VIDEO-" + uuidLimitado;
+        return uuidComPrefixo;
+    }
 }
 
 

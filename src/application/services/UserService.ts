@@ -4,16 +4,16 @@ import { IJwtConfig } from "../../infrastructure/utils/jwt/IJwtConfig";
 import { IMailer } from "../../infrastructure/utils/nodemailer/IMailer";
 import { IResetPasswordEmail } from "../../infrastructure/utils/nodemailer/recuperarSenhaMail/IResetPasswordEmail";
 import { IUuidConfig } from "../../infrastructure/utils/uuid/IUuidConfig";
-import { AddStudyTimeDTO } from "../dto/AddStudyTimeDTO";
-import { DeleteUserDTO } from "../dto/DeleteUserDTO";
-import { LoggedUserDTO } from "../dto/LoggedUserDTO";
-import { TimelineDTO } from "../dto/TimelineDTO";
-import { UserDTO } from "../dto/UserDTO";
-import { UserEmailDTO } from "../dto/UserEmailDTO";
-import { UserLoginDTO } from "../dto/UserLoginDTO";
-import { UserNewPasswordDTO } from "../dto/UserNewPasswordDTO";
-import { UserResponseDTO } from "../dto/UserResponseDTO";
-import { UserUpdateDTO } from "../dto/UserUpdateDTO";
+import { AddStudyTimeDTO } from "../dto/studentUser/AddStudyTimeDTO";
+import { DeleteUserDTO } from "../dto/user/DeleteUserDTO";
+import { LoggedUserDTO } from "../dto/user/LoggedUserDTO";
+import { TimelineDTO } from "../dto/studentUser/TimelineDTO";
+import { UserDTO } from "../dto/user/UserDTO";
+import { UserEmailDTO } from "../dto/user/UserEmailDTO";
+import { UserLoginDTO } from "../dto/user/UserLoginDTO";
+import { UserNewPasswordDTO } from "../dto/user/UserNewPasswordDTO";
+import { UserResponseDTO } from "../dto/user/UserResponseDTO";
+import { UserUpdateDTO } from "../dto/user/UserUpdateDTO";
 import { IUserRepository } from "./repositories/IUserRepository";
 
 export class UserService {
