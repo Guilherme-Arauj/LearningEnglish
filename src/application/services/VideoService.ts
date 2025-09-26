@@ -32,6 +32,7 @@ export class VideoService {
       channelTitle: dto.channelTitle,
       tags: dto.tags,
       status: "ACTIVE",
+      cefr: dto.cefr,
       createdAt: new Date(),
     });
     const saved = await this.videoRepository.create(video);
@@ -67,6 +68,7 @@ export class VideoService {
       channelTitle: (video: Video, value: string) =>
         (video.channelTitle = value),
       tags: (video: Video, value: string) => (video.tags = value),
+      cefr: (video: Video, value: string) => (video.cefr = value),
     } as const;
 
     (

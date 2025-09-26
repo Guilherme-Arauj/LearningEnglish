@@ -1,5 +1,6 @@
 export class VideoUpdateDTO {
   public id: string;
+  public cefr?: string;
   public youtubeVideoId?: string;
   public title?: string;
   public description?: string;
@@ -11,6 +12,7 @@ export class VideoUpdateDTO {
   constructor(
     id: string,
     {
+      cefr,
       youtubeVideoId,
       title,
       description,
@@ -19,6 +21,7 @@ export class VideoUpdateDTO {
       channelTitle,
       tags,
     }: {
+      cefr?: string;
       youtubeVideoId?: string;
       title?: string;
       description?: string;
@@ -29,6 +32,7 @@ export class VideoUpdateDTO {
     }
   ) {
     this.id = id;
+    this.cefr = cefr;
     this.youtubeVideoId = youtubeVideoId;
     this.title = title;
     this.description = description;

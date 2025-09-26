@@ -7,7 +7,8 @@ export interface IVideo {
   publishedAt?: Date;
   channelTitle?: string;
   tags?: string;
-  status?: string;
+  status: string;
+  cefr: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -20,7 +21,8 @@ export interface IVideoPublicData {
   thumbnailUrl?: string;
   publishedAt?: Date;
   channelTitle?: string;
-  tags?: string; 
+  tags?: string;
+  cefr: string;
 }
 
 export class Video implements IVideo {
@@ -31,13 +33,15 @@ export class Video implements IVideo {
   private _thumbnailUrl?: string;
   private _publishedAt?: Date;
   private _channelTitle?: string;
-  private _tags?: string; 
-  private _status?: string;
+  private _tags?: string;
+  private _status: string;
+  private _cefr: string;
   private _createdAt?: Date;
   private _updatedAt?: Date;
 
   constructor(data: IVideo) {
     this.validateRequiredFields(data);
+    this.validateCefr(data.cefr);
 
     this._id = data.id;
     this._youtubeVideoId = data.youtubeVideoId;
@@ -48,21 +52,47 @@ export class Video implements IVideo {
     this._channelTitle = data.channelTitle;
     this._tags = data.tags;
     this._status = data.status;
+    this._cefr = data.cefr;
     this._createdAt = data.createdAt;
     this._updatedAt = data.updatedAt;
   }
 
-  get id(): string { return this._id; }
-  get youtubeVideoId(): string { return this._youtubeVideoId; }
-  get title(): string { return this._title; }
-  get description(): string | undefined { return this._description; }
-  get thumbnailUrl(): string | undefined { return this._thumbnailUrl; }
-  get publishedAt(): Date | undefined { return this._publishedAt; }
-  get channelTitle(): string | undefined { return this._channelTitle; }
-  get tags(): string | undefined { return this._tags; }
-  get status(): string | undefined { return this._status; }
-  get createdAt(): Date | undefined { return this._createdAt; }
-  get updatedAt(): Date | undefined { return this._updatedAt; }
+  get id(): string {
+    return this._id;
+  }
+  get youtubeVideoId(): string {
+    return this._youtubeVideoId;
+  }
+  get title(): string {
+    return this._title;
+  }
+  get description(): string | undefined {
+    return this._description;
+  }
+  get thumbnailUrl(): string | undefined {
+    return this._thumbnailUrl;
+  }
+  get publishedAt(): Date | undefined {
+    return this._publishedAt;
+  }
+  get channelTitle(): string | undefined {
+    return this._channelTitle;
+  }
+  get tags(): string | undefined {
+    return this._tags;
+  }
+  get status(): string {
+    return this._status;
+  }
+  get cefr(): string  {
+    return this._cefr;
+  }
+  get createdAt(): Date | undefined {
+    return this._createdAt;
+  }
+  get updatedAt(): Date | undefined {
+    return this._updatedAt;
+  }
 
   set title(newTitle: string) {
     if (!newTitle?.trim()) {
@@ -70,32 +100,37 @@ export class Video implements IVideo {
     }
     this._title = newTitle.trim();
   }
-  
+
   set youtubeVideoId(newId: string) {
     if (!newId?.trim()) {
       throw new Error("youtubeVideoId não pode ser vazio!");
     }
     this._youtubeVideoId = newId.trim();
   }
-  
-  set description(newDescription: string | null) { 
-    this._description = newDescription || undefined; 
+
+  set description(newDescription: string | null) {
+    this._description = newDescription || undefined;
   }
-  
-  set thumbnailUrl(newUrl: string | null) { 
-    this._thumbnailUrl = newUrl || undefined; 
+
+  set thumbnailUrl(newUrl: string | null) {
+    this._thumbnailUrl = newUrl || undefined;
   }
-  
-  set publishedAt(newDate: Date | null) { 
-    this._publishedAt = newDate || undefined; 
+
+  set publishedAt(newDate: Date | null) {
+    this._publishedAt = newDate || undefined;
   }
-  
-  set channelTitle(newChannel: string | null) { 
-    this._channelTitle = newChannel || undefined; 
+
+  set channelTitle(newChannel: string | null) {
+    this._channelTitle = newChannel || undefined;
   }
-  
+
   set tags(newTags: string | null) {
-    this._tags = newTags || undefined; 
+    this._tags = newTags || undefined;
+  }
+
+  set cefr(newCefr: string) {
+    this.validateCefr(newCefr);
+    this._cefr = newCefr;
   }
 
   set status(newStatus: string) {
@@ -117,6 +152,7 @@ export class Video implements IVideo {
       publishedAt: this._publishedAt,
       channelTitle: this._channelTitle,
       tags: this._tags,
+      cefr: this._cefr
     };
   }
 
@@ -131,11 +167,12 @@ export class Video implements IVideo {
       channelTitle: this._channelTitle,
       tags: this._tags,
       status: this._status,
+      cefr: this._cefr,
       createdAt: this._createdAt,
     };
   }
 
-    public toPersistenceForUpdate(): IVideo {
+  public toPersistenceForUpdate(): IVideo {
     return {
       id: this._id,
       youtubeVideoId: this._youtubeVideoId,
@@ -146,14 +183,25 @@ export class Video implements IVideo {
       channelTitle: this._channelTitle,
       tags: this._tags,
       status: this._status,
-      updatedAt: this._updatedAt
+      cefr: this._cefr,
+      updatedAt: this._updatedAt,
     };
   }
   //------ ---------------------------- ------------
 
   private validateRequiredFields(data: IVideo): void {
     if (!data.id) throw new Error("ID não pode ser vazio!");
-    if (!data.youtubeVideoId) throw new Error("youtubeVideoId não pode ser vazio!");
+    if (!data.youtubeVideoId)
+      throw new Error("youtubeVideoId não pode ser vazio!");
     if (!data.title) throw new Error("Título não pode ser vazio!");
+  }
+
+  private validateCefr(cefr: string): void {
+    const validCefrLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
+    if (!validCefrLevels.includes(cefr)) {
+      throw new Error(
+        "CEFR deve ser um nível válido (A1, A2, B1, B2, C1, C2)!"
+      );
+    }
   }
 }

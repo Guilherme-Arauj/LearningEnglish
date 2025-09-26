@@ -5,7 +5,6 @@ import express, { Application } from "express";
 import { userRouter } from "./routes/user";
 import { adminRouter } from "./routes/admin";
 import { studentRouter } from "./routes/student";
-import { videoRoutes } from "./routes/video";
 import cors from "cors";
 import { SESSION_SECRET } from "../env/envConfig";
 import morgan from "morgan";
@@ -49,6 +48,6 @@ app.use(limiter);
 app.use("/users", userRouter);
 app.use("/admin", adminRouter);
 app.use("/student", studentRouter);
-app.use("/videos", videoRoutes);
+
 
 export default app;

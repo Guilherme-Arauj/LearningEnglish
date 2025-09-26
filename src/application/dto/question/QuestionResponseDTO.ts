@@ -1,4 +1,4 @@
-import { Question } from "../../domain/entities/Question";
+import { Question } from "../../../domain/entities/Question";
 
 
 export class QuestionResponseDTO {
