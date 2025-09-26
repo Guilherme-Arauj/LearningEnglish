@@ -18,4 +18,5 @@ studentRouter.post('/addTimeSpent', tokenMiddleware.verifyToken, (req, res) => u
 
 studentRouter.put('/updateTimeline', tokenMiddleware.verifyToken, (req, res) => userController.updateTimeline(req, res));
 
+
 export { studentRouter };

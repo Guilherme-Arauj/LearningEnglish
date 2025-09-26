@@ -9,46 +9,55 @@ export class VideoResponseDTO {
   public publishedAt?: Date;
   public channelTitle?: string;
   public tags?: string;
-  public createdAt?: Date;
-  public updatedAt?: Date;
+  public cefr: string;
+  public status: string;
+  
+  // URLs formatadas do YouTube
+  public youtubeUrl: string;
+  public youtubeEmbedUrl: string;
+  public youtubeShortUrl: string;
 
   constructor(
     id: string,
     youtubeVideoId: string,
     title: string,
+    cefr: string,
+    status: string,
     description?: string,
     thumbnailUrl?: string,
     publishedAt?: Date,
     channelTitle?: string,
     tags?: string,
-    createdAt?: Date,
-    updatedAt?: Date
   ) {
     this.id = id;
     this.youtubeVideoId = youtubeVideoId;
     this.title = title;
+    this.cefr = cefr;
+    this.status = status;
     this.description = description;
     this.thumbnailUrl = thumbnailUrl;
     this.publishedAt = publishedAt;
     this.channelTitle = channelTitle;
     this.tags = tags;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    
+    // Gerar URLs automaticamente
+    this.youtubeUrl = `https://www.youtube.com/watch?v=${youtubeVideoId}`;
+    this.youtubeEmbedUrl = `https://www.youtube.com/embed/${youtubeVideoId}`;
+    this.youtubeShortUrl = `https://youtu.be/${youtubeVideoId}`;
   }
 
   static fromVideo(video: Video): VideoResponseDTO {
-    const publicData = video.toPublicData();
     return new VideoResponseDTO(
-      publicData.id,
-      publicData.youtubeVideoId,
-      publicData.title,
-      publicData.description,
-      publicData.thumbnailUrl,
-      publicData.publishedAt,
-      publicData.channelTitle,
-      publicData.tags,
-      video.createdAt,
-      video.updatedAt
+      video.id,
+      video.youtubeVideoId,
+      video.title,
+      video.cefr,
+      video.status,
+      video.description,
+      video.thumbnailUrl,
+      video.publishedAt,
+      video.channelTitle,
+      video.tags,
     );
   }
 }

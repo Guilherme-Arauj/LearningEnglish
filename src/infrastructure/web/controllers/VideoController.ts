@@ -23,6 +23,7 @@ export class VideoController {
         thumbnailUrl,
         channelTitle,
         tags,
+        cefr,
         publishedAt,
       } = req.body;
 
@@ -33,14 +34,17 @@ export class VideoController {
         thumbnailUrl,
         channelTitle,
         tags,
+        cefr,
         publishedAt,
       };
 
       const validatedData = await validateDTOCreateVideo(reqSchema, res);
+      if (!validatedData) return;
 
       const dto = new CreateVideoDTO(
         validatedData.youtubeVideoId,
         validatedData.title,
+        validatedData.cefr,
         validatedData.description,
         validatedData.thumbnailUrl,
         validatedData.publishedAt,
@@ -56,7 +60,11 @@ export class VideoController {
       });
     } catch (error) {
       console.error("Erro ao processar requisição:", error);
-      res.status(400).json({ message: `Erro ao Criar Vídeo - ${error}` });
+      if (!res.headersSent) {
+        res
+          .status(500)
+          .json({ message: `Erro interno do servidor - ${error}` });
+      }
     }
   }
 

@@ -11,15 +11,9 @@ export class VideoRepository implements IVideoRepository {
   }
 
   public async create(video: Video): Promise<Video> {
-    const data = video.toPersistenceForCreate();
     const created = await this.prisma.video.create({
-      data: {
-        ...data,
-      },
+      data: video.toPersistenceForCreate(),
     });
-
-    console.log(data, created);
-
     return this.mapToEntity(created);
   }
 
@@ -36,6 +30,7 @@ export class VideoRepository implements IVideoRepository {
         channelTitle: data.channelTitle,
         tags: data.tags,
         status: data.status,
+        cefr: data.cefr,
         updatedAt: data.updatedAt,
       },
     });
@@ -44,6 +39,13 @@ export class VideoRepository implements IVideoRepository {
 
   public async getAllVideos(): Promise<Video[]> {
     const videos = await this.prisma.video.findMany();
+    return videos.map((prismaVideo: any) => this.mapToEntity(prismaVideo));
+  }
+
+  public async getAllActiveVideos(): Promise<Video[]> {
+    const videos = await this.prisma.video.findMany({
+      where: { status: "ACTIVE" },
+    });
     return videos.map((prismaVideo: any) => this.mapToEntity(prismaVideo));
   }
 
@@ -81,6 +83,8 @@ export class VideoRepository implements IVideoRepository {
       publishedAt: prismaVideo.publishedAt || undefined,
       channelTitle: prismaVideo.channelTitle ?? undefined,
       tags: prismaVideo.tags ?? undefined,
+      cefr: prismaVideo.cefr,
+      status: prismaVideo.status ?? undefined,
       createdAt: prismaVideo.createdAt || undefined,
       updatedAt: prismaVideo.updatedAt || undefined,
     });
