@@ -15,9 +15,7 @@ Utilizar: mysql://root:root123@db:3306/learningEnglish
 ### 3- Criar arquivo docker-compose.yml
  Copiar para o arquivo :
  ```
- version: "3.9"
-
-services:
+ services:
   db:
     image: mysql:8.0
     container_name: learningenglish-db
@@ -34,15 +32,16 @@ services:
     networks:
       - learningenglish-network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 20s
-      retries: 10
-
-  app:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -proot123 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+  api:
     build:
       context: ./LearningEnglish
       dockerfile: Dockerfile
-    container_name: learningenglish-app
+    container_name: learningenglish-api
     restart: always
     ports:
       - "3000:3000"
@@ -50,10 +49,24 @@ services:
       db:
         condition: service_healthy
     environment:
-      DATABASE_URL: "mysql://root:root123@db:3306/learningEnglish" 
+      DATABASE_URL: "mysql://root:root123@db:3306/learningEnglish"
+      SEED_ON_START: "true"           # mude para "false" se quiser pular o seed
+      NODE_ENV: "development"
+    command: >
+      sh -c "
+        echo '⏳ Aguardando DB...' &&
+        npx prisma migrate deploy &&
+        if [ \"${SEED_ON_START:-true}\" = \"true\" ]; then
+          echo '🌱 Rodando seed...' && npm run db:seed;
+        else
+          echo '⏭️  Seed pulado';
+        fi &&
+        echo '🚀 Iniciando API...' &&
+        npm run dev
+      "
     volumes:
-      - ./LearningEnglish:/app
-      - /app/node_modules
+      - ./LearningEnglish:/api
+      - /api/node_modules
     networks:
       - learningenglish-network
 
@@ -66,18 +79,38 @@ services:
     ports:
       - "4200:4200"
     depends_on:
-      - app
+      - api
     volumes:
-      - ./LearningEnglishFront:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./LearningEnglishFront:/usr/src/api
+      - /usr/src/api/node_modules
     networks:
       - learningenglish-network
+  prisma-studio:
+    build:
+      context: ./LearningEnglish
+      dockerfile: Dockerfile
+    container_name: prisma-studio
+    command: sh -c "npx prisma generate && npx prisma studio --hostname 0.0.0.0 --port 5555"
+    ports:
+      - "5555:5555"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "mysql://root:root123@db:3306/learningEnglish"
+    volumes:
+      - ./LearningEnglish:/api
+      - /api/node_modules
+    networks:
+      - learningenglish-network
+
 volumes:
   db_data:
-
+  
 networks:
   learningenglish-network:
     driver: bridge
+    
  ```
 ### 4- Executar docker
 #### 1- Suba apenas o banco de dados
