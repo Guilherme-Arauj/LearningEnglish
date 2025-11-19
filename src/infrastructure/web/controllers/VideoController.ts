@@ -151,4 +151,40 @@ export class VideoController {
       res.status(400).json({ message: `Erro ao Buscar Vídeos - ${error}` });
     }
   }
+
+  public async getVideoQuestionByTimeline(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      throw new Error("User ID is missing from request.");
+    }
+
+    const response = await this.videoService.getVideosByUserTimeline(userId);
+
+    res.status(200).json({
+      message: "Vídeo e suas questões retornados!",
+      video: response,
+    });
+  }
+
+  public async getMyContent(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      throw new Error("User ID is missing from request.");
+    }
+
+    const response = await this.videoService.getMyContent(userId);
+
+    res.status(200).json({
+      message: "Vídeo e suas questões retornados!",
+      video: response,
+    });
+  }
 }

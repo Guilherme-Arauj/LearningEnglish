@@ -1,4 +1,4 @@
-import { User } from "../../domain/entities/User";
+import { User } from "../../../domain/entities/User";
 
 export class UserResponseDTO {
   public id: string;

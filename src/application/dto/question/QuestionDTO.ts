@@ -1,5 +1,6 @@
 export class QuestionDTO {
     public title: string;
+    public videoId: string | null;
     public cefr?: string | null;
     public type?: string | null;
     public theme?: string | null;
@@ -10,6 +11,7 @@ export class QuestionDTO {
   
     constructor(
       title: string,
+      videoId: string | null,
       cefr?: string | null,
       type?: string | null,
       theme?: string | null,
@@ -19,6 +21,7 @@ export class QuestionDTO {
       response?: string | null
     ) {
       this.title = title;
+      this.videoId = videoId;
       this.cefr = cefr;
       this.type = type;
       this.theme = theme;

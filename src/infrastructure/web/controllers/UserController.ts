@@ -204,13 +204,6 @@ export class UserController {
 
   public async updateUser(req: Request, res: Response): Promise<void> {
     try {
-      if (!req.user || req.user.privilege !== "admin") {
-        res.status(403).json({
-          message:
-            "Acesso restrito: apenas administradores podem acessar esta rota.",
-        });
-      }
-
       const { id, ...userData } = req.body;
 
       const reqSchema = { id, ...userData };
@@ -234,13 +227,6 @@ export class UserController {
 
   public async getAll(req: Request, res: Response): Promise<void> {
     try {
-      if (!req.user || req.user.privilege !== "admin") {
-        res.status(403).json({
-          message:
-            "Acesso restrito: apenas administradores podem acessar esta rota.",
-        });
-      }
-
       const users = await this.userService.getAllUsers();
 
       res.status(200).json({
@@ -255,13 +241,6 @@ export class UserController {
 
   public async deleteUser(req: Request, res: Response): Promise<void> {
     try {
-      if (!req.user || req.user.privilege !== "admin") {
-        res.status(403).json({
-          message:
-            "Acesso restrito: apenas administradores podem acessar esta rota.",
-        });
-      }
-
       const { id } = req.body;
       const reqSchema = { id };
 

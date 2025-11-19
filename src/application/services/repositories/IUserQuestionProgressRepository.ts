@@ -5,4 +5,6 @@ export interface IUserQuestionProgressRepository {
   findByUserAndQuestion(userId: string, questionId: string): Promise<UserQuestionProgress | null>;
   update(userQuestionProgress: UserQuestionProgress): Promise<UserQuestionProgress>;
   findByUserIdWithQuestions(userId: string): Promise<any[]>;
+  countByUserId(userId: string): Promise<number>;
+  findByUserIdAndVideoId(userId: string, videoId: string): Promise<any[]>;
 }

@@ -36,4 +36,6 @@ userRouter.get('/listarUsuarios', tokenMiddleware.verifyToken, (req, res) => use
 //rota para deletar usuário
 userRouter.delete('/deletarUsuario', tokenMiddleware.verifyToken, (req, res) => userController.deleteUser(req, res));
 
+
+
 export { userRouter };

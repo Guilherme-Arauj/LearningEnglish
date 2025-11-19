@@ -18,19 +18,11 @@ export class QuestionController {
 
   public async createQuestion(req: Request, res: Response): Promise<any> {
     try {
-      if (!req.user || req.user.privilege !== "admin") {
-        return res
-          .status(403)
-          .json({
-            message:
-              "Acesso restrito: apenas administradores podem acessar esta rota.",
-          });
-      }
-
-      const { title, cefr, type, theme, optionA, optionB, optionC, response } =
+      const { title, videoId, cefr, type, theme, optionA, optionB, optionC, response } =
         req.body;
       const reqSchema = {
         title,
+        videoId,
         cefr,
         type,
         theme,
@@ -45,6 +37,7 @@ export class QuestionController {
 
       const dto = new QuestionDTO(
         validatedData.title,
+        validatedData.videoId || null,
         validatedData.cefr,
         validatedData.type,
         validatedData.theme,
@@ -68,15 +61,6 @@ export class QuestionController {
 
   public async updateQuestion(req: Request, res: Response): Promise<any> {
     try {
-      if (!req.user || req.user.privilege !== "admin") {
-        return res
-          .status(403)
-          .json({
-            message:
-              "Acesso restrito: apenas administradores podem acessar esta rota.",
-          });
-      }
-
       const { id, ...questionData } = req.body;
       const reqSchema = { id, ...questionData };
 

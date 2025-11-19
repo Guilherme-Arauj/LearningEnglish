@@ -24,6 +24,7 @@ export class QuestionService {
     const question = new Question({
       id: id,
       title: dto.title,
+      videoId: dto.videoId ?? undefined,
       cefr: dto.cefr ?? undefined,
       type: dto.type ?? undefined,
       theme: dto.theme ?? undefined,
@@ -31,6 +32,7 @@ export class QuestionService {
       optionB: dto.optionB ?? undefined,
       optionC: dto.optionC ?? undefined,
       response: dto.response ?? undefined,
+      status: "ACTIVE"
     });
 
     const savedQuestion = await this.questionRepository.create(question);
@@ -64,6 +66,7 @@ export class QuestionService {
 
     const updateMethods = {
       title: (q: Question, value: string) => q.title = value,
+      videoId: (q: Question, value: string | null) => q.videoId = value,
       cefr: (q: Question, value: string) => q.cefr = value,
       type: (q: Question, value: string) => q.type = value,
       theme: (q: Question, value: string) => q.theme = value,
@@ -79,8 +82,10 @@ export class QuestionService {
         ]>
     ).forEach(([field, updateFn]) => {
       const value = dto[field];
-      if (value !== undefined && value !== null) {
-        updateFn(question, value);
+      if (field === 'videoId' && value !== undefined) {
+        (updateFn as any)(question, value); // Type assertion
+      } else if (field !== 'videoId' && value !== undefined && value !== null) {
+        (updateFn as any)(question, value); // Type assertion
       }
     });
 

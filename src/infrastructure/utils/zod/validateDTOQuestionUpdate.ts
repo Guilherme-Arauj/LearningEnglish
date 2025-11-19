@@ -1,16 +1,44 @@
 import { z } from "zod";
 
 export async function validateDTOQuestionUpdate(reqSchema: object, res: any) {
+  const validCefrLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
+
   const questionUpdateSchema = z.object({
     id: z.string().min(1, "ID é obrigatório"),
     title: z.string().min(1, "Título é obrigatório").optional(),
-    cefr: z.string().max(10, "CEFR deve ter no máximo 10 caracteres").optional().nullable(),
+    videoId: z.string()
+      .refine(
+        (value) => {
+          const videoIdPattern = /^VIDEO-[a-f0-9]{8}-[a-f0-9]{3}$/i;
+          return videoIdPattern.test(value);
+        },
+        { message: "VideoId deve seguir o padrão VIDEO-XXXXXXXX-XXX" }
+      )
+      .optional()
+      .nullable(),
+    cefr: z.string()
+      .refine(
+        (value) => validCefrLevels.includes(value), 
+        { message: "CEFR deve ser um nível válido (A1, A2, B1, B2, C1, C2)" }
+      )
+      .optional()
+      .nullable(),
     type: z.string().max(50, "Tipo deve ter no máximo 50 caracteres").optional().nullable(),
     theme: z.string().max(100, "Tema deve ter no máximo 100 caracteres").optional().nullable(),
     optionA: z.string().optional().nullable(),
     optionB: z.string().optional().nullable(),
     optionC: z.string().optional().nullable(),
-    response: z.string().max(10, "Resposta deve ter no máximo 10 caracteres").optional().nullable(),
+    response: z.string()
+      .max(10, "Resposta deve ter no máximo 10 caracteres")
+      .refine(
+        (value) => {
+          if (!value) return true;
+          return ['A', 'B', 'C'].includes(value.toUpperCase());
+        },
+        { message: "Resposta deve ser A, B ou C" }
+      )
+      .optional()
+      .nullable(),
   });
 
   try {

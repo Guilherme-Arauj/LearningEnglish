@@ -7,60 +7,98 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Question {
-  id                   String                 @id @db.VarChar(36)
-  title                String                 @db.Text
-  cefr                 String?                @db.VarChar(10)
-  type                 String?                @db.VarChar(50)
-  theme                String?                @db.VarChar(100)
-  optionA              String?                @db.Text
-  optionB              String?                @db.Text
-  optionC              String?                @db.Text
-  response             String?                @db.VarChar(10)
-  status               String                 @default("ACTIVE") @db.VarChar(20)
-  deletedAt            DateTime?
-  UserQuestionProgress UserQuestionProgress[]
-}
-
 model User {
-  id                   String                 @id @db.VarChar(36)
-  name                 String                 @db.VarChar(100)
-  email                String                 @unique(map: "email") @db.VarChar(100)
-  password             String                 @db.VarChar(100)
-  cefr                 String                 @db.VarChar(10)
-  privilege            String                 @db.VarChar(50)
-  status               String                 @default("ACTIVE") @db.VarChar(20)
-  deletedAt            DateTime?
-  timeline             Int?                   @default(0)
-  firstAccess          Boolean                @default(true)
-  timeSpentSeconds     Int                    @default(0)
-  UserQuestionProgress UserQuestionProgress[]
-}
+  id               String    @id @db.VarChar(36)
+  name             String    @db.VarChar(100)
+  email            String    @unique(map: "email") @db.VarChar(100)
+  password         String    @db.VarChar(100)
+  cefr             String    @db.VarChar(10)
+  privilege        String    @db.VarChar(50)
+  status           String    @default("ACTIVE") @db.VarChar(20)
+  deletedAt        DateTime?
+  timeline         Int?      @default(0)
+  firstAccess      Boolean   @default(true)
+  timeSpentSeconds Int       @default(0)
 
-model UserQuestionProgress {
-  id           String    @id @db.VarChar(36)
-  userId       String?   @db.VarChar(36)
-  questionId   String?   @db.VarChar(36)
-  status       Boolean?
-  chosenOption String?   @db.VarChar(10)
-  User         User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionProgress_ibfk_1")
-  Question     Question? @relation(fields: [questionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionProgress_ibfk_2")
+  // RELATIONS
+  userQuestionProgress UserQuestionProgress[]
+  userVideoProgress    UserVideoProgress[]
 
-  @@index([questionId], map: "questionId")
-  @@index([userId], map: "userId")
+  @@map("User")
 }
 
 model Video {
   id             String    @id @db.VarChar(36)
-  youtubeVideoId String    @unique
   title          String
+  cefr           String    @db.VarChar(10)
+  type           String?   @db.VarChar(50)
+  theme          String?   @db.VarChar(100)
+  youtubeVideoId String    @unique
   description    String?
   thumbnailUrl   String?
   publishedAt    DateTime?
   channelTitle   String?
   tags           String?
   status         String    @default("ACTIVE") @db.VarChar(20)
-  cefr           String    @db.VarChar(10)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime?
+
+  // RELATIONS
+  questions         Question[]
+  userVideoProgress UserVideoProgress[]
+
+  @@map("Video")
+}
+
+model Question {
+  id        String    @id @db.VarChar(36)
+  videoId   String?   @db.VarChar(36)
+  title     String    @db.Text
+  cefr      String?   @db.VarChar(10)
+  type      String?   @db.VarChar(50)
+  theme     String?   @db.VarChar(100)
+  optionA   String?   @db.Text
+  optionB   String?   @db.Text
+  optionC   String?   @db.Text
+  response  String?   @db.VarChar(10)
+  status    String    @default("ACTIVE") @db.VarChar(20)
+  deletedAt DateTime?
+
+  // RELATIONS
+  video                Video?                 @relation(fields: [videoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Question_ibfk_video")
+  userQuestionProgress UserQuestionProgress[]
+
+  @@index([videoId], map: "videoId")
+  @@map("Question")
+}
+
+model UserVideoProgress {
+  id      String   @id @db.VarChar(36)
+  userId  String?  @db.VarChar(36)
+  videoId String?  @db.VarChar(36)
+  status  Boolean?
+
+  // RELATIONS
+  user  User?  @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserVideoProgress_ibfk_1")
+  video Video? @relation(fields: [videoId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserVideoProgress_ibfk_2")
+
+  @@index([userId], map: "userId")
+  @@index([videoId], map: "videoId")
+  @@map("UserVideoProgress")
+}
+
+model UserQuestionProgress {
+  id           String   @id @db.VarChar(36)
+  userId       String?  @db.VarChar(36)
+  questionId   String?  @db.VarChar(36)
+  status       Boolean?
+  chosenOption String?  @db.VarChar(10)
+
+  // RELATIONS
+  user     User?     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionProgress_ibfk_1")
+  question Question? @relation(fields: [questionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "UserQuestionProgress_ibfk_2")
+
+  @@index([questionId], map: "questionId")
+  @@index([userId], map: "userId")
+  @@map("UserQuestionProgress")
 }

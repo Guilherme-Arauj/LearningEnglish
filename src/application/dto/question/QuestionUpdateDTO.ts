@@ -1,6 +1,7 @@
 export class QuestionUpdateDTO {
     public id: string;
     public title?: string;
+    public videoId?: string | null;
     public cefr?: string | null;
     public type?: string | null;
     public theme?: string | null;
@@ -13,6 +14,7 @@ export class QuestionUpdateDTO {
       id: string,
       data: {
         title?: string;
+        videoId?: string | null,
         cefr?: string | null;
         type?: string | null;
         theme?: string | null;
@@ -24,6 +26,7 @@ export class QuestionUpdateDTO {
     ) {
       this.id = id;
       this.title = data.title;
+      this.videoId = data.videoId;
       this.cefr = data.cefr;
       this.type = data.type;
       this.theme = data.theme;

@@ -5,6 +5,17 @@ export async function validateDTOQuestion(reqSchema: object, res: any) {
 
   const questionSchema = z.object({
     title: z.string().min(1, "Título é obrigatório"),
+    videoId: z.string()
+      .refine(
+        (value) => {
+          // Ajustada para aceitar o padrão real: VIDEO-XXXXXXXX-XXX
+          const videoIdPattern = /^VIDEO-[a-f0-9]{8}-[a-f0-9]{3}$/i;
+          return videoIdPattern.test(value);
+        },
+        { message: "VideoId deve seguir o padrão VIDEO-XXXXXXXX-XXX" }
+      )
+      .optional()
+      .nullable(),
     cefr: z.string()
       .refine(
         (value) => validCefrLevels.includes(value), 
@@ -17,7 +28,17 @@ export async function validateDTOQuestion(reqSchema: object, res: any) {
     optionA: z.string().optional().nullable(),
     optionB: z.string().optional().nullable(),
     optionC: z.string().optional().nullable(),
-    response: z.string().max(10, "Resposta deve ter no máximo 10 caracteres").optional().nullable(),
+    response: z.string()
+      .max(10, "Resposta deve ter no máximo 10 caracteres")
+      .refine(
+        (value) => {
+          if (!value) return true;
+          return ['A', 'B', 'C'].includes(value.toUpperCase());
+        },
+        { message: "Resposta deve ser A, B ou C" }
+      )
+      .optional()
+      .nullable(),
   });
 
   try {
