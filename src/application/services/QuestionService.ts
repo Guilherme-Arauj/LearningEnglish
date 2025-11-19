@@ -32,7 +32,7 @@ export class QuestionService {
       optionB: dto.optionB ?? undefined,
       optionC: dto.optionC ?? undefined,
       response: dto.response ?? undefined,
-      status: "ACTIVE"
+      status: "ACTIVE",
     });
 
     const savedQuestion = await this.questionRepository.create(question);
@@ -42,7 +42,9 @@ export class QuestionService {
 
   // ---
 
-  public async deleteQuestion(dto: DeleteQuestionDTO): Promise<QuestionResponseDTO> {
+  public async deleteQuestion(
+    dto: DeleteQuestionDTO
+  ): Promise<QuestionResponseDTO> {
     const deletedQuestion = await this.questionRepository.delete(dto.id);
 
     return QuestionResponseDTO.fromQuestion(deletedQuestion);
@@ -60,31 +62,36 @@ export class QuestionService {
 
   // ---
 
-  public async updateQuestion(dto: QuestionUpdateDTO): Promise<QuestionResponseDTO> {
+  public async updateQuestion(
+    dto: QuestionUpdateDTO
+  ): Promise<QuestionResponseDTO> {
     const question = await this.questionRepository.findQuestionById(dto.id);
     if (!question) throw new Error("Questão não encontrada");
 
     const updateMethods = {
-      title: (q: Question, value: string) => q.title = value,
-      videoId: (q: Question, value: string | null) => q.videoId = value,
-      cefr: (q: Question, value: string) => q.cefr = value,
-      type: (q: Question, value: string) => q.type = value,
-      theme: (q: Question, value: string) => q.theme = value,
-      optionA: (q: Question, value: string) => q.optionA = value,
-      optionB: (q: Question, value: string) => q.optionB = value,
-      optionC: (q: Question, value: string) => q.optionC = value,
-      response: (q: Question, value: string) => q.response = value,
+      title: (q: Question, value: string) => (q.title = value),
+      videoId: (q: Question, value: string | null) => (q.videoId = value),
+      cefr: (q: Question, value: string) => (q.cefr = value),
+      type: (q: Question, value: string) => (q.type = value),
+      theme: (q: Question, value: string) => (q.theme = value),
+      optionA: (q: Question, value: string) => (q.optionA = value),
+      optionB: (q: Question, value: string) => (q.optionB = value),
+      optionC: (q: Question, value: string) => (q.optionC = value),
+      response: (q: Question, value: string) => (q.response = value),
     } as const;
-    
-    (Object.entries(updateMethods) as Array<[
+
+    (
+      Object.entries(updateMethods) as Array<
+        [
           keyof typeof updateMethods,
           (typeof updateMethods)[keyof typeof updateMethods]
-        ]>
+        ]
+      >
     ).forEach(([field, updateFn]) => {
       const value = dto[field];
-      if (field === 'videoId' && value !== undefined) {
+      if (field === "videoId" && value !== undefined) {
         (updateFn as any)(question, value); // Type assertion
-      } else if (field !== 'videoId' && value !== undefined && value !== null) {
+      } else if (field !== "videoId" && value !== undefined && value !== null) {
         (updateFn as any)(question, value); // Type assertion
       }
     });
@@ -95,45 +102,47 @@ export class QuestionService {
 
   // ---
 
-  public async answerQuestion(dto: AnswerQuestionDTO): Promise<{ correct: boolean; correctAnswer?: string; question: QuestionResponseDTO}> {
-    const question = await this.questionRepository.findQuestionById(dto.questionId);
-      if (!question) {
-        throw new Error("Questão não encontrada");
-      }
-  
-      const isCorrect = question.isCorrectAnswer(dto.answer);
-  
-      let correctAnswerText;
-      if (!isCorrect) {
-        correctAnswerText = question.getCorrectAnswer();
-      }
-  
-      const existingProgress = await this.userQuestionProgressRepository.findByUserAndQuestion(dto.userId, dto.questionId);
-  
-      if (existingProgress) {
-        existingProgress.status = isCorrect;
-        existingProgress.chosenOption = dto.answer.toUpperCase();
-        await this.userQuestionProgressRepository.update(existingProgress);
-      } else {
-        const progressId = await this.uuidConfig.generateUserQuestionProgressId();
-        
-        const userQuestionProgress = new UserQuestionProgress({
-          id: progressId,
-          userId: dto.userId,
-          questionId: dto.questionId,
-          status: isCorrect,
-          chosenOption: dto.answer.toUpperCase()
-        });
-  
-        await this.userQuestionProgressRepository.create(userQuestionProgress);
-      }
-  
-      return {
-        correct: isCorrect,
-        correctAnswer: correctAnswerText,
-        question: QuestionResponseDTO.fromQuestion(question)
-      };
+  public async answerQuestion(
+    dto: AnswerQuestionDTO
+  ): Promise<{
+    correct: boolean;
+    correctAnswer?: string;
+    question: QuestionResponseDTO;
+  }> {
+    const question = await this.questionRepository.findQuestionById(
+      dto.questionId
+    );
+    if (!question) {
+      throw new Error("Questão não encontrada");
     }
-  }
-  
 
+    const isCorrect = question.isCorrectAnswer(dto.answer);
+
+    let correctAnswerText;
+    if (!isCorrect) {
+      correctAnswerText = question.getCorrectAnswer();
+    }
+
+    const existingProgress =
+      await this.userQuestionProgressRepository.findByUserAndQuestion(
+        dto.userId,
+        dto.questionId
+      );
+
+    if (!existingProgress) {
+      throw new Error(
+        "Progresso da questão não encontrado. Execute a inicialização do conteúdo primeiro."
+      );
+    }
+    
+    existingProgress.status = isCorrect;
+    existingProgress.chosenOption = dto.answer.toUpperCase();
+    await this.userQuestionProgressRepository.update(existingProgress);
+
+    return {
+      correct: isCorrect,
+      correctAnswer: correctAnswerText,
+      question: QuestionResponseDTO.fromQuestion(question),
+    };
+  }
+}

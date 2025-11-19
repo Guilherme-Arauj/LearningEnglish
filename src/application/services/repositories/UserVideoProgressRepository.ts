@@ -48,7 +48,9 @@ export class UserVideoProgressRepository
     return this.mapToEntity(updated);
   }
 
-  public async findByUserIdWithVideos(userId: string): Promise<any[]> {
+  public async findByUserIdWithVideos(
+    userId: string
+  ): Promise<UserVideoProgress[]> {
     const progressWithVideos = await this.prisma.userVideoProgress.findMany({
       where: {
         userId: userId,
@@ -61,13 +63,7 @@ export class UserVideoProgressRepository
       },
     });
 
-    return progressWithVideos.map((item) => ({
-      id: item.id,
-      userId: item.userId,
-      videoId: item.videoId,
-      status: item.status,
-      video: item.video, 
-    }));
+    return progressWithVideos.map((item) => this.mapToEntity(item)); // ← Usar mapToEntity
   }
 
   public async countByUserId(userId: string): Promise<number> {

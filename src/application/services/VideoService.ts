@@ -132,7 +132,6 @@ export class VideoService {
       throw new Error("Usuário não possui timeline definida");
     }
 
-    // Verificar se usuário já tem progresso (evitar duplicatas)
     const jaTemProgresso = await this.userVideoProgressRepository.countByUserId(
       userId
     );
@@ -146,10 +145,9 @@ export class VideoService {
         user.timeline
       );
 
-    // Criar UserVideoProgress para cada vídeo
     for (const video of videosWithQuestions) {
       const userVideoProgress = new UserVideoProgress({
-        id: await this.uuidConfig.generateVideoId(), // ou generateId()
+        id: await this.uuidConfig.generateProgressVideoId(),
         userId: userId,
         videoId: video.id,
         status: false,
@@ -157,10 +155,9 @@ export class VideoService {
 
       await this.userVideoProgressRepository.create(userVideoProgress);
 
-      // Criar UserQuestionProgress para cada questão do vídeo
       for (const question of video.questions) {
         const userQuestionProgress = new UserQuestionProgress({
-          id: await this.uuidConfig.generateVideoId(), // ou generateId()
+          id: await this.uuidConfig.generateProgressQuestionId(),
           userId: userId,
           questionId: question.id,
           status: false,
@@ -216,41 +213,41 @@ export class VideoService {
       const questionsProgress =
         await this.userQuestionProgressRepository.findByUserIdAndVideoId(
           userId,
-          videoProgress.videoId
+          videoProgress.videoId!
         );
 
       result.push({
-        id: videoProgress.video.id,
-        title: videoProgress.video.title,
-        cefr: videoProgress.video.cefr,
-        type: videoProgress.video.type,
-        theme: videoProgress.video.theme,
-        youtubeVideoId: videoProgress.video.youtubeVideoId,
-        description: videoProgress.video.description,
-        thumbnailUrl: videoProgress.video.thumbnailUrl,
-        publishedAt: videoProgress.video.publishedAt,
-        channelTitle: videoProgress.video.channelTitle,
-        tags: videoProgress.video.tags,
-        status: videoProgress.video.status,
-        createdAt: videoProgress.video.createdAt,
-        updatedAt: videoProgress.video.updatedAt,
+        id: videoProgress.Video!.id, // ← Video maiúsculo
+        title: videoProgress.Video!.title,
+        cefr: videoProgress.Video!.cefr,
+        type: videoProgress.Video!.type,
+        theme: videoProgress.Video!.theme,
+        youtubeVideoId: videoProgress.Video!.youtubeVideoId,
+        description: videoProgress.Video!.description,
+        thumbnailUrl: videoProgress.Video!.thumbnailUrl,
+        publishedAt: videoProgress.Video!.publishedAt,
+        channelTitle: videoProgress.Video!.channelTitle,
+        tags: videoProgress.Video!.tags,
+        status: videoProgress.Video!.status,
+        createdAt: videoProgress.Video!.createdAt,
+        updatedAt: videoProgress.Video!.updatedAt,
         userProgress: {
           id: videoProgress.id,
           status: videoProgress.status,
         },
         questions: questionsProgress.map((qp) => ({
-          id: qp.question.id,
-          videoId: qp.question.videoId,
-          title: qp.question.title,
-          cefr: qp.question.cefr,
-          type: qp.question.type,
-          theme: qp.question.theme,
-          optionA: qp.question.optionA,
-          optionB: qp.question.optionB,
-          optionC: qp.question.optionC,
-          response: qp.question.response,
-          status: qp.question.status,
-          deletedAt: qp.question.deletedAt,
+          id: qp.question!.id, // ← question minúsculo!
+          videoId: qp.question!.videoId,
+          title: qp.question!.title,
+          cefr: qp.question!.cefr,
+          type: qp.question!.type,
+          theme: qp.question!.theme,
+          optionA: qp.question!.optionA,
+          optionB: qp.question!.optionB,
+          optionC: qp.question!.optionC,
+          response: qp.question!.response,
+          status: qp.question!.status,
+          deletedAt: qp.question!.deletedAt,
           userProgress: {
             id: qp.id,
             status: qp.status,

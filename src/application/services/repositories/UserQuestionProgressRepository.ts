@@ -48,7 +48,9 @@ export class UserQuestionProgressRepository
     return this.mapToEntity(updated);
   }
 
-  public async findByUserIdWithQuestions(userId: string): Promise<any[]> {
+  public async findByUserIdWithQuestions(
+    userId: string
+  ): Promise<UserQuestionProgress[]> {
     const progressWithQuestions =
       await this.prisma.userQuestionProgress.findMany({
         where: {
@@ -62,14 +64,7 @@ export class UserQuestionProgressRepository
         },
       });
 
-    return progressWithQuestions.map((item) => ({
-      id: item.id,
-      userId: item.userId,
-      questionId: item.questionId,
-      status: item.status,
-      chosenOption: item.chosenOption,
-      question: item.question, // ← Retorna a questão completa
-    }));
+    return progressWithQuestions.map((item) => this.mapToEntity(item));
   }
 
   public async countByUserId(userId: string): Promise<number> {
@@ -81,7 +76,7 @@ export class UserQuestionProgressRepository
   public async findByUserIdAndVideoId(
     userId: string,
     videoId: string
-  ): Promise<any[]> {
+  ): Promise<UserQuestionProgress[]> {
     const progressWithQuestions =
       await this.prisma.userQuestionProgress.findMany({
         where: {
@@ -95,14 +90,7 @@ export class UserQuestionProgressRepository
         },
       });
 
-    return progressWithQuestions.map((item) => ({
-      id: item.id,
-      userId: item.userId,
-      questionId: item.questionId,
-      status: item.status,
-      chosenOption: item.chosenOption,
-      question: item.question,
-    }));
+    return progressWithQuestions.map((item) => this.mapToEntity(item));
   }
 
   private mapToEntity(prismaUserQuestionProgress: any): UserQuestionProgress {
