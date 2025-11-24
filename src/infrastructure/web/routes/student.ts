@@ -28,5 +28,7 @@ studentRouter.get('/getVideosByTimeline', tokenMiddleware.verifyToken, (req, res
 
 studentRouter.get('/getMyContent', tokenMiddleware.verifyToken, (req, res) => videoController.getMyContent(req, res));
 
+studentRouter.put('/updateVideoProgress', tokenMiddleware.verifyToken, (req, res) => userVideoProgressController.updateVideoProgress(req, res))
+
 
 export { studentRouter };

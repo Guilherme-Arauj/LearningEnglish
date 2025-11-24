@@ -6,4 +6,5 @@ export interface IUserVideoProgressRepository {
   update(userVideoProgress: UserVideoProgress): Promise<UserVideoProgress>;
   findByUserIdWithVideos(userId: string): Promise<UserVideoProgress[]>;
   countByUserId(userId: string): Promise<number>;
+  getById(videProgressId: string): Promise<UserVideoProgress | null>;
 }

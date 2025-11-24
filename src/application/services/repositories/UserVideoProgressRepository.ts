@@ -43,6 +43,7 @@ export class UserVideoProgressRepository
     const updated = await this.prisma.userVideoProgress.update({
       where: { id: userVideoProgress.id },
       data: userVideoProgress.toPersistence(),
+      include: { video: true },
     });
 
     return this.mapToEntity(updated);
@@ -71,6 +72,19 @@ export class UserVideoProgressRepository
       where: { userId: userId },
     });
   }
+
+  public async getById(videProgressId: string): Promise<UserVideoProgress | null> {
+    const videoProgress = await this.prisma.userVideoProgress.findFirst({
+      where: {
+        id: videProgressId
+      },
+      include: { video: true },
+    });
+
+    if (!videoProgress) return null;
+
+    return this.mapToEntity(videoProgress);
+  } 
 
   private mapToEntity(prismaUserVideoProgress: any): UserVideoProgress {
     return new UserVideoProgress({

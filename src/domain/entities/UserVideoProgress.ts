@@ -1,5 +1,5 @@
 import { IVideo } from "./Video";
-import { IUser, User } from "./User";
+import { IUser } from "./User";
 
 export interface IUserVideoProgress {
   id: string;
@@ -30,7 +30,6 @@ export class UserVideoProgress implements IUserVideoProgress {
   private _userId?: string;
   private _videoId?: string;
   private _status?: boolean;
-  private _chosenOption?: string;
   private _user?: IUser;
   private _video?: IVideo;
 
@@ -43,30 +42,23 @@ export class UserVideoProgress implements IUserVideoProgress {
     this._video = data.video;
   }
 
-  get id(): string {
-    return this._id;
-  }
-  get userId(): string | undefined {
-    return this._userId;
-  }
-  get videoId(): string | undefined {
-    return this._videoId;
-  }
-  get status(): boolean | undefined {
-    return this._status;
-  }
-  get chosenOption(): string | undefined {
-    return this._chosenOption;
-  }
-  get user(): IUser | undefined {
-    return this._user;
-  }
-  get Video(): IVideo | undefined {
-    return this._video;
+  get id(): string { return this._id; }
+  get userId(): string | undefined { return this._userId; }
+  get videoId(): string | undefined { return this._videoId; }
+  get status(): boolean | undefined { return this._status; }
+  get user(): IUser | undefined { return this._user; }
+  get Video(): IVideo | undefined { return this._video; }
+
+  set userId(userId: string | null) {
+    this._userId = userId || undefined;
   }
 
-  set status(status: boolean) {
-    this._status = status;
+  set videoId(videoId: string | null) {
+    this._videoId = videoId || undefined;
+  }
+
+  set status(status: boolean | null) {
+    this._status = status ?? undefined;
   }
 
   //------ Métodos para exposição de dados ----------
