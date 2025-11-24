@@ -75,13 +75,11 @@ describe('validateDTOUserNewPassword', () => {
         id: 'STUDENT',
         password: '123456'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[ID deve ter pelo menos 8 caracteres (prefixo + 6 chars)]')
+        expect.stringContaining('ID deve ter pelo menos 8 caracteres (prefixo + 6 chars)')
       )
     })
 
@@ -90,13 +88,11 @@ describe('validateDTOUserNewPassword', () => {
         id: 'INVALID-123456',
         password: '123456'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining("[ID deve começar com 'STUDENT-' ou 'ADMIN-']")
+        expect.stringContaining("ID deve começar com 'STUDENT-' ou 'ADMIN-'")
       )
     })
 
@@ -105,7 +101,6 @@ describe('validateDTOUserNewPassword', () => {
         id: '',
         password: '123456'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -114,7 +109,6 @@ describe('validateDTOUserNewPassword', () => {
       const invalidData = {
         password: '123456'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -124,7 +118,6 @@ describe('validateDTOUserNewPassword', () => {
         id: 'STUDEN-123456',
         password: '123456'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -134,7 +127,6 @@ describe('validateDTOUserNewPassword', () => {
         id: 'ADMI-123456',
         password: '123456'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -144,7 +136,6 @@ describe('validateDTOUserNewPassword', () => {
         id: 'student-123456',
         password: '123456'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -154,7 +145,6 @@ describe('validateDTOUserNewPassword', () => {
         id: 'STUDENT - 123456',
         password: '123456'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -166,13 +156,11 @@ describe('validateDTOUserNewPassword', () => {
         id: 'STUDENT-abc123',
         password: '12345'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Senha deve ter no mínimo 6 caracteres]')
+        expect.stringContaining('Senha deve ter no mínimo 6 caracteres')
       )
     })
 
@@ -181,7 +169,6 @@ describe('validateDTOUserNewPassword', () => {
         id: 'ADMIN-xyz789',
         password: ''
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -190,7 +177,6 @@ describe('validateDTOUserNewPassword', () => {
       const invalidData = {
         id: 'STUDENT-test01'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -200,7 +186,6 @@ describe('validateDTOUserNewPassword', () => {
         id: 'ADMIN-user01',
         password: null
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -210,7 +195,6 @@ describe('validateDTOUserNewPassword', () => {
         id: 'STUDENT-abc123',
         password: undefined
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -222,10 +206,8 @@ describe('validateDTOUserNewPassword', () => {
         id: 'INVALID',
         password: '123'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalled()
     })
 
@@ -234,7 +216,6 @@ describe('validateDTOUserNewPassword', () => {
         id: '',
         password: ''
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
     })
@@ -341,13 +322,11 @@ describe('validateDTOUserNewPassword', () => {
         id: 'ADMIN-x',
         password: '123456'
       }
-      
       await expect(validateDTOUserNewPassword(invalidData))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[ID deve ter pelo menos 8 caracteres (prefixo + 6 chars)]')
+        expect.stringContaining('ID deve ter pelo menos 8 caracteres (prefixo + 6 chars)')
       )
     })
   })

@@ -1,11 +1,11 @@
 {
 	"info": {
-		"_postman_id": "6fdc2cb5-addc-4349-bda7-8b1229eb1031",
+		"_postman_id": "9303852b-4df7-4d96-8a2a-04699873c526",
 		"name": "InglesBackend",
 		"description": "Converted from Thunder Client collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "31259591",
-		"_collection_link": "https://lively-star-785264.postman.co/workspace/ingles~d69c736a-99de-4714-a83d-cc3ca88ea1e8/collection/31259591-6fdc2cb5-addc-4349-bda7-8b1229eb1031?action=share&source=collection_link&creator=31259591"
+		"_exporter_id": "47661383",
+		"_collection_link": "https://manager-1534.postman.co/workspace/Learn-English~74c32021-67d6-4088-b845-58c312280f78/collection/43222439-9303852b-4df7-4d96-8a2a-04699873c526?action=share&source=collection_link&creator=47661383"
 	},
 	"item": [
 		{
@@ -18,7 +18,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"name\": \"araujo\",\n  \"email\": \"superrr@gmail.com\",\n  \"password\": \"senha123\",\n  \"privilege\": \"admin\",\n  \"cefr\": \"B2\"\n}",
+							"raw": "{\n  \"name\": \"araujo\",\n  \"email\": \"ulalaooole@gmail.com\",\n  \"password\": \"Senha1234$\",\n  \"cefr\": \"B2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -42,12 +42,25 @@
 				},
 				{
 					"name": "loginUsuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"jwt\", pm.response.json().user.token);"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"araujo29082@gmail.com\",\n  \"password\": \"1234guigs\"\n}",
+							"raw": "{\n  \"email\": \"ulalale45@gmail.com\",\n  \"password\": \"Senha1234$\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -76,7 +89,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"araujocontato2@gmail.com\"\n}",
+							"raw": "{\n  \"email\": \"guilhermebackup33@gmail.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -84,14 +97,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/recuperarSenha",
-							"protocol": "http",
+							"raw": "{{URL}}users/recuperarSenha",
 							"host": [
-								"localhost"
+								"{{URL}}users"
 							],
-							"port": "3000",
 							"path": [
-								"users",
 								"recuperarSenha"
 							]
 						}
@@ -145,7 +155,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjE5Nzc4LCJleHAiOjE3NTA2MjY5Nzh9.Vu1-CFAYWPG35iFFrNg1kiHLS-5ALTEmnewYWlObiOM",
+									"value": "{{jwt}}",
 									"type": "string"
 								}
 							]
@@ -154,7 +164,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"id\": \"ADMIN-4e4ce8\",\n  \"name\": \"BISCOITO\"\n}",
+							"raw": "{\n  \"id\": \"STUDENT-af490d\",  \n  \"name\": \"BISCOITO\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -162,14 +172,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3000/users/atualizarUsuario",
-							"protocol": "http",
+							"raw": "{{URL}}users/atualizarUsuario",
 							"host": [
-								"localhost"
+								"{{URL}}users"
 							],
-							"port": "3000",
 							"path": [
-								"users",
 								"atualizarUsuario"
 							]
 						}
@@ -192,14 +199,11 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/users/listarUsuarios",
-							"protocol": "http",
+							"raw": "{{URL}}users/listarUsuarios",
 							"host": [
-								"localhost"
+								"{{URL}}users"
 							],
-							"port": "3000",
 							"path": [
-								"users",
 								"listarUsuarios"
 							]
 						}
@@ -283,14 +287,70 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "QuestionCRUD",
-			"item": [
+				},
 				{
-					"name": "criarQuestao",
+					"name": "loggedUser",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNUVURFTlQtM2RhM2IxIiwiZW1haWwiOiJyMmQyZDNAZ21haWwuY29tIiwiaWF0IjoxNzU3MDkwNTk5LCJleHAiOjE3NTcwOTc3OTl9.z-TuKq7EFesUGf6-l09ttxuG8Fm1IuM_UO9na8nEDhE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{URL}}users/me",
+							"host": [
+								"{{URL}}users"
+							],
+							"path": [
+								"me"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNUVURFTlQtM2RhM2IxIiwiZW1haWwiOiJyMmQyZDNAZ21haWwuY29tIiwiaWF0IjoxNzU2ODUxNzA5LCJleHAiOjE3NTY4NTg5MDl9.RKc2nSoavsEpvcF9rMii9Z3Bc_IqclYUgboY0HAQYdU",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}users/logout",
+							"host": [
+								"{{URL}}users"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adminCreateUser",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -306,7 +366,48 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"title\": \"Qual \\u00e9 a capital da Fran\\u00e7a?\",\n  \"cefr\": \"A2\",\n  \"type\": \"multiple-choice\",\n  \"theme\": \"Geografia\",\n  \"optionA\": \"Paris\",\n  \"optionB\": \"Londres\",\n  \"optionC\": \"Berlim\",\n  \"response\": \"A\"\n}",
+							"raw": "{\n  \"name\": \"araujo\",\n  \"email\": \"ulalale45@gmail.com\",\n  \"password\": \"Senha1234$\",\n  \"cefr\": \"B2\",\n  \"privilege\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}admin/adminCadastro",
+							"host": [
+								"{{URL}}admin"
+							],
+							"path": [
+								"adminCadastro"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "QuestionCRUD",
+			"item": [
+				{
+					"name": "criarQuestao",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc2MzQ4MjI2NSwiZXhwIjoxNzYzNDg5NDY1fQ.rqovu6cvTA-u7Ph7jvV1Q5a5jvJ7A_FjUlOxQRr7Grc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Qual é a capital da França?\",\n  \"videoId\": \"VIDEO-5aaa1722-496\",\n  \"cefr\": \"A2\",\n  \"type\": \"multiple-choice\",\n  \"theme\": \"Geografia\",\n  \"optionA\": \"Paris\",\n  \"optionB\": \"Londres\",\n  \"optionC\": \"Berlim\",\n  \"response\": \"A\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -336,7 +437,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLWMxNmU4YyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzQ4Njc1MTA0LCJleHAiOjE3NDg2ODIzMDR9.t5qXIPdOcx4byB0HonjTMhUHvoAJ66WXfr-5dfm5fQU",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc2MzQ4NDQwOCwiZXhwIjoxNzYzNDkxNjA4fQ.nyIgknSeWI6WmBnYVViqlnBLQhGTU5Nd4r4rg9ULuro",
 									"type": "string"
 								}
 							]
@@ -345,7 +446,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"id\": \"Q-7d14117d-28d\",\n  \"title\": \"T\\u00edtulo atualizado\",\n  \"theme\": \"Novo tema\",\n  \"cefr\": \"A1\"\n}",
+							"raw": "{\n  \"id\": \"Q-27c58a44-7ea\",\n  \"videoId\": \"VIDEO-5aaa1722-496\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -449,7 +550,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwNjgzMjQ0LCJleHAiOjE3NTA2OTA0NDR9.GizJ6ACL0LjN2pJZxcyfJlL1kYJ_zCSV8PN0vjzPjdg",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc2MzU3NzQxNiwiZXhwIjoxNzYzNTg0NjE2fQ.nuO6MwNedug_Nr6rB-HHf8EYYEwO9rJIWnMtf5E-NiA",
 									"type": "string"
 								}
 							]
@@ -458,7 +559,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"questionId\": \"Q-7d14117d-28d\",\n  \"answer\": \"A\"\n}",
+							"raw": "{\n  \"questionId\": \"Q-27c58a44-7ea\",\n  \"answer\": \"A\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -481,14 +582,14 @@
 					"response": []
 				},
 				{
-					"name": "trackProgress",
+					"name": "trackProgressQuestion",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTJjOWJiNyIsImVtYWlsIjoiYXJhdWpvY29udGF0bzJzc3NAZ21haWwuY29tIiwiaWF0IjoxNzUwMjY1NzY5LCJleHAiOjE3NTAyNzI5Njl9.8_dAsAtlRcvQ8g6rY_2tchbNSfm6xfeb1vPSPBF4WSs",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc2MzU3NDQ0NywiZXhwIjoxNzYzNTgxNjQ3fQ.vQn-UgjvqE9wEveIxFLZZNCEcfZieeJkKi5I6BkPQGw",
 									"type": "string"
 								}
 							]
@@ -496,7 +597,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:3000/student/trackProgress",
+							"raw": "http://localhost:3000/student/trackProgressQuestion",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -504,7 +605,277 @@
 							"port": "3000",
 							"path": [
 								"student",
-								"trackProgress"
+								"trackProgressQuestion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateTimeline",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"timeline\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}student/updateTimeline",
+							"host": [
+								"{{URL}}student"
+							],
+							"path": [
+								"updateTimeline"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "trackProgressVideo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc2MzU3NTE3OSwiZXhwIjoxNzYzNTgyMzc5fQ.q3RG5uPR600SJODTwNU2nJIMqnd8IaSgFOvmeCOGHes",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/student/trackProgressVideo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"student",
+								"trackProgressVideo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getVideosByTimeline",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc2MzU2OTc5MCwiZXhwIjoxNzYzNTc2OTkwfQ.N8kFzIV_Hd3F2yYCHQy7dAWRUoYlAQCiU_H6lWKl0nc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/student/getVideosByTimeline",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"student",
+								"getVideosByTimeline"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getMyContent",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc2MzU3NTY4MywiZXhwIjoxNzYzNTgyODgzfQ.mwM0NPAvBUnoHE-dJWStxkf0lY6CJOzAYgXBM-mgDWg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/student/getMyContent",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"student",
+								"getMyContent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateVideoProgress",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "VideoCRUD",
+			"item": [
+				{
+					"name": "createVideo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNUVURFTlQtMzRjZDQ0IiwiZW1haWwiOiJ1bGFsYWxlQGdtYWlsLmNvbSIsImlhdCI6MTc1ODkxMTYzNiwiZXhwIjoxNzU4OTE4ODM2fQ.PBm5mxv8u_gaswZb7pmTDTENaWXbOeoFVjUN_zSCP8Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"youtubeVideoId\": \"dQww9sgXc11219Xd\",\n  \"title\": \"Never Gonna Give You Up\",\n  \"description\": \"The official video for Rick Astley's 'Never Gonna Give You Up'\",\n  \"thumbnailUrl\": \"https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg\",\n  \"channelTitle\": \"Rick Astley\",\n  \"tags\": \"music, 80s, pop, classic\",\n  \"cefr\": \"A2\",\n  \"publishedAt\": \"2009-10-25T06:57:33Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/admin/createVideo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"admin",
+								"createVideo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateVideo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc1ODkxMDk2NCwiZXhwIjoxNzU4OTE4MTY0fQ.6LumipjxmMIamx6C71rlIw4oDCYUKjkG2cu3jXg3Kec",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"youtubeVideoId\": \"dQw4w9WgXcQ\",\n  \"title\": \"Neverrrrrrr - Updated Title\"\n} ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}admin/updateVideo/VIDEO-5aaa1722-496",
+							"host": [
+								"{{URL}}admin"
+							],
+							"path": [
+								"updateVideo",
+								"VIDEO-5aaa1722-496"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteVideo",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlNUVURFTlQtMzRjZDQ0IiwiZW1haWwiOiJ1bGFsYWxlQGdtYWlsLmNvbSIsImlhdCI6MTc1ODkwNDg4OSwiZXhwIjoxNzU4OTEyMDg5fQ.7zqtaBxH7DTX_b3j_F3-MpkptxW0jFnbbliomqaPv8g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}admin/deleteVideo/VIDEO-5aaa1722-496",
+							"host": [
+								"{{URL}}admin"
+							],
+							"path": [
+								"deleteVideo",
+								"VIDEO-5aaa1722-496"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllVideos",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc1ODkxMTUxNiwiZXhwIjoxNzU4OTE4NzE2fQ.mbmo6DLF3deNWmCM04c8Wrx0_SH3E7wqvHj6-phlzHA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}admin/getAllVideos",
+							"host": [
+								"{{URL}}admin"
+							],
+							"path": [
+								"getAllVideos"
 							]
 						}
 					},

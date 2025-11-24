@@ -44,7 +44,7 @@ describe('validateDTOAddStudyTime', () => {
 
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[ID deve ter pelo menos 8 caracteres')
+        expect.stringContaining('ID deve ter pelo menos 8 caracteres')
       )
     })
 
@@ -59,7 +59,7 @@ describe('validateDTOAddStudyTime', () => {
 
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining("[ID deve começar com 'STUDENT-' ou 'ADMIN-']")
+        expect.stringContaining("ID deve começar com 'STUDENT-' ou 'ADMIN-'")
       )
     })
 
@@ -74,7 +74,7 @@ describe('validateDTOAddStudyTime', () => {
 
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Tempo a adicionar deve ser maior que zero]')
+        expect.stringContaining('Tempo a adicionar deve ser maior que zero')
       )
     })
 
@@ -89,7 +89,7 @@ describe('validateDTOAddStudyTime', () => {
 
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Tempo a adicionar deve ser um número inteiro]')
+        expect.stringContaining('Tempo a adicionar deve ser um número inteiro')
       )
     })
 
@@ -101,7 +101,10 @@ describe('validateDTOAddStudyTime', () => {
       await expect(validateDTOAddStudyTime(invalidData, {}))
         .rejects.toThrow('Dados inválidos')
 
-      expect(mockConsoleError).toHaveBeenCalled()
+      expect(mockConsoleError).toHaveBeenCalledWith(
+        'Erro de validação:',
+        expect.any(String)
+      )
     })
   })
 
@@ -109,11 +112,19 @@ describe('validateDTOAddStudyTime', () => {
     it('deve falhar com objeto vazio', async () => {
       await expect(validateDTOAddStudyTime({}, {}))
         .rejects.toThrow('Dados inválidos')
+      expect(mockConsoleError).toHaveBeenCalledWith(
+        'Erro de validação:',
+        expect.any(String)
+      )
     })
 
     it('deve falhar com null', async () => {
       await expect(validateDTOAddStudyTime(null as any, {}))
         .rejects.toThrow('Dados inválidos')
+      expect(mockConsoleError).toHaveBeenCalledWith(
+        'Erro de validação:',
+        expect.any(String)
+      )
     })
   })
 })

@@ -74,51 +74,45 @@ describe('validateDTOQuestion', () => {
   describe('validação com erro - título', () => {
     it('deve falhar com título vazio', async () => {
       const invalidData = { title: '' }
-      
       await expect(validateDTOQuestion(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Título é obrigatório]')
+        expect.stringContaining('Título é obrigatório')
       )
     })
 
     it('deve falhar sem campo title', async () => {
       const invalidData = {}
-      
       await expect(validateDTOQuestion(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
 
     it('deve falhar com title null', async () => {
       const invalidData = { title: null }
-      
       await expect(validateDTOQuestion(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
   })
 
   describe('validação com erro - CEFR', () => {
-    it('deve falhar com CEFR muito longo', async () => {
+    it('deve falhar com CEFR inválido', async () => {
       const invalidData = {
         title: 'Which word is a noun?',
-        cefr: 'A1-INTERMEDIATE-ADVANCED'
+        cefr: 'A1-INTERMEDIATE'
       }
-      
       await expect(validateDTOQuestion(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[CEFR deve ter no máximo 10 caracteres]')
+        expect.stringContaining('CEFR deve ser um nível válido')
       )
     })
 
-    it('deve aceitar CEFR com exatamente 10 caracteres', async () => {
+    it('deve aceitar CEFR válido', async () => {
       const validData = {
         title: 'Choose the correct preposition.',
-        cefr: '1234567890'
+        cefr: 'A2'
       }
       const result = await validateDTOQuestion(validData, mockRes)
       expect(result).toEqual(validData)
@@ -129,15 +123,13 @@ describe('validateDTOQuestion', () => {
     it('deve falhar com tipo muito longo', async () => {
       const invalidData = {
         title: 'What does "beautiful" mean?',
-        type: 'multiple-choice-with-very-long-description-that-exceeds-limit'
+        type: 'multiple-choice-with-very-long-description-that-exceeds-limit-1234567890'
       }
-      
       await expect(validateDTOQuestion(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Tipo deve ter no máximo 50 caracteres]')
+        expect.stringContaining('Tipo deve ter no máximo 50 caracteres')
       )
     })
 
@@ -157,13 +149,11 @@ describe('validateDTOQuestion', () => {
         title: 'What is the present continuous form?',
         theme: 'English Grammar and Vocabulary with focus on present tense, past tense, future tense and conditional structures with detailed explanations and examples'
       }
-      
       await expect(validateDTOQuestion(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Tema deve ter no máximo 100 caracteres]')
+        expect.stringContaining('Tema deve ter no máximo 100 caracteres')
       )
     })
 
@@ -183,20 +173,31 @@ describe('validateDTOQuestion', () => {
         title: 'Which option is correct?',
         response: 'OPTION-A-IS-CORRECT'
       }
-      
       await expect(validateDTOQuestion(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Resposta deve ter no máximo 10 caracteres]')
+        expect.stringContaining('Resposta deve ter no máximo 10 caracteres')
       )
     })
 
-    it('deve aceitar resposta com exatamente 10 caracteres', async () => {
+    it('deve falhar com resposta inválida', async () => {
+      const invalidData = {
+        title: 'Which option is correct?',
+        response: 'D'
+      }
+      await expect(validateDTOQuestion(invalidData, mockRes))
+        .rejects.toThrow('Dados inválidos')
+      expect(mockConsoleError).toHaveBeenCalledWith(
+        'Erro de validação:',
+        expect.stringContaining('Resposta deve ser A, B ou C')
+      )
+    })
+
+    it('deve aceitar resposta com exatamente 1 caractere válido', async () => {
       const validData = {
         title: 'Select the right answer.',
-        response: '1234567890'
+        response: 'A'
       }
       const result = await validateDTOQuestion(validData, mockRes)
       expect(result).toEqual(validData)
@@ -212,10 +213,8 @@ describe('validateDTOQuestion', () => {
         theme: 'English Grammar and Vocabulary with focus on present tense, past tense, future tense and conditional structures with detailed explanations',
         response: 'OPTION-A-IS-THE-CORRECT-ANSWER'
       }
-      
       await expect(validateDTOQuestion(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalled()
     })
   })
@@ -231,16 +230,16 @@ describe('validateDTOQuestion', () => {
         .rejects.toThrow('Dados inválidos')
     })
 
-    it('deve aceitar strings vazias em campos opcionais', async () => {
+    it('deve aceitar campos opcionais como null', async () => {
       const validData = {
         title: 'What is the meaning of this word?',
-        cefr: '',
-        type: '',
-        theme: '',
-        optionA: '',
-        optionB: '',
-        optionC: '',
-        response: ''
+        cefr: null,
+        type: null,
+        theme: null,
+        optionA: null,
+        optionB: null,
+        optionC: null,
+        response: null
       }
       const result = await validateDTOQuestion(validData, mockRes)
       expect(result).toEqual(validData)

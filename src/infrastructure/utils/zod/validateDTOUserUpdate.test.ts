@@ -103,13 +103,11 @@ describe('validateDTOUserUpdate', () => {
         id: 'STUDENT',
         email: 'test@example.com'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[ID deve ter pelo menos 8 caracteres (prefixo + 6 chars)]')
+        expect.stringContaining('ID deve ter pelo menos 8 caracteres (prefixo + 6 chars)')
       )
     })
 
@@ -118,13 +116,11 @@ describe('validateDTOUserUpdate', () => {
         id: 'INVALID-123456',
         name: 'Test User'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining("[ID deve começar com 'STUDENT-' ou 'ADMIN-']")
+        expect.stringContaining("ID deve começar com 'STUDENT-' ou 'ADMIN-'")
       )
     })
 
@@ -133,7 +129,6 @@ describe('validateDTOUserUpdate', () => {
         id: '',
         password: '123456'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -143,7 +138,6 @@ describe('validateDTOUserUpdate', () => {
         email: 'test@example.com',
         name: 'Test User'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -153,7 +147,6 @@ describe('validateDTOUserUpdate', () => {
         id: 'student-123456',
         name: 'Test User'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -165,13 +158,11 @@ describe('validateDTOUserUpdate', () => {
         id: 'STUDENT-abc123',
         email: 'invalid-email'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Formato de email inválido]')
+        expect.stringContaining('Formato de email inválido')
       )
     })
 
@@ -180,7 +171,6 @@ describe('validateDTOUserUpdate', () => {
         id: 'ADMIN-xyz789',
         email: 'userexample.com'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -190,7 +180,6 @@ describe('validateDTOUserUpdate', () => {
         id: 'STUDENT-test01',
         email: ''
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -202,13 +191,11 @@ describe('validateDTOUserUpdate', () => {
         id: 'ADMIN-user01',
         name: ''
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Nome é obrigatório]')
+        expect.stringContaining('Nome é obrigatório')
       )
     })
 
@@ -217,7 +204,6 @@ describe('validateDTOUserUpdate', () => {
         id: 'STUDENT-maria456',
         name: null
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -229,13 +215,11 @@ describe('validateDTOUserUpdate', () => {
         id: 'STUDENT-john123',
         password: '12345'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Senha deve ter no mínimo 6 caracteres]')
+        expect.stringContaining('Senha deve ter no mínimo 6 caracteres')
       )
     })
 
@@ -244,7 +228,6 @@ describe('validateDTOUserUpdate', () => {
         id: 'ADMIN-system01',
         password: ''
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -254,7 +237,6 @@ describe('validateDTOUserUpdate', () => {
         id: 'STUDENT-test123',
         password: null
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -266,10 +248,8 @@ describe('validateDTOUserUpdate', () => {
         id: 'ADMIN-user01',
         privilege: 'teacher'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
         expect.stringContaining("Privilégio inválido! Use 'student' ou 'admin'.")
@@ -281,7 +261,6 @@ describe('validateDTOUserUpdate', () => {
         id: 'STUDENT-maria456',
         privilege: ''
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -291,7 +270,6 @@ describe('validateDTOUserUpdate', () => {
         id: 'ADMIN-system01',
         privilege: 'ADMIN'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -306,10 +284,8 @@ describe('validateDTOUserUpdate', () => {
         password: '123',
         privilege: 'teacher'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalled()
     })
 
@@ -321,7 +297,6 @@ describe('validateDTOUserUpdate', () => {
         password: 'validpass',
         privilege: 'student'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -483,7 +458,6 @@ describe('validateDTOUserUpdate', () => {
         id: 'ADMIN-x',
         name: 'Test User'
       }
-      
       await expect(validateDTOUserUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })

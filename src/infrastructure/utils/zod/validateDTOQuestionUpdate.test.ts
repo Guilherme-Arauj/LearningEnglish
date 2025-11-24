@@ -86,26 +86,22 @@ describe('validateDTOQuestionUpdate', () => {
   describe('validação com erro - ID', () => {
     it('deve falhar com ID vazio', async () => {
       const invalidData = { id: '' }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[ID é obrigatório]')
+        expect.stringContaining('ID é obrigatório')
       )
     })
 
     it('deve falhar sem campo id', async () => {
       const invalidData = { title: 'Some question' }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
 
     it('deve falhar com id null', async () => {
       const invalidData = { id: null }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -117,13 +113,11 @@ describe('validateDTOQuestionUpdate', () => {
         id: 'question-123',
         title: ''
       }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Título é obrigatório]')
+        expect.stringContaining('Título é obrigatório')
       )
     })
 
@@ -132,32 +126,29 @@ describe('validateDTOQuestionUpdate', () => {
         id: 'question-123',
         title: null
       }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
   })
 
   describe('validação com erro - CEFR', () => {
-    it('deve falhar com CEFR muito longo', async () => {
+    it('deve falhar com CEFR inválido', async () => {
       const invalidData = {
         id: 'question-123',
         cefr: 'A1-INTERMEDIATE-ADVANCED'
       }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[CEFR deve ter no máximo 10 caracteres]')
+        expect.stringContaining('CEFR deve ser um nível válido')
       )
     })
 
-    it('deve aceitar CEFR com exatamente 10 caracteres', async () => {
+    it('deve aceitar CEFR válido', async () => {
       const validData = {
         id: 'question-123',
-        cefr: '1234567890'
+        cefr: 'A2'
       }
       const result = await validateDTOQuestionUpdate(validData, mockRes)
       expect(result).toEqual(validData)
@@ -168,15 +159,13 @@ describe('validateDTOQuestionUpdate', () => {
     it('deve falhar com tipo muito longo', async () => {
       const invalidData = {
         id: 'question-123',
-        type: 'multiple-choice-with-very-long-description-that-exceeds-limit'
+        type: 'multiple-choice-with-very-long-description-that-exceeds-limit-1234567890'
       }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Tipo deve ter no máximo 50 caracteres]')
+        expect.stringContaining('Tipo deve ter no máximo 50 caracteres')
       )
     })
 
@@ -196,13 +185,11 @@ describe('validateDTOQuestionUpdate', () => {
         id: 'question-123',
         theme: 'English Grammar and Vocabulary with focus on present tense, past tense, future tense and conditional structures with detailed explanations and examples'
       }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Tema deve ter no máximo 100 caracteres]')
+        expect.stringContaining('Tema deve ter no máximo 100 caracteres')
       )
     })
 
@@ -222,20 +209,31 @@ describe('validateDTOQuestionUpdate', () => {
         id: 'question-123',
         response: 'OPTION-A-IS-CORRECT'
       }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Resposta deve ter no máximo 10 caracteres]')
+        expect.stringContaining('Resposta deve ter no máximo 10 caracteres')
       )
     })
 
-    it('deve aceitar resposta com exatamente 10 caracteres', async () => {
+    it('deve falhar com resposta inválida', async () => {
+      const invalidData = {
+        id: 'question-123',
+        response: 'D'
+      }
+      await expect(validateDTOQuestionUpdate(invalidData, mockRes))
+        .rejects.toThrow('Dados inválidos')
+      expect(mockConsoleError).toHaveBeenCalledWith(
+        'Erro de validação:',
+        expect.stringContaining('Resposta deve ser A, B ou C')
+      )
+    })
+
+    it('deve aceitar resposta com exatamente 1 caractere válido', async () => {
       const validData = {
         id: 'question-123',
-        response: '1234567890'
+        response: 'A'
       }
       const result = await validateDTOQuestionUpdate(validData, mockRes)
       expect(result).toEqual(validData)
@@ -252,10 +250,8 @@ describe('validateDTOQuestionUpdate', () => {
         theme: 'English Grammar and Vocabulary with focus on present tense, past tense, future tense and conditional structures with detailed explanations',
         response: 'OPTION-A-IS-THE-CORRECT-ANSWER'
       }
-      
       await expect(validateDTOQuestionUpdate(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalled()
     })
   })
@@ -271,16 +267,16 @@ describe('validateDTOQuestionUpdate', () => {
         .rejects.toThrow('Dados inválidos')
     })
 
-    it('deve aceitar strings vazias em campos opcionais', async () => {
+    it('deve aceitar campos opcionais como null', async () => {
       const validData = {
         id: 'question-123',
-        cefr: '',
-        type: '',
-        theme: '',
-        optionA: '',
-        optionB: '',
-        optionC: '',
-        response: ''
+        cefr: null,
+        type: null,
+        theme: null,
+        optionA: null,
+        optionB: null,
+        optionC: null,
+        response: null
       }
       const result = await validateDTOQuestionUpdate(validData, mockRes)
       expect(result).toEqual(validData)

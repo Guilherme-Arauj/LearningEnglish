@@ -68,7 +68,7 @@ describe('validateDTOLogin', () => {
       
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Formato de email inválido]')
+        expect.stringContaining('Formato de email inválido')
       )
     })
 
@@ -83,7 +83,7 @@ describe('validateDTOLogin', () => {
       
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Formato de email inválido]')
+        expect.stringContaining('Formato de email inválido')
       )
     })
 
@@ -119,7 +119,7 @@ describe('validateDTOLogin', () => {
       
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Senha deve ter no mínimo 6 caracteres]')
+        expect.stringContaining('Senha deve ter no mínimo 6 caracteres')
       )
     })
 

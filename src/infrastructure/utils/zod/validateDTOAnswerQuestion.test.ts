@@ -47,7 +47,7 @@ describe('validateDTOAnswerQuestion', () => {
       
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[ID do usuário é obrigatório]')
+        expect.stringContaining('ID do usuário é obrigatório')
       )
     })
 
@@ -63,7 +63,7 @@ describe('validateDTOAnswerQuestion', () => {
       
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[ID da questão é obrigatório]')
+        expect.stringContaining('ID da questão é obrigatório')
       )
     })
 
@@ -79,7 +79,7 @@ describe('validateDTOAnswerQuestion', () => {
       
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Resposta é obrigatória]')
+        expect.stringContaining('Resposta é obrigatória')
       )
     })
 
@@ -112,11 +112,13 @@ describe('validateDTOAnswerQuestion', () => {
     it('deve falhar com objeto vazio', async () => {
       await expect(validateDTOAnswerQuestion({}, {}))
         .rejects.toThrow('Dados inválidos')
+      expect(mockConsoleError).toHaveBeenCalled()
     })
 
     it('deve falhar com null', async () => {
       await expect(validateDTOAnswerQuestion(null as any, {}))
         .rejects.toThrow('Dados inválidos')
+      expect(mockConsoleError).toHaveBeenCalled()
     })
 
     it('deve aceitar espaços em branco como válidos', async () => {

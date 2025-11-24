@@ -23,7 +23,7 @@ describe('validateDTOUser', () => {
       const validData = {
         email: 'student@example.com',
         name: 'John Doe',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'A1'
       }
@@ -43,7 +43,7 @@ describe('validateDTOUser', () => {
       expect(result).toEqual(validData)
     })
 
-    it('deve aceitar senha com mais de 6 caracteres', async () => {
+    it('deve aceitar senha com mais de 8 caracteres', async () => {
       const validData = {
         email: 'user@test.com',
         name: 'Test User',
@@ -71,7 +71,7 @@ describe('validateDTOUser', () => {
       const validData = {
         email: 'newuser@example.com',
         name: 'New User',
-        password: 'newpass',
+        password: 'newpass123',
         privilege: 'student',
         cefr: ''
       }
@@ -85,17 +85,15 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'userexample.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Formato de email inválido]')
+        expect.stringContaining('Formato de email inválido')
       )
     })
 
@@ -103,11 +101,10 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -116,11 +113,10 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: '',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -128,11 +124,10 @@ describe('validateDTOUser', () => {
     it('deve falhar sem campo email', async () => {
       const invalidData = {
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -143,28 +138,25 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@example.com',
         name: '',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Nome é obrigatório]')
+        expect.stringContaining('Nome é obrigatório')
       )
     })
 
     it('deve falhar sem campo name', async () => {
       const invalidData = {
         email: 'user@example.com',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -173,11 +165,10 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@example.com',
         name: null,
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -188,17 +179,15 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@example.com',
         name: 'User Test',
-        password: '12345',
+        password: '1234567',
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
-        expect.stringContaining('[Senha deve ter no mínimo 6 caracteres]')
+        expect.stringContaining('Senha deve ter no mínimo 8 caracteres')
       )
     })
 
@@ -210,7 +199,6 @@ describe('validateDTOUser', () => {
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -222,16 +210,15 @@ describe('validateDTOUser', () => {
         privilege: 'student',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
 
-    it('deve aceitar senha exatamente com 6 caracteres', async () => {
+    it('deve aceitar senha exatamente com 8 caracteres', async () => {
       const validData = {
         email: 'user@example.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'A1'
       }
@@ -245,14 +232,12 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@example.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'teacher',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalledWith(
         'Erro de validação:',
         expect.stringContaining("Privilégio inválido! Use 'student' ou 'admin'.")
@@ -263,11 +248,10 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@example.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: '',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -276,10 +260,9 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@example.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -288,11 +271,10 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@example.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'STUDENT',
         cefr: 'A1'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -303,10 +285,9 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@example.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'student'
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -315,11 +296,10 @@ describe('validateDTOUser', () => {
       const invalidData = {
         email: 'user@example.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: null
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -334,10 +314,8 @@ describe('validateDTOUser', () => {
         privilege: 'invalid',
         cefr: null
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
-      
       expect(mockConsoleError).toHaveBeenCalled()
     })
 
@@ -349,7 +327,6 @@ describe('validateDTOUser', () => {
         privilege: '',
         cefr: ''
       }
-      
       await expect(validateDTOUser(invalidData, mockRes))
         .rejects.toThrow('Dados inválidos')
     })
@@ -370,7 +347,7 @@ describe('validateDTOUser', () => {
       const validData = {
         email: 'user@mail.example.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'student',
         cefr: 'B2'
       }
@@ -382,7 +359,7 @@ describe('validateDTOUser', () => {
       const validData = {
         email: 'user123@test.com',
         name: 'User Test',
-        password: '123456',
+        password: '12345678',
         privilege: 'admin',
         cefr: 'C1'
       }

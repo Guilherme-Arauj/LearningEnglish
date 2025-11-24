@@ -104,6 +104,42 @@ describe('UuidConfig', () => {
     })
   })
 
+  describe('generateVideoId', () => {
+    it('deve gerar ID de vídeo com prefixo correto', async () => {
+      const mockUuid = 'abcdef123456-7890-1234-5678-901234567890'
+      const mockUuidv4 = vi.mocked(uuidv4) as any
+      mockUuidv4.mockReturnValue(mockUuid)
+
+      const result = await uuidConfig.generateVideoId()
+      expect(result).toBe('VIDEO-abcdef123456')
+      expect(result).toMatch(/^VIDEO-.{12}$/)
+    })
+  })
+
+  describe('generateProgressVideoId', () => {
+    it('deve gerar ID de progresso de vídeo com prefixo correto', async () => {
+      const mockUuid = '123456abcdef-7890-1234-5678-901234567890'
+      const mockUuidv4 = vi.mocked(uuidv4) as any
+      mockUuidv4.mockReturnValue(mockUuid)
+
+      const result = await uuidConfig.generateProgressVideoId()
+      expect(result).toBe('V-PROG-123456abcdef')
+      expect(result).toMatch(/^V-PROG-.{12}$/)
+    })
+  })
+
+  describe('generateProgressQuestionId', () => {
+    it('deve gerar ID de progresso de questão com prefixo correto', async () => {
+      const mockUuid = 'fedcba654321-7890-1234-5678-901234567890'
+      const mockUuidv4 = vi.mocked(uuidv4) as any
+      mockUuidv4.mockReturnValue(mockUuid)
+
+      const result = await uuidConfig.generateProgressQuestionId()
+      expect(result).toBe('Q-PROG-fedcba654321')
+      expect(result).toMatch(/^Q-PROG-.{12}$/)
+    })
+  })
+
   describe('IDs únicos', () => {
     it('deve gerar IDs diferentes em chamadas consecutivas', async () => {
       const mockUuidv4 = vi.mocked(uuidv4) as any
@@ -137,11 +173,17 @@ describe('UuidConfig', () => {
       const adminId = await uuidConfig.generateAdminId()
       const questionId = await uuidConfig.generateQuestionId()
       const progressId = await uuidConfig.generateUserQuestionProgressId()
+      const videoId = await uuidConfig.generateVideoId()
+      const progressVideoId = await uuidConfig.generateProgressVideoId()
+      const progressQuestionId = await uuidConfig.generateProgressQuestionId()
 
       expect(studentId).toBe('STUDENT-550e84')
       expect(adminId).toBe('ADMIN-550e84')
       expect(questionId).toBe('Q-550e8400-e29')
       expect(progressId).toBe('PROGRESS-550e8400-e29')
+      expect(videoId).toBe('VIDEO-550e8400-e29')
+      expect(progressVideoId).toBe('V-PROG-550e8400-e29')
+      expect(progressQuestionId).toBe('Q-PROG-550e8400-e29')
     })
 
     it('deve lidar com UUID com números e letras', async () => {
@@ -153,13 +195,19 @@ describe('UuidConfig', () => {
         uuidConfig.generateStudentId(),
         uuidConfig.generateAdminId(),
         uuidConfig.generateQuestionId(),
-        uuidConfig.generateUserQuestionProgressId()
+        uuidConfig.generateUserQuestionProgressId(),
+        uuidConfig.generateVideoId(),
+        uuidConfig.generateProgressVideoId(),
+        uuidConfig.generateProgressQuestionId()
       ])
 
       expect(results[0]).toBe('STUDENT-123abc')
       expect(results[1]).toBe('ADMIN-123abc')
       expect(results[2]).toBe('Q-123abc45-6de')
       expect(results[3]).toBe('PROGRESS-123abc45-6de')
+      expect(results[4]).toBe('VIDEO-123abc45-6de')
+      expect(results[5]).toBe('V-PROG-123abc45-6de')
+      expect(results[6]).toBe('Q-PROG-123abc45-6de')
     })
   })
 
@@ -173,11 +221,17 @@ describe('UuidConfig', () => {
       const adminId = await uuidConfig.generateAdminId()
       const questionId = await uuidConfig.generateQuestionId()
       const progressId = await uuidConfig.generateUserQuestionProgressId()
+      const videoId = await uuidConfig.generateVideoId()
+      const progressVideoId = await uuidConfig.generateProgressVideoId()
+      const progressQuestionId = await uuidConfig.generateProgressQuestionId()
 
       expect(studentId).toMatch(/^STUDENT-.{6}$/)
       expect(adminId).toMatch(/^ADMIN-.{6}$/)
       expect(questionId).toMatch(/^Q-.{12}$/)
       expect(progressId).toMatch(/^PROGRESS-.{12}$/)
+      expect(videoId).toMatch(/^VIDEO-.{12}$/)
+      expect(progressVideoId).toMatch(/^V-PROG-.{12}$/)
+      expect(progressQuestionId).toMatch(/^Q-PROG-.{12}$/)
     })
 
     it('deve verificar comprimentos corretos dos IDs', async () => {
@@ -189,11 +243,17 @@ describe('UuidConfig', () => {
       const adminId = await uuidConfig.generateAdminId()
       const questionId = await uuidConfig.generateQuestionId()
       const progressId = await uuidConfig.generateUserQuestionProgressId()
+      const videoId = await uuidConfig.generateVideoId()
+      const progressVideoId = await uuidConfig.generateProgressVideoId()
+      const progressQuestionId = await uuidConfig.generateProgressQuestionId()
 
       expect(studentId.length).toBe(14) 
       expect(adminId.length).toBe(12)   
       expect(questionId.length).toBe(14)
       expect(progressId.length).toBe(21) 
+      expect(videoId.length).toBe(18)
+      expect(progressVideoId.length).toBe(19)
+      expect(progressQuestionId.length).toBe(19)
     })
   })
 
@@ -207,11 +267,17 @@ describe('UuidConfig', () => {
       const adminId = await uuidConfig.generateAdminId()
       const questionId = await uuidConfig.generateQuestionId()
       const progressId = await uuidConfig.generateUserQuestionProgressId()
+      const videoId = await uuidConfig.generateVideoId()
+      const progressVideoId = await uuidConfig.generateProgressVideoId()
+      const progressQuestionId = await uuidConfig.generateProgressQuestionId()
 
       expect(studentId).toBe('STUDENT-012345')
       expect(adminId).toBe('ADMIN-012345')          
       expect(questionId).toBe('Q-0123456789ab')     
       expect(progressId).toBe('PROGRESS-0123456789ab')
+      expect(videoId).toBe('VIDEO-0123456789ab')
+      expect(progressVideoId).toBe('V-PROG-0123456789ab')
+      expect(progressQuestionId).toBe('Q-PROG-0123456789ab')
     })
   })
 })

@@ -48,7 +48,7 @@ describe('validateDTODeleteQuestion', () => {
       expect(mockRes.json).toHaveBeenCalledWith({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            message: '[ID deve ter pelo menos 14 caracteres (Q- + 12 chars)]'
+            message: 'ID deve ter pelo menos 14 caracteres (Q- + 12 chars)'
           })
         ])
       })
@@ -63,7 +63,7 @@ describe('validateDTODeleteQuestion', () => {
       expect(mockRes.json).toHaveBeenCalledWith({
         errors: expect.arrayContaining([
           expect.objectContaining({
-            message: "[ID deve começar com 'Q-']"
+            message: "ID deve começar com 'Q-'"
           })
         ])
       })
