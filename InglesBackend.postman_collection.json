@@ -740,8 +740,39 @@
 				{
 					"name": "updateVideoProgress",
 					"request": {
-						"method": "GET",
-						"header": []
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkFETUlOLTcwYWJmMCIsImVtYWlsIjoidWxhbGFsZTQ1QGdtYWlsLmNvbSIsImlhdCI6MTc2Mzk5NTI5NiwiZXhwIjoxNzY0MDAyNDk2fQ.ADjvMUB5pCpqi6YmnpboIiyduxDUiMMdIajMOv0GSfc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"V-PROG-8bcc8a5d-8f5\",\n    \"status\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/student/updateVideoProgress",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"student",
+								"updateVideoProgress"
+							]
+						}
 					},
 					"response": []
 				}
