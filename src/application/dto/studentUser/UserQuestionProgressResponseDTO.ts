@@ -2,6 +2,7 @@ import {
   IUserQuestionProgressPublicData,
   UserQuestionProgress,
 } from "../../../domain/entities/UserQuestionProgress";
+import { IQuestion } from "../../../domain/entities/Question";
 
 export class UserQuestionProgressResponseDTO {
   public id: string;
@@ -9,12 +10,8 @@ export class UserQuestionProgressResponseDTO {
   public questionId?: string;
   public status?: boolean;
   public chosenOption?: string;
-  public question?: {
-    title: string;
-    theme: string;
-    cefr: string;
-    type: string;
-  } | null;
+
+  public question?: IQuestion | null;
 
   constructor(
     id: string,
@@ -22,39 +19,29 @@ export class UserQuestionProgressResponseDTO {
     questionId?: string,
     status?: boolean,
     chosenOption?: string,
-    question?: {
-      title: string;
-      theme: string;
-      cefr: string;
-      type: string;
-    } | null
+    question?: IQuestion | null
   ) {
     this.id = id;
     this.userId = userId;
     this.questionId = questionId;
     this.status = status;
     this.chosenOption = chosenOption;
-    this.question = question;
+    this.question = question ?? null;
   }
 
   static fromUserQuestionProgress(
     userQuestionProgress: UserQuestionProgress
   ): UserQuestionProgressResponseDTO {
-    const publicData = userQuestionProgress.toPublicData();
+    const publicData: IUserQuestionProgressPublicData =
+      userQuestionProgress.toPublicData();
+
     return new UserQuestionProgressResponseDTO(
       publicData.id,
       publicData.userId,
       publicData.questionId,
       publicData.status,
       publicData.chosenOption,
-      publicData.question
-        ? {
-            title: publicData.question.title || "",
-            theme: publicData.question.theme || "",
-            cefr: publicData.question.cefr || "",
-            type: publicData.question.type || "",
-          }
-        : null
+      publicData.question ?? null
     );
   }
 }
