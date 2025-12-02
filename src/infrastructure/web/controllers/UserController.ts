@@ -14,6 +14,7 @@ import { DeleteUserDTO } from "../../../application/dto/user/DeleteUserDTO";
 import { validateDTOAddStudyTime } from "../../utils/zod/validateDTOAddStudyTime";
 import { AddStudyTimeDTO } from "../../../application/dto/studentUser/AddStudyTimeDTO";
 import { UserService } from "../../../application/services/UserService";
+import { VideoService } from "../../../application/services/VideoService";
 import { validateDTOTimeline } from "../../utils/zod/validateDTOTimeline";
 import { TimelineDTO } from "../../../application/dto/studentUser/TimelineDTO";
 import { validateDTOLoggedUser } from "../../utils/zod/validateDTOLoggedUser";
@@ -21,9 +22,11 @@ import { LoggedUserDTO } from "../../../application/dto/user/LoggedUserDTO";
 
 export class UserController {
   private userService: UserService;
+  private videoService: VideoService;
 
-  constructor(userService: UserService) {
+  constructor(userService: UserService, videoService: VideoService) {
     this.userService = userService;
+    this.videoService = videoService;
   }
 
   public async create(req: Request, res: Response): Promise<void> {
@@ -313,9 +316,20 @@ export class UserController {
     const dto = new TimelineDTO(validatedData.userId, validatedData.timeline);
 
     const user = await this.userService.updateTimeline(dto);
+    
+    // Buscar vídeos após atualizar timeline
+    const videos = await this.videoService.getVideosByUserTimeline(userId);
 
-    res
-      .status(200)
-      .json({ message: "Cronograma atualizado com sucesso!", user: user });
+    const response = { 
+      message: "Cronograma atualizado com sucesso!", 
+      user: user,
+      videos: videos
+    };
+
+    console.log("=== UPDATE TIMELINE RESPONSE ===");
+    console.log(JSON.stringify(response, null, 2));
+    console.log("=================================");
+
+    res.status(200).json(response);
   }
 }

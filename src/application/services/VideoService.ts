@@ -132,38 +132,42 @@ export class VideoService {
       throw new Error("Usuário não possui timeline definida");
     }
 
-    const jaTemProgresso = await this.userVideoProgressRepository.countByUserId(
-      userId
-    );
-
-    if (jaTemProgresso > 0) {
-      throw new Error("Usuário já possui conteúdo associado");
-    }
-
     const videosWithQuestions =
       await this.videoRepository.getVideosWithQuestionsByTimeline(
         user.timeline
       );
 
+    // Buscar progresso existente do usuário
+    const existingVideoProgress = await this.userVideoProgressRepository.findByUserIdWithVideos(userId);
+    const existingQuestionProgress = await this.userQuestionProgressRepository.findByUserIdWithQuestions(userId);
+    
+    const existingVideoIds = new Set(existingVideoProgress.map(p => p.videoId));
+    const existingQuestionIds = new Set(existingQuestionProgress.map(p => p.questionId));
+
+    // Criar progresso apenas para conteúdo novo
     for (const video of videosWithQuestions) {
-      const userVideoProgress = new UserVideoProgress({
-        id: await this.uuidConfig.generateProgressVideoId(),
-        userId: userId,
-        videoId: video.id,
-        status: false,
-      });
-
-      await this.userVideoProgressRepository.create(userVideoProgress);
-
-      for (const question of video.questions) {
-        const userQuestionProgress = new UserQuestionProgress({
-          id: await this.uuidConfig.generateProgressQuestionId(),
+      if (!existingVideoIds.has(video.id)) {
+        const userVideoProgress = new UserVideoProgress({
+          id: await this.uuidConfig.generateProgressVideoId(),
           userId: userId,
-          questionId: question.id,
+          videoId: video.id,
           status: false,
         });
 
-        await this.userQuestionProgressRepository.create(userQuestionProgress);
+        await this.userVideoProgressRepository.create(userVideoProgress);
+      }
+
+      for (const question of video.questions) {
+        if (!existingQuestionIds.has(question.id)) {
+          const userQuestionProgress = new UserQuestionProgress({
+            id: await this.uuidConfig.generateProgressQuestionId(),
+            userId: userId,
+            questionId: question.id,
+            status: false,
+          });
+
+          await this.userQuestionProgressRepository.create(userQuestionProgress);
+        }
       }
     }
 

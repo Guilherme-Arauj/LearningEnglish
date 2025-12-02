@@ -18,7 +18,7 @@ app.use(helmet());
 
 // Middleware para permitir requisições de diferentes origens
 app.use(cors({
-  origin: "http://localhost:4200",
+  origin: "*",
   credentials: true
 }));
 
@@ -37,7 +37,7 @@ const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour'
-});
+}); 
 
 // Middleware para processar JSON no corpo das requisições
 app.use(morgan("dev"));
